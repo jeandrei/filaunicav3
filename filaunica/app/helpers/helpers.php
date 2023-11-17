@@ -194,4 +194,13 @@ function formatadatempo($data){
     return $result;
 }
 
+
+//função para verificar conteúdo de dados
+function debug($data){
+    echo("<pre>");
+    print_r($data);
+    echo("</pre>");
+    die();
+  }
+
 ?>

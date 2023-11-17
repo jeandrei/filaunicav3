@@ -181,7 +181,7 @@ h1 {
                 id="etapa_id" 
                 class="form-control"                                        
             >
-                    <option value="Todos">Todos</option>
+                    <option value="null">Todos</option>
                     <?php 
                     $etapas = $this->etapaModel->getEtapas();                     
                     foreach($etapas as $etapa) : ?> 
@@ -208,7 +208,7 @@ h1 {
                 id="escola_id" 
                 class="form-control"                                        
             >
-                    <option value="Todos">Todos</option>
+                    <option value="null">Todos</option>
                     <?php 
                     $escolas = $this->filaModel->getEscolas();                    
                     foreach($escolas as $escola) : ?> 
@@ -242,7 +242,7 @@ h1 {
                 id="situacao_id" 
                 class="form-control"                                        
             >
-                    <option value="Todos">Todos</option>
+                    <option value="null">Todos</option>
                     <option value="FE" <?php echo $_GET['situacao_id'] == 'FE' ? 'selected':'';?>>Fora de Todas as Etapas</option>
                     <?php 
                     $situacoes = $this->situacaoModel->getSituacoes();                       
@@ -390,7 +390,7 @@ if($data['results'] == false){ die('<div class="container alert alert-warning">S
                 </div> 
                 <div class="col-sm-4">
                 <b>Vagas</b>
-                    <?php if($registro['opcao2_id']) : ?>
+                    <?php if($registro['opcao3_id']) : ?>
                         Mat. (<?php echo ($registro['vagas_op3']->matutino)?$registro['vagas_op3']->matutino:'NI'?>)  
                         Vesp. (<?php echo ($registro['vagas_op3']->vespertino)?$registro['vagas_op3']->vespertino:'NI'?>)
                         Int. (<?php echo ($registro['vagas_op3']->integral)?$registro['vagas_op3']->integral:'NI'?>)

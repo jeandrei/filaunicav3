@@ -41,7 +41,7 @@
             $result = $this->db->resultSet();
             
             //verifica se obteve algum resultado
-            if($result >0)
+            if($this->db->rowCount() > 0)
             {
                 foreach ($result as $row)
                 {

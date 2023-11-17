@@ -1,10 +1,11 @@
 <?php
-
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+  
     //todos os erros deixar só a linha abaixo
-    //error_reporting(E_ALL);
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    error_reporting(E_ALL);
+    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
+     //desativar todos os erros
+    //ini_set('display_errors','Off');
 
 
     // DB Params

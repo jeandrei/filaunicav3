@@ -166,7 +166,8 @@ class Pagination extends Database
         // AQUI EU ALTEREI FIZ A CONEXÃO COM O BANCO DE DADOS QUE ESTÁ NO DATABASE  
         try
         {             
-            $this->dbh = new PDO($this->$dsn, $this->user, $this->pass, $this->options); 
+            //$this->dbh = new Database;
+            $this->dbh = new PDO($this->dsn, $this->user, $this->pass, $this->options); 
             $this->dbh->exec('SET NAMES "utf8"');           
             //$this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
@@ -941,7 +942,9 @@ class paginationException extends Exception
     public function __toString()
     {
         return '<strong>Pagination Class Error:</strong> '.$this->message.PHP_EOL;
-    }
+    }  
+
+
 }
 
 

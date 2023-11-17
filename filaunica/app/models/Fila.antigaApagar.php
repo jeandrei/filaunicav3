@@ -228,13 +228,8 @@
                               LIMIT 
                                 1"
                             );             
-            $result = $this->db->single();  
-            
-            if($this->db->rowCount() > 0){
-                return $result;   
-            } else {
-                return false;
-            }      
+            $result = $this->db->single();           
+            return $result;            
         }
 
 
@@ -456,36 +451,83 @@
          
               
 
-        //FUNÇÃO QUE EXECUTA A SQL PAGINATE
+           //FUNÇÃO QUE EXECUTA A SQL PAGINATE
         //quando for para relatório usar getFilaBusca($relatorio=true,$page=NULL,$options)
-        public function getFilaBusca($relatorio,$page,$options){
-            $bind = [];
-            var_dump($options);           
+        public function getFilaBuscaBKPNOVA($relatorio,$page,$options){           
+           
+            //SQL BASE
+            $sql = "SELECT *,  (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) as etapa FROM fila WHERE 1";
+            $order = '';
             
-            $sql = "SELECT *,  (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) as etapa FROM fila";
-            $where = ' WHERE 1';
-            $order = " ORDER BY registro ASC"; 
+            
 
-            //SE FOR INFORMADO O PROTOCOLO VOU DIRETO PARA O RESULTADO
-            if(isset($options['named_params'][':protocolo']) && $options['named_params'][':protocolo'] !== '' && $options['named_params'][':protocolo'] !== 'null'){
+            // SE FOR INFORMADO O PROTOCOLO VOU DIRETO PARA A PESQUISA
+            if(!empty($options['named_params'][':protocolo']) && $options['named_params'][':protocolo'] != 'null'){            
                 $where .= " AND fila.protocolo = :protocolo";
-                array_push($bind,':protocolo');
-            } else {
-            //SE NÃO FOR INFORMADO O PROTOCOLO MONTO A SQL
+
+                $sql .= $where;
+
+                try
+                {
+                    $this->pag = new Pagination($page,$sql, $options);  
+                }
+                catch(paginationException $e)
+                {
+                    echo $e;
+                    exit();
+                }
+               
+                $this->pag->bindParam(':protocolo', $options['named_params'][':protocolo'], PDO::PARAM_STR, 12);
                 
-                //SE FOI INFORMADO O NOME
-                if(isset($options['named_params'][':nome']) && $options['named_params'][':nome'] !== '' && $options['named_params'][':nome'] !== 'null'){
-                    $where .= " AND nomecrianca LIKE CONCAT('%',:nome,'%')";
-                    array_push($bind,':nome');
-                }
+            } else {
+            // SE NÃO TIVER PROTOCOLO MONTO A SQL
+            
+                //SE FOR SELECIONADO A OPÇÃO FORA DE TODAS AS ETAPAS
+                if(!empty($options['named_params'][':situacao_id']) && $options['named_params'][':situacao_id'] == 'FE'){ 
+                    
+                    // pego as situações que o cadastro permanece na fila
+                    $situacoes = $this->getSituacaoQueFicamNaFila();
 
-                //SE FOR INFORMADO A ETAPA                
-                if(isset($options['named_params'][':etapa_id']) && $options['named_params'][':etapa_id'] !== '' && $options['named_params'][':etapa_id'] !== 'null'){
+                    //monto a sql com base nas situações que permanece na fila
+                    if($situacoes){                         
+                        foreach($situacoes as $key=>$situacao){
+                            
+                            if($key == 0){
+                                $where .= " AND (fila.situacao_id = " . $situacao->id;
+                            } else {
+                                $where .= " OR fila.situacao_id = " . $situacao->id;
+                            }                      
+                        }
+                        
+                        $where .= ") AND (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) IS NULL";
+                    //se nenhuma situação permanece na fila o que é só em casos de testes ou início da implantação do sistema, eu busco por situação id = null que não vai ter nenhum registro, se ninguém fica na fila não posso mostrar ninguém no caso de nenhuma situação for ativa na fila
+                    } else {
+                        $where.= " AND (fila.situacao_id = NULL)";
+                    }            
+                } elseif (isset($options['named_params'][':etapa_id']) && $options['named_params'][':etapa_id'] !== 'null' && $options['named_params'][':etapa_id'] !== '') { 
                     $where .= " AND (SELECT id FROM etapa WHERE fila.nascimento>=etapa.data_ini AND fila.nascimento<=etapa.data_fin) = :etapa_id";
-                    array_push($bind,':etapa_id');
+                } 
+                
+
+                /* SE FOR INFORMADO O NOME */
+                if(!empty($options['named_params'][':nome'])){    
+                    $where .= " AND nomecrianca LIKE CONCAT('%',:nome,'%')";
                 }
 
-                //SE FOR INFORMADO A ESCOLA  
+
+                /* SE FOR INFORMADO A SITUAÇÃO */
+                if(
+                    isset($options['named_params'][':situacao_id']) && 
+                    ($options['named_params'][':situacao_id']) !== 'null' && 
+                    ($options['named_params'][':situacao_id']) !== '' 
+                    && $options['named_params'][':situacao_id'] !== "FE"
+                    )  
+                {
+                    $where .= " AND situacao_id = :situacao_id";
+                }    
+
+
+                //SE SELECIONOU UMA ESCOLA ORDENO PELA PRIMEIRA OPÇÃO DE ESCOLA
                 if(
                     isset($options['named_params'][':escola_id']) &&
                     $options['named_params'][':escola_id'] !== 'null' && 
@@ -495,68 +537,71 @@
                 {   $where .= " AND (opcao1_id = :escola_id";
                     $where .= " OR opcao2_id = :escola_id";
                     $where .= " OR opcao3_id = :escola_id".")";
-                    $order = " ORDER BY registro, opcao1_id ASC"; 
-                    array_push($bind,':escola_id');
-                } 
-
-                 /* SE FOR INFORMADO A SITUAÇÃO */
-                 if(
-                    isset($options['named_params'][':situacao_id']) && 
-                    ($options['named_params'][':situacao_id']) !== 'null' && 
-                    ($options['named_params'][':situacao_id']) !== '' 
-                    && $options['named_params'][':situacao_id'] !== "FE"
-                    )  
-                {
-                    $where .= " AND situacao_id = :situacao_id";
-                    array_push($bind,':situacao_id');
-                }    
-
-                //SE FOR SELECIONADO A OPÇÃO FORA DE TODAS AS ETAPAS
-                if(!empty($options['named_params'][':situacao_id']) && $options['named_params'][':situacao_id'] == 'FE'){
-                
-                //SE FOR SELECIONADO A OPÇÃO FORA DE TODAS AS ETAPAS
+                    $order .= " ORDER BY registro, opcao1_id ASC"; 
                 } else {
-                //A SITUAÇÃO É DIFERENTE DE FORA DE TODAS AS ETAPAS
-                    
-                }
-                //A SITUAÇÃO É DIFERENTE DE FORA DE TODAS AS ETAPAS
-            }
-            //SE NÃO FOR INFORMADO O PROTOCOLO MONTO A SQL
-
-             //monta a sql        
-            $sql .= $where .$order; 
-            echo('<br><br>') ;
-            var_dump($sql);
-        
-            //TENTA EXECUTAR A PAGINAÇÃO 
-            try
-            {
-                $this->pag = new Pagination($page,$sql,$options);  
-            }
-            catch(paginationException $e)
-            {
-                echo $e;
-                exit();
-            }
-
-            /**BIND VALUES */            
-            foreach($bind as $row){
-                $this->pag->bindParam($row, $options['named_params'][$row], PDO::PARAM_STR, 12); 
-            }
+                    //CASO CONTRÁRIO ORDENO PELO REGISTRO SEMPRE
+                    $order .= " ORDER BY registro ASC"; 
+                }    
+                
+                $sql .= $where .$order;                
+                
+                
             
-            //$this->pag->bindParam(':etapa_id', $options['named_params'][':etapa_id'], PDO::PARAM_STR, 12);
-            //EXECUTA A PAGINAÇÃO
-            $this->pag->execute();
-            //RETORNA A PAGINAÇÃO            
-            return $this->pag;    
+                try
+                {
+                    $this->pag = new Pagination($page,$sql, $options);  
+                }
+                catch(paginationException $e)
+                {
+                    echo $e;
+                    exit();
+                }
+                
+                //BIND NOME
+                if(!empty($options['named_params'][':nome']) && $options['named_params'][':nome'] != 'null'){       
+                    $this->pag->bindParam(':nome', $options['named_params'][':nome'], PDO::PARAM_STR, 12);  
+                }
+
+                //BIND ETAPA
+                if(!empty($options['named_params'][':etapa_id']) && $options['named_params'][':etapa_id'] != 'null'){       
+                    $this->pag->bindParam(':etapa_id', $options['named_params'][':etapa_id'], PDO::PARAM_STR, 12);  
+                }
+
+                //BIND SITUAÇÃO
+                if(!empty($options['named_params'][':situacao_id']) && $options['named_params'][':situacao_id'] != 'null'){       
+                    $this->pag->bindParam(':situacao_id', $options['named_params'][':situacao_id'], PDO::PARAM_STR, 12);  
+                }
+
+                //BIND ESCOLA
+                if(!empty($options['named_params'][':escola_id']) && $options['named_params'][':escola_id'] != 'null'){                      
+                    $this->pag->bindParam(':escola_id', $options['named_params'][':escola_id'], PDO::PARAM_STR, 12);  
+                }
+                //die(var_dump($sql));
+            } 
+            // SE NÃO TIVER PROTOCOLO MONTO A SQL
+
+           
+        
+         
+            
+            /* POR FIM SE MANDO PARA RELATÓRIO OU PARA A QUERY */            
+            if($relatorio == false){
+                $this->pag->execute();
+                return $this->pag; 
+            } else {                
+                $this->db->query($sql);
+                $result = $this->db->resultSet();                          
+                return  $result;
+            }
+
             
         }//public function getFilaBusca  
 
 
-         //FUNÇÃO QUE EXECUTA A SQL PAGINATE
+
+        //FUNÇÃO QUE EXECUTA A SQL PAGINATE
         //quando for para relatório usar getFilaBusca($relatorio=true,$page=NULL,$options)
-        public function getFilaBuscaBKP($relatorio,$page,$options){
-           
+        public function getFilaBusca($relatorio,$page,$options){
             
             $sql = "SELECT *,  (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) as etapa FROM fila";
 
@@ -585,7 +630,7 @@
                 }               
             // SE A ETAPA É IGUAL A TODOS EU CLOCO O COMANDO WHERE FILA.ID QUE TRAZ TODOS OS REGISTROS
             } elseif ( 
-                (($options['named_params'][':etapa_id']) === "null")||(($options['named_params'][':etapa_id']) === NULL) ||
+                (($options['named_params'][':etapa_id']) === "Todos")||(($options['named_params'][':etapa_id']) === NULL) ||
                 (($options['named_params'][':etapa_id']) === "")
                 )
             {   
@@ -636,7 +681,14 @@
             }
 
             
-        }//public function getFilaBusca  
+        }//public function getFilaBusca
+        
+        
+
+
+
+
+
 
 
 
