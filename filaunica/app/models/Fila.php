@@ -460,7 +460,7 @@
         //quando for para relatório usar getFilaBusca($relatorio=true,$page=NULL,$options)
         public function getFilaBusca($relatorio,$page,$options){
             $bind = [];
-            var_dump($options);           
+            //var_dump($options);           
             
             $sql = "SELECT *,  (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) as etapa FROM fila";
             $where = ' WHERE 1';
@@ -473,6 +473,26 @@
             } else {
             //SE NÃO FOR INFORMADO O PROTOCOLO MONTO A SQL
                 
+                if(($options['named_params'][':situacao_id']) == "FE"){
+                    // pego as situações que o cadastro permanece na fila
+                    $situacoes = $this->getSituacaoQueFicamNaFila();
+                
+                    //monto a sql com base nas situações que permanece na fila
+                    if($situacoes){                        
+                        foreach($situacoes as $key=>$situacao){
+                            
+                            if($key == 0){
+                                $where .= " AND (fila.situacao_id = " . $situacao->id;
+                            } else {
+                                $where .= " OR fila.situacao_id = " . $situacao->id;
+                            }                      
+                        }
+                        
+                        $where .= ") AND (SELECT descricao FROM etapa WHERE fila.nascimento>=data_ini AND fila.nascimento<=data_fin) IS NULL";
+                        //se nenhuma situação permanece na fila o que é só em casos de testes ou início da implantação do sistema, eu busco por situação id = null que não vai ter nenhum registro, se ninguém fica na fila não posso mostrar ninguém no caso de nenhuma situação for ativa na fila
+                    }
+                }
+
                 //SE FOI INFORMADO O NOME
                 if(isset($options['named_params'][':nome']) && $options['named_params'][':nome'] !== '' && $options['named_params'][':nome'] !== 'null'){
                     $where .= " AND nomecrianca LIKE CONCAT('%',:nome,'%')";
@@ -524,9 +544,7 @@
             //SE NÃO FOR INFORMADO O PROTOCOLO MONTO A SQL
 
              //monta a sql        
-            $sql .= $where .$order; 
-            echo('<br><br>') ;
-            var_dump($sql);
+            $sql .= $where .$order;            
         
             //TENTA EXECUTAR A PAGINAÇÃO 
             try

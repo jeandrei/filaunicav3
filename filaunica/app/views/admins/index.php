@@ -1,4 +1,4 @@
-
+<?php //die(var_dump($data['results'][0]['vagas_op1']));?>
 <style>
 
 * {
@@ -375,25 +375,25 @@ if($data['results'] == false){ die('<div class="container alert alert-warning">S
                 <div class="col-sm-4">
                     <b>Vagas</b>
                     <?php if($registro['opcao1_id']) : ?>                        
-                        Mat. (<?php echo ($registro['vagas_op1']->matutino)?$registro['vagas_op1']->matutino:'NI'?>)  
-                        Vesp. (<?php echo ($registro['vagas_op1']->vespertino)?$registro['vagas_op1']->vespertino:'NI'?>)
-                        Int. (<?php echo ($registro['vagas_op1']->integral)?$registro['vagas_op1']->integral:'NI'?>)
+                        Mat. (<?php echo ($registro['vagas_op1'])?$registro['vagas_op1']->matutino:'NI'?>)  
+                        Vesp. (<?php echo ($registro['vagas_op1'])?$registro['vagas_op1']->vespertino:'NI'?>)
+                        Int. (<?php echo ($registro['vagas_op1'])?$registro['vagas_op1']->integral:'NI'?>)
                     <?php endif; ?>
                 </div>
                 <div class="col-sm-4">
                 <b>Vagas</b>
                     <?php if($registro['opcao2_id']) : ?>
-                        Mat. (<?php echo ($registro['vagas_op2']->matutino)?$registro['vagas_op2']->matutino:'NI'?>)  
-                        Vesp. (<?php echo ($registro['vagas_op2']->vespertino)?$registro['vagas_op2']->vespertino:'NI'?>)
-                        Int. (<?php echo ($registro['vagas_op2']->integral)?$registro['vagas_op2']->integral:'NI'?>)
+                        Mat. (<?php echo ($registro['vagas_op2'])?$registro['vagas_op2']->matutino:'NI'?>)  
+                        Vesp. (<?php echo ($registro['vagas_op2'])?$registro['vagas_op2']->vespertino:'NI'?>)
+                        Int. (<?php echo ($registro['vagas_op2'])?$registro['vagas_op2']->integral:'NI'?>)
                     <?php endif; ?>
                 </div> 
                 <div class="col-sm-4">
                 <b>Vagas</b>
                     <?php if($registro['opcao3_id']) : ?>
-                        Mat. (<?php echo ($registro['vagas_op3']->matutino)?$registro['vagas_op3']->matutino:'NI'?>)  
-                        Vesp. (<?php echo ($registro['vagas_op3']->vespertino)?$registro['vagas_op3']->vespertino:'NI'?>)
-                        Int. (<?php echo ($registro['vagas_op3']->integral)?$registro['vagas_op3']->integral:'NI'?>)
+                        Mat. (<?php echo ($registro['vagas_op3'])?$registro['vagas_op3']->matutino:'NI'?>)  
+                        Vesp. (<?php echo ($registro['vagas_op3'])?$registro['vagas_op3']->vespertino:'NI'?>)
+                        Int. (<?php echo ($registro['vagas_op3'])?$registro['vagas_op3']->integral:'NI'?>)
                     <?php endif; ?>
                 </div>  
             </div> 

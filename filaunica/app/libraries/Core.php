@@ -16,7 +16,7 @@
 
          // Look in controller for first value
          // verificamos se o controller existe dentro da pasta app/controllers
-         if(file_exists('../app/controllers/' . ucwords($url[0]). '.php')){
+         if(isset($url[0]) && file_exists('../app/controllers/' . ucwords($url[0]). '.php')){
             //if existe, set as a controller
             $this->currentController = ucwords($url[0]);
             // Unset 0 index
