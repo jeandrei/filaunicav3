@@ -458,7 +458,7 @@
 
         //FUNÇÃO QUE EXECUTA A SQL PAGINATE
         //quando for para relatório usar getFilaBusca($relatorio=true,$page=NULL,$options)
-        public function getFilaBusca($relatorio,$page,$options){
+        public function getFilaBusca($relatorio,$page,$options){            
             $bind = [];
             //var_dump($options);           
             
@@ -556,17 +556,26 @@
                 echo $e;
                 exit();
             }
-
-            /**BIND VALUES */            
-            foreach($bind as $row){
-                $this->pag->bindParam($row, $options['named_params'][$row], PDO::PARAM_STR, 12); 
-            }
+         
             
-            //$this->pag->bindParam(':etapa_id', $options['named_params'][':etapa_id'], PDO::PARAM_STR, 12);
-            //EXECUTA A PAGINAÇÃO
-            $this->pag->execute();
-            //RETORNA A PAGINAÇÃO            
-            return $this->pag;    
+            if($relatorio == false){
+                /**BIND VALUES */  
+                foreach($bind as $row){
+                    $this->pag->bindParam($row, $options['named_params'][$row], PDO::PARAM_STR, 12); 
+                }               
+                //EXECUTA A PAGINAÇÃO
+                $this->pag->execute();
+                //RETORNA A PAGINAÇÃO            
+                return $this->pag;   
+            } else { 
+                $this->db->query($sql);
+                /**BIND VALUES */
+                foreach($bind as $row){
+                    $this->db->bind($row, $options['named_params'][$row]);
+                }     
+                $result = $this->db->resultSet();                 
+                return  $result;
+            }        
             
         }//public function getFilaBusca  
 

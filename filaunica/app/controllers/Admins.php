@@ -56,117 +56,183 @@
                                     ':escola_id' => $_GET['escola_id'],
                                     ':nome' => $_GET['nome']
                                     )     
-          );    
-             
-          $paginate = $this->filaModel->getFilaBusca($relatorio=false, $page, $options);
+          );
           
-          /* PAGINAÇÃO SUCESSO */
-          if($paginate->success == true)
-          {             
-            // $data['paginate'] é só a parte da paginação tem que passar os dois arraya paginate e result
-            //$data['paginate'] = $paginate;
-            // $result são os dados propriamente dito depois eu fasso um foreach para passar
-            // os valores como posição que utilizo um métido para pegar
-            $pagresults = $paginate->resultset->fetchAll();
-            if(!empty($pagresults)){
+          //se o usuário clicar em imprimir
+          if(isset($_GET['botao']) && $_GET['botao'] == "Imprimir"){
+            
+            //pego os resultados da pesquisa
+            $result = $this->filaModel->getFilaBusca($relatorio=true, $page=NULL, $options);
+
+            if(!empty($result)){
               //faço o foreach para poder utilizar os métodos
-              foreach($pagresults as $row){
-                $results[] = [
-                  'id' => ($row['id']) 
-                            ? $row['id'] 
-                            : '',
-                  'posicao' => ($this->filaModel->buscaPosicaoFila($row['protocolo'])) 
-                            ? $this->filaModel->buscaPosicaoFila($row['protocolo']) 
-                            : "-",
-                  'etapa' => ($this->etapaModel->getEtapaDescricao($row['nascimento'])) 
-                            ? $this->etapaModel->getEtapaDescricao($row['nascimento']) 
-                            : "FE",
-                  'nomecrianca' => ($row['nomecrianca']) 
-                            ? html($row['nomecrianca'] )
-                            : '',
-                  'nascimento' => ($row['nascimento']) 
-                            ? formatadata($row['nascimento']) 
-                            : '',
-                  'responsavel' => ($row['responsavel']) 
-                            ? html($row['responsavel']) 
-                            : '',
-                  'protocolo' => ($row['protocolo']) 
-                            ? html($row['protocolo'])
-                            : '',
-                  'registro' => ($row['registro']) 
-                            ? date('d/m/Y H:i:s', strtotime($row['registro'])) 
-                            : '',
-                  'telefone' => ($row['telefone']) 
-                            ? html($row['telefone'])
-                            : '',
-                  'celular' => ($row['celular']) 
-                            ? html($row['celular']) 
-                            : '',
-                  'situacao' => ($row['situacao_id']) 
-                            ? $this->situacaoModel->getDescricaoSituacaoById($row['situacao_id']) 
-                            : '',                  
-                  'situacao_id' => ($row['situacao_id']) 
-                            ? $row['situacao_id'] 
-                            : '',
-                  'opcao1_id' => ($row['opcao1_id']) 
-                            ? html($this->filaModel->getEscolasById($row['opcao1_id'])->nome)
-                            : '',
-                  'vagas_op1' => ($row['opcao1_id']) 
-                            ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao1_id'],$this->etapaModel->getEtapaId($row['nascimento'])) 
-                            : '',
-                  'opcao2_id' => ($row['opcao2_id']) 
-                            ? html($this->filaModel->getEscolasById($row['opcao2_id'])->nome)
-                            : '',
-                  'vagas_op2' => ($row['opcao2_id'])
-                            ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao2_id'],$this->etapaModel->getEtapaId($row['nascimento']))
-                            : '',
-                  'opcao3_id' => ($row['opcao3_id']) 
-                            ? html($this->filaModel->getEscolasById($row['opcao3_id'])->nome)
-                            : '',
-                  'vagas_op3' => ($row['opcao3_id']) 
-                            ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao3_id'],$this->etapaModel->getEtapaId($row['nascimento'])) 
-                            : '',
-                  'opcao_matricula' => ($row['opcao_matricula']) 
-                            ? html($this->filaModel->getEscolasById($row['opcao_matricula'])->nome)
-                            : '',
-                  'opcao_turno' => ($row['opcao_turno']) 
-                            ? $this->filaModel->getTurno($row['opcao_turno']) 
-                            : '',
-                  'turno_matricula' => ($row['turno_matricula']) 
-                            ? $this->filaModel->getTurno($row['turno_matricula']) 
-                            : '',
-                  'ultimo_historico' => ($this->filaModel->getLastHistorico($row['id'])) 
-                            ? html($this->filaModel->getLastHistorico($row['id'])->historico)
-                            : '',
-                  'obs_admin' => ($row['obs_admin']) 
-                            ? html($row['obs_admin'])
-                            : '',
-                  'deficiencia' => ($row['deficiencia'] == 0)
-                            ?'NÃO'
-                            :'SIM',
-                  'logradouro' => ($row['logradouro']) 
-                            ? html($row['logradouro'])
-                            : '',
-                  'bairro' => ($row['bairro_id']) 
-                            ? $this->filaModel->getBairroByid($row['bairro_id']) 
-                            : '',
-                  'historico' => ($this->adminModel->getHistoricoById($row['id'])) 
-                            ? $this->adminModel->getHistoricoById($row['id']) 
-                            : ''
-                ];
+              foreach($result as $row){
+                $data[] = array(
+                  'id' => $row->id,
+                  'posicao' => ($this->filaModel->buscaPosicaoFila($row->protocolo)) ? $this->filaModel->buscaPosicaoFila($row->protocolo) : "-",
+                  'etapa' => ($this->etapaModel->getEtapaDescricao($row->nascimento)) ? $this->etapaModel->getEtapaDescricao($row->nascimento) : "FORA ETAPAS",
+                  'nomecrianca' => ($row->nomecrianca) 
+                                    ? $row->nomecrianca 
+                                    : 'Sem informação de Nome',
+                  'nascimento' => ($row->nascimento)
+                                    ? date('d/m/Y', strtotime($row->nascimento))
+                                    : 'Sem informação de Nascimento',
+                  'responsavel' => ($row->responsavel)
+                                    ? $row->responsavel
+                                    : 'Sem informação de Responsável',
+                  'protocolo' => ($row->protocolo)
+                                    ? $row->protocolo
+                                    : 'Registro com erro na geraçao de protocolo',
+                  'registro' => ($row->registro)
+                                    ? date('d/m/Y H:i:s', strtotime($row->registro))
+                                    : 'Sem informação de registro',
+                  'telefone' => ($row->telefone)
+                                    ? $row->telefone
+                                    : 'Sem informação de telefone',
+                  'celular' => ($row->celular)
+                                    ? $row->celular
+                                    : 'Sem informação de celular',
+                  'situacao' => ($row->situacao_id)
+                                    ? $this->situacaoModel->getDescricaoSituacaoById($row->situacao_id)
+                                    : 'Registro com erro na situação informada',                  
+                  'situacao_id' => ($row->situacao_id)
+                                    ? $row->situacao_id
+                                    : 'Registro com erro na situação informada',
+                  'opcao1_id' => ($row->opcao1_id) 
+                                    ? $this->filaModel->getEscolasById($row->opcao1_id)->nome 
+                                    : '',
+                  'opcao2_id' => ($row->opcao2_id) 
+                                    ? $this->filaModel->getEscolasById($row->opcao2_id)->nome 
+                                    : '',
+                  'opcao3_id' => ($row->opcao3_id)
+                                    ? $this->filaModel->getEscolasById($row->opcao3_id)->nome
+                                    : '',
+                  'opcao_matricula' => ($row->opcao_matricula)
+                                    ? $this->filaModel->getEscolasById($row->opcao_matricula)->nome
+                                    : '',
+                  'opcao_turno' => ($row->opcao_turno)
+                                    ? $this->filaModel->getTurno($row->opcao_turno)
+                                    : 'Sem opção de turno informada',
+                  'turno_matricula' => ($row->turno_matricula)
+                                    ? $this->filaModel->getTurno($row->turno_matricula)
+                                    : 'Sem informação de turno para a matrícula'
+                );
               }
             } else {
-              $results = false;
-            }             
-          }       
-          /* PAGINAÇÃO SUCESSO */     
-            
+              $data = false;
+            }  
+            // E AQUI CHAMO O RELATÓRIO             
+            $this->view('relatorios/relatorioconsulta' ,$data);
+          //fim se o usuário clicar em imprimir
+          } else {
+          //se o usuário clicar em atualizar
+            $paginate = $this->filaModel->getFilaBusca($relatorio=false, $page, $options);
+            /* PAGINAÇÃO SUCESSO */
+            if($paginate->success == true)
+            {             
+              // $data['paginate'] é só a parte da paginação tem que passar os dois arraya paginate e result
+              //$data['paginate'] = $paginate;
+              // $result são os dados propriamente dito depois eu fasso um foreach para passar
+              // os valores como posição que utilizo um métido para pegar
+              $pagresults = $paginate->resultset->fetchAll();
+              if(!empty($pagresults)){
+                //faço o foreach para poder utilizar os métodos
+                foreach($pagresults as $row){
+                  $results[] = [
+                    'id' => ($row['id']) 
+                              ? $row['id'] 
+                              : '',
+                    'posicao' => ($this->filaModel->buscaPosicaoFila($row['protocolo'])) 
+                              ? $this->filaModel->buscaPosicaoFila($row['protocolo']) 
+                              : "-",
+                    'etapa' => ($this->etapaModel->getEtapaDescricao($row['nascimento'])) 
+                              ? $this->etapaModel->getEtapaDescricao($row['nascimento']) 
+                              : "FE",
+                    'nomecrianca' => ($row['nomecrianca']) 
+                              ? html($row['nomecrianca'] )
+                              : '',
+                    'nascimento' => ($row['nascimento']) 
+                              ? formatadata($row['nascimento']) 
+                              : '',
+                    'responsavel' => ($row['responsavel']) 
+                              ? html($row['responsavel']) 
+                              : '',
+                    'protocolo' => ($row['protocolo']) 
+                              ? html($row['protocolo'])
+                              : '',
+                    'registro' => ($row['registro']) 
+                              ? date('d/m/Y H:i:s', strtotime($row['registro'])) 
+                              : '',
+                    'telefone' => ($row['telefone']) 
+                              ? html($row['telefone'])
+                              : '',
+                    'celular' => ($row['celular']) 
+                              ? html($row['celular']) 
+                              : '',
+                    'situacao' => ($row['situacao_id']) 
+                              ? $this->situacaoModel->getDescricaoSituacaoById($row['situacao_id']) 
+                              : '',                  
+                    'situacao_id' => ($row['situacao_id']) 
+                              ? $row['situacao_id'] 
+                              : '',
+                    'opcao1_id' => ($row['opcao1_id']) 
+                              ? html($this->filaModel->getEscolasById($row['opcao1_id'])->nome)
+                              : '',
+                    'vagas_op1' => ($row['opcao1_id']) 
+                              ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao1_id'],$this->etapaModel->getEtapaId($row['nascimento'])) 
+                              : '',
+                    'opcao2_id' => ($row['opcao2_id']) 
+                              ? html($this->filaModel->getEscolasById($row['opcao2_id'])->nome)
+                              : '',
+                    'vagas_op2' => ($row['opcao2_id'])
+                              ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao2_id'],$this->etapaModel->getEtapaId($row['nascimento']))
+                              : '',
+                    'opcao3_id' => ($row['opcao3_id']) 
+                              ? html($this->filaModel->getEscolasById($row['opcao3_id'])->nome)
+                              : '',
+                    'vagas_op3' => ($row['opcao3_id']) 
+                              ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao3_id'],$this->etapaModel->getEtapaId($row['nascimento'])) 
+                              : '',
+                    'opcao_matricula' => ($row['opcao_matricula']) 
+                              ? html($this->filaModel->getEscolasById($row['opcao_matricula'])->nome)
+                              : '',
+                    'opcao_turno' => ($row['opcao_turno']) 
+                              ? $this->filaModel->getTurno($row['opcao_turno']) 
+                              : '',
+                    'turno_matricula' => ($row['turno_matricula']) 
+                              ? $this->filaModel->getTurno($row['turno_matricula']) 
+                              : '',
+                    'ultimo_historico' => ($this->filaModel->getLastHistorico($row['id'])) 
+                              ? html($this->filaModel->getLastHistorico($row['id'])->historico)
+                              : '',
+                    'obs_admin' => ($row['obs_admin']) 
+                              ? html($row['obs_admin'])
+                              : '',
+                    'deficiencia' => ($row['deficiencia'] == 0)
+                              ?'NÃO'
+                              :'SIM',
+                    'logradouro' => ($row['logradouro']) 
+                              ? html($row['logradouro'])
+                              : '',
+                    'bairro' => ($row['bairro_id']) 
+                              ? $this->filaModel->getBairroByid($row['bairro_id']) 
+                              : '',
+                    'historico' => ($this->adminModel->getHistoricoById($row['id'])) 
+                              ? $this->adminModel->getHistoricoById($row['id']) 
+                              : ''
+                  ];
+                }
+              } else {
+                $results = false;
+              }             
+            }       
+            /* PAGINAÇÃO SUCESSO */     
+          }
+          //fim se o usuáro clicar em atualizar     
           $data = [
             'paginate' => $paginate,
             'results' => $results
           ];
-          //debug($data);
-
           $this->view('admins/index', $data);
         }
         /*INDEX*/

@@ -1,8 +1,6 @@
 <?php
-
+ini_set('display_errors','Off');
 require APPROOT . '/views/inc/fpdf/fpdf.php'; 
-
-
 
 class PDF extends FPDF
 {            

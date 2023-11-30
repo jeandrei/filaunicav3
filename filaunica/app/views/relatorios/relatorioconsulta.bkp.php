@@ -2,19 +2,6 @@
 ini_set('display_errors','Off');
 require APPROOT . '/views/inc/fpdf/fpdf.php'; 
 
-//die(var_dump($data));
-
-/* $contador = 0;
-foreach($data as $row){
-    var_dump($row["quadroVagas"][$contador]->descricao);
-    echo("<hr>");
-    $contador++;
-}
-die(); */
-
-
-//$numEscolas = ((count($data)));
-
 class PDF extends FPDF
 {            
             
@@ -33,7 +20,7 @@ class PDF extends FPDF
                 $this->Ln(20);
                 // Move to the right
                 $this->Cell(120);
-                $this->Cell(30,10, utf8_decode("Relatório de Quadro de Vagas"),0,0,'C');
+                $this->Cell(30,10, utf8_decode("Lista de Classificação da Fila Única"),0,0,'C');
                 // Line break
                 $this->Ln(20);                
             }
@@ -58,13 +45,12 @@ class PDF extends FPDF
             //AddPage('P') RETRATO AddPage('L') PAISAGEM
             //$pdf->AddPage('L');            
             $pdf->SetFont('Arial','B',8);
-            $colunas =array("Escola", "Etapa", "Matutino","Vespertino", "Integral");
+            $colunas =array("Pos", "Nome da Criança", "Responsável pelo cadastro", "Nascimento", "Etapa", "Protocolo", "Situação");
             //largura das colunas
-            //$larguracoll = array(1 => 80, 2 => 80, 3 => 20, 4 => 25, 5 => 25, 6 => 30);
-            $larguracoll = array(1 => 150, 2 => 50, 3 => 20, 4 => 20, 5 => 20);
-
-            $tam_fonte = 10;                            
-              
+            $larguracoll = array(1 => 10, 2 => 80, 3 => 80, 4 => 20, 5 => 25, 6 => 25, 7 => 30);
+            $tam_fonte = 10;    
+                        
+               
 
                 //se $data é falso não tem dados para emitir
                 if($data == false){
@@ -82,22 +68,31 @@ class PDF extends FPDF
                      //coloca as colunas com os títulos da tabela
                      foreach($colunas as $coluna){
                          $i++;
-                         $pdf->SetFont('Arial','B',10);                   
+                         $pdf->SetFont('Arial','B',8);                   
                          $pdf->Cell($larguracoll[$i],$tam_fonte,utf8_decode($coluna),1);
                      }
-                    
-                                          
-                        foreach($data as $row) {                             
-                            $pdf->SetFont('Arial','',$tam_fonte);  
-                            $pdf->Ln();                          
-                            $pdf->Cell($larguracoll[1],$tam_fonte,utf8_decode($row["escola"]),1,0,'C'); 
-                             $pdf->Cell($larguracoll[2],$tam_fonte,utf8_decode($row["etapa"]),1,0,'C');                          
-                            $pdf->Cell($larguracoll[3],$tam_fonte,utf8_decode($row["matutino"]),1,0,'C');   
-                            $pdf->Cell($larguracoll[4],$tam_fonte,utf8_decode($row["vespertino"]),1,0,'C');                   
-                            $pdf->Cell($larguracoll[5],$tam_fonte,utf8_decode($row["integral"]),1,0,'C'); 
+ 
+                     foreach($data as $row) {       
+                         $pdf->SetFont('Arial','',8);  
+                         $pdf->Ln();   
+                         $pdf->Cell($larguracoll[1],$tam_fonte,utf8_decode($row["posicao"]),1,0,'C');                       
+                         $pdf->Cell($larguracoll[2],$tam_fonte,utf8_decode($row["nomecrianca"]),1,0,'C');
+                         $pdf->Cell($larguracoll[3],$tam_fonte,utf8_decode($row["responsavel"]),1,0,'C');                         
+                         $pdf->Cell($larguracoll[4],$tam_fonte,utf8_decode($row["nascimento"]),1,0,'C');
+                         $pdf->Cell($larguracoll[5],$tam_fonte,utf8_decode($row["etapa"]),1,0,'C');
+                         $pdf->Cell($larguracoll[6],$tam_fonte,utf8_decode($row["protocolo"]),1,0,'C');  
+                         $pdf->Cell($larguracoll[7],$tam_fonte,utf8_decode($row["situacao"]),1,0,'C');  
                             
-                        } 
-                                        
+                         
+                         if($row['opcao_matricula']){
+                         $pdf->Ln(); 
+                         $pdf->SetFillColor(255, 255, 179); 
+                         $pdf->Cell(200,$tam_fonte,utf8_decode($row["situacao"] . " unidade: " . $row["opcao_matricula"]),1,0,'C',true);   
+                         $pdf->Cell(70,$tam_fonte,utf8_decode("Turno: " . $row["turno_matricula"]),1,0,'C',true);                        
+                         }
+                        
+                     } 
+                    
                 }   
 
 
