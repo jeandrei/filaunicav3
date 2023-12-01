@@ -102,7 +102,7 @@
       </div> 
 
       <div class="coluna coluna-50">      
-        <button type='button' class='btn btn-danger btn-sm' onClick=remover(this,<?php echo $row['id'];?>)><i class="fa fa-trash" aria-hidden="true"></i></button>
+        <button type='button' class='btn btn-danger btn-sm' onClick=arquivar(this,<?php echo $row['id'];?>)><i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>
 
       <div class="coluna coluna-10">
@@ -207,26 +207,56 @@ function getRegistro(id){
     
    
 // Remove um registro da fila e remove a linha da tabela   
+function arquivar(rowToDelete,id) {
+  if(typeof id != 'undefined'){
+    //pego o registro a partir do id lá do banco de dados
+    let registro = getRegistro(id);      
+    
+    const confirma = confirm(`Tem certeza que deseja arquivar o protocolo ${registro.protocolo} da criança ${registro.nomecrianca}?`);
+    if(confirma){
+      $.ajax({  
+          url: `<?php echo URLROOT; ?>/filas/arquiva/${id}`,                
+          method:'POST',
+          success: function(retorno_php){   
+              console.log(retorno_php);               
+              var responseObj = JSON.parse(retorno_php);               
+               if(responseObj.error == false){
+                deleteRow(rowToDelete);
+                createNotification(responseObj['message'], responseObj['class']);
+              }  else {
+                createNotification(responseObj['message'], responseObj['class']);
+              }  
+                              
+          }     
+      });//Fecha o ajax      
+    } 
+  }     
+}
+
+// Remove um registro da fila e remove a linha da tabela   
 function remover(rowToDelete,id) {
-  //pego o registro a partir do id lá do banco de dados
-  let registro = getRegistro(id);      
-  
-  const confirma = confirm(`Tem certeza que deseja excluir o protocolo ${registro.protocolo} da criança ${registro.nomecrianca}?`);
-  if(confirma){
-    $.ajax({  
-        url: `<?php echo URLROOT; ?>/filas/delete/${id}`,                
-        method:'POST',
-        success: function(retorno_php){                     
-            var responseObj = JSON.parse(retorno_php); 
-            if(responseObj.error == false){
-              deleteRow(rowToDelete);
-            } else {
-              alert(responseObj.message);
-            }
-                            
-        }     
-    });//Fecha o ajax      
-  }      
+  if(typeof id != 'undefined'){
+    //pego o registro a partir do id lá do banco de dados
+    let registro = getRegistro(id);      
+    
+    const confirma = confirm(`Tem certeza que deseja excluir o protocolo ${registro.protocolo} da criança ${registro.nomecrianca}?`);
+    if(confirma){
+      $.ajax({  
+          url: `<?php echo URLROOT; ?>/filas/delete/${id}`,                
+          method:'POST',
+          success: function(retorno_php){                     
+              var responseObj = JSON.parse(retorno_php);               
+               if(responseObj.error == false){
+                deleteRow(rowToDelete);
+                createNotification(responseObj['message'], responseObj['class']);
+              } else {
+                createNotification(responseObj['message'], responseObj['class']);
+              } 
+                              
+          }     
+      });//Fecha o ajax      
+    } 
+  }     
 }
 
   

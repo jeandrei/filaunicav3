@@ -46,7 +46,7 @@
     
     <!-- ===================FORMULÁRIO DE CADASTRO========================== -->   
     <div class="container mt-3" style="background-color:#FFFAF0">
-    <form id="cadastrar" action="<?php echo URLROOT; ?>/filas/cadastrar" method="post" enctype="multipart/form-data">
+    <form id="cadastrar_temp" action="<?php echo URLROOT; ?>/filas/cadastrar" method="post" enctype="multipart/form-data">
         
         
           
@@ -400,7 +400,7 @@
                                     id="opcao1" 
                                     class="form-control <?php echo (!empty($data['opcao1_err'])) ? 'is-invalid' : ''; ?>"                                       
                                 >
-                                <option value="">Selecione a Escola</option>
+                                <option value="null">Selecione a Escola</option>
                                     <?php                                                    
                                     foreach($data['escolas'] as $escola) : ?> 
                                         <option value="<?php echo $escola->id; ?>"
@@ -428,7 +428,7 @@
                                     id="opcao2" 
                                     class="form-control"                                        
                                 >
-                                <option value="">Selecione a Escola</option>
+                                <option value="null">Selecione a Escola</option>
                                     <?php                                                    
                                     foreach($data['escolas'] as $escola) : ?> 
                                         <option value="<?php echo $escola->id; ?>"
@@ -456,7 +456,7 @@
                                     id="opcao3" 
                                     class="form-control"                                        
                                 >
-                                <option value="">Selecione a Escola</option>
+                                <option value="null">Selecione a Escola</option>
                                     <?php                                                    
                                     foreach($data['escolas'] as $escola) : ?> 
                                         <option value="<?php echo $escola->id; ?>"
@@ -488,9 +488,10 @@
                                     id="opcao_turno" 
                                     class="form-control <?php echo (!empty($data['opcao_turno_err'])) ? 'is-invalid' : ''; ?>"                                       
                                 >
-                                    <option value="">Selecione o turno desejado</option>
+                                    <option value="null">Selecione o turno desejado</option>
                                     <option value="1" <?php echo $data['opcao_turno'] == '1' ? 'selected':'';?>>Matutino</option>
-                                    <option value="2" <?php echo $data['opcao_turno'] == '2' ? 'selected':'';?>>Vespertino</option>                                        
+                                    <option value="2" <?php echo $data['opcao_turno'] == '2' ? 'selected':'';?>>Vespertino</option> 
+                                    <option value="3" <?php echo $data['opcao_turno'] == '3' ? 'selected':'';?>>Integral</option>                                        
                                             
                                 </select>                                           
                                 <span class="text-danger">

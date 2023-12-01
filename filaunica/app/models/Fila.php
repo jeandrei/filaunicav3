@@ -45,10 +45,27 @@ class Fila {
             return false;
         }           
     } 
+
+   
+    
             
     //retorna se já existe um nome e data de nascimento cadastrado
     public function nomeCadastrado($nome,$nasc){
-        $this->db->query("SELECT * FROM fila where nomecrianca = :nomecrianca AND nascimento = :nascimento");
+        
+        $sql = "SELECT * FROM fila where nomecrianca = :nomecrianca AND nascimento = :nascimento";
+
+        if($situacoesFicamFila = $this->getSituacaoQueFicamNaFila()){
+            $sql .= " AND (";
+            foreach($situacoesFicamFila as $key=>$situacao){ 
+                if($key == 0) {
+                    $sql .= "fila.situacao_id = $situacao->id";
+                } else {
+                    $sql .= " OR fila.situacao_id = $situacao->id";
+                }
+            }
+            $sql .= ")";
+        }  
+        $this->db->query($sql);
         $this->db->bind(':nomecrianca',$nome);
         $this->db->bind(':nascimento',$nasc);
         $row = $this->db->single();   
@@ -698,7 +715,19 @@ class Fila {
 
     // Retorna um registro a partir do nome e data de nascimento
     public function getRegistroByNomeNascimento($nome, $nascimento){
-        $this->db->query('SELECT 
+        
+        // Verifico se existe a situação Arquivado
+        if(!$this->existeSitArquivado()){
+            // Se não existe eu crio ela
+            if(!$this->criaSitArquivado()){
+                return false;
+            }
+        }
+
+        if(!$idSitArquivado = $this->getIdSitArquivado()){
+            return false;
+        }
+        $this->db->query("SELECT 
                                 f.id as id,
                                 f.protocolo,
                                 f.nomecrianca,
@@ -718,9 +747,11 @@ class Fila {
                                 f.nomecrianca = :nome
                         AND 	
                                 f.nascimento = :nascimento
+                        AND 
+                                f.situacao_id != $idSitArquivado
                         ORDER BY 
                                 f.registro
-                        ASC');
+                        ASC");
         // Bind value
         $this->db->bind(':nome', $nome);
         $this->db->bind(':nascimento', $nascimento);
@@ -733,7 +764,7 @@ class Fila {
     }
 
     // Deleta um registro da fila
-    public function delete($id){
+    public function delete($id){        
         $this->db->query('DELETE from fila WHERE id=:id');
         $this->db->bind(':id',$id);                                         
         if($this->db->execute()){
@@ -742,6 +773,93 @@ class Fila {
             return false;
         } 
     }
+
+    // Verifica se existe a situação arquivado
+    public function existeSitArquivado(){
+        $sql = "SELECT * FROM situacao WHERE descricao = 'Arquivado'";
+        $this->db->query($sql);  
+        $result = $this->db->single();
+        if($this->db->rowCount() > 0){
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    // Cria a situação arquivado na tabela situação
+    public function criaSitArquivado(){
+        $this->db->query("INSERT INTO situacao (descricao, cor) VALUES ('Arquivado', '#A9A9A9')");  // Execute
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Retorna o id da situação arquivado
+    public function getIdSitArquivado(){
+        $this->db->query("SELECT id FROM situacao WHERE descricao = 'Arquivado'");          
+        $row = $this->db->single();   
+        if($this->db->rowCount() > 0){
+            return $row->id;
+        } else {
+            return false;
+        } 
+    }
+
+    // Altera um registro no banco para arquivado
+    public function setToArquivado($id){        
+        // Verifico se existe a situação Arquivado
+        if(!$this->existeSitArquivado()){
+            // Se não existe eu crio ela
+            if(!$this->criaSitArquivado()){
+                return false;
+            }
+        }
+
+        if(!$idSitArquivado = $this->getIdSitArquivado()){
+            return false;
+        }
+
+        $this->db->query("UPDATE fila SET situacao_id = $idSitArquivado WHERE id = :id");
+        // Bind values
+        $this->db->bind(':id',$id);            
+        // Execute
+        if($this->db->execute()){
+            return true;                
+        } else {
+            return false;
+        }
+    }
+
+    //Atualiza o histórico do registro para ficar registrado quando o registro foi arquivado
+    public function setHistoricoArquivado($id,$userName){        
+        if(!$idSitArquivado = $this->getIdSitArquivado()){
+            return false;
+        }
+        $this->db->query("INSERT INTO historico_id_fila (fila_id,usuario,situacao_id,historico) VALUES ($id,'$userName',$idSitArquivado,'Arquivado através da analise de registros duplicados')");
+        // Bind values
+        $this->db->bind(':id',$id);            
+        // Execute
+        if($this->db->execute()){
+            return true;                
+        } else {
+            return false;
+        }
+    }
+
+    // Arquiva um registro da fila
+    public function arquiva($id,$userName){            
+        if(!$this->setToArquivado($id)){
+            return false;
+        } else {
+            if(!$this->setHistoricoArquivado($id,$userName)){
+                return false;
+            } else {
+                return true;
+            }
+        }   
+    }    
 
 
     // Retorna um registro a partir do id

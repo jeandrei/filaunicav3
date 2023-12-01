@@ -37,6 +37,14 @@
         }
     }
 
+    function getUserId(){
+        if(isset($_SESSION[DB_NAME . '_user_id'])){       
+            return $_SESSION[DB_NAME . '_user_id'];
+         } else {
+             return false;
+         }
+    }
+
     function isAdmin(){
         if((isset($_SESSION[DB_NAME . '_user_type'])) && ($_SESSION[DB_NAME . '_user_type']) == 'admin'){
             return true;

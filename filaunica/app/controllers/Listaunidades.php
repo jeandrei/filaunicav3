@@ -23,14 +23,26 @@
                 foreach($escolas as $row){                    
                     $data[] = [
                         'id' => $row->id,
-                        'nome' => $row->nome,
-                        'bairro_id' => $row->bairro_id,
-                        'bairro' => $this->bairroModel->getBairroById($row->bairro_id)->nome,
-                        'logradouro' => $row->logradouro,                    
-                        'numero' => ($row->numero) ? $row->numero : '',
-                        'emAtividade' => ($row->emAtividade == 1) ? 'Sim' : 'Não'
+                        'nome' => ($row->nome)
+                                    ? $row->nome
+                                    : '',
+                        'bairro_id' => ($row->bairro_id)
+                                    ? $row->bairro_id
+                                    : '',
+                        'bairro' => ($this->bairroModel->getBairroById($row->bairro_id))
+                                    ? $this->bairroModel->getBairroById($row->bairro_id)->nome
+                                    : '',
+                        'logradouro' => ($row->logradouro)
+                                    ? $row->logradouro
+                                    :'',                    
+                        'numero' => ($row->numero) 
+                                    ? $row->numero 
+                                    : '',
+                        'emAtividade' => ($row->emAtividade == 1) 
+                                    ? 'Sim' 
+                                    : 'Não'
                     ];       
-                } 
+                }                 
                 $this->view('listaunidades/index', $data);
             } else {                                 
                 $this->view('listaunidades/index');
