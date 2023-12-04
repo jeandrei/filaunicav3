@@ -5,12 +5,13 @@
             $this->filaModel = $this->model('Fila');
             $this->etapaModel = $this->model('Etapa');
             $this->userModel = $this->model('User');
+            $this->configModel = $this->model('Config');
         }
 
 
 
           //Registra um cadastro na fila não permite duplicados
-          public function cadastrar(){    
+          public function cad(){               
             //pega todos os bairros
             $bairros = ($this->filaModel->getBairros())
                         ? $this->filaModel->getBairros()
@@ -64,7 +65,7 @@
                     'celular_err' => '',
                     'bairro_err' => '',
                     'rua_err' => '',
-                    'rua_err' => '',
+                    'numero_err' => '',
                     'nome_err' => '',
                     'nascimento_err' => '',
                     'certidao_err' => '',
@@ -72,7 +73,8 @@
                     'opcao1_err' => '',
                     'opcao2_err' => '',
                     'opcao3_err' => '',
-                    'cadastroDuplicado' => false
+                    'cadastroDuplicado' => false,
+                    'urlForm' => URLROOT . '/filas/cad'
                 ];
                                   
                     
@@ -266,7 +268,7 @@
                     'celular_err' => '',
                     'bairro_err' => '',
                     'rua_err' => '',
-                    'rua_err' => '',
+                    'numero_err' => '',
                     'nome_err' => '',
                     'nascimento_err' => '',
                     'certidao_err' => '',
@@ -274,14 +276,21 @@
                     'opcao2_err' => '',
                     'opcao3_err' => '',
                     'opcao_turno_err' => '',
-                    'cadastroDuplicado' => false
+                    'cadastroDuplicado' => false,
+                    'urlForm' => URLROOT . '/filas/cad'
                 ];                
                 $this->view('filas/cadastrar', $data);
             }    
         }
 
 /*         Registra um cadastro na fila mesmo duplicados. emite alerta mas permite cadastros duplicados
- */        public function cadastrarPermiteDuplicados(){    
+ */        public function cadastrar(){ 
+    
+            /* se estiver configurado para não permitir duplicados e a passoa tentar acessar pela url eu encerro aqui */
+            if($this->configModel->getPermiteDuplicado() != 'sim')   {
+                die('Não é permitido acessar esta página');
+            }
+
             //pega todos os bairros
             $bairros = ($this->filaModel->getBairros())
                         ? $this->filaModel->getBairros()
@@ -335,7 +344,7 @@
                     'celular_err' => '',
                     'bairro_err' => '',
                     'rua_err' => '',
-                    'rua_err' => '',
+                    'numero_err' => '',
                     'nome_err' => '',
                     'nascimento_err' => '',
                     'certidao_err' => '',
@@ -343,7 +352,8 @@
                     'opcao1_err' => '',
                     'opcao2_err' => '',
                     'opcao3_err' => '',
-                    'cadastroDuplicado' => false
+                    'cadastroDuplicado' => false,
+                    'urlForm' => URLROOT . '/filas/cadastrar'
                 ];
                                   
                     
@@ -538,7 +548,7 @@
                     'celular_err' => '',
                     'bairro_err' => '',
                     'rua_err' => '',
-                    'rua_err' => '',
+                    'numero_err' => '',
                     'nome_err' => '',
                     'nascimento_err' => '',
                     'certidao_err' => '',
@@ -546,7 +556,8 @@
                     'opcao2_err' => '',
                     'opcao3_err' => '',
                     'opcao_turno_err' => '',
-                    'cadastroDuplicado' => false
+                    'cadastroDuplicado' => false,
+                    'urlForm' => URLROOT . '/filas/cadastrar'
                 ];                
                 $this->view('filas/cadastrar', $data);
             }    

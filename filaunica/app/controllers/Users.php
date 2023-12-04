@@ -24,6 +24,10 @@
                 $page = 1;  
             }  
 
+            /*inicialização dos dados da paginação */
+            if(!isset($_GET['name'])){$_GET['name'] = '';}
+            if(!isset($_GET['type'])){$_GET['type'] = '';}  
+
 
             $options = array(
                 'results_per_page' => 10,
@@ -51,9 +55,15 @@
                     foreach($results as $row){
                         $data['results'][] = [
                             'id'   => $row['id'],
-                            'name' => $row['name'],
-                            'email' => $row['email'],
-                            'type' => $row['type']
+                            'name' => ($row['name'])
+                                    ? $row['name']
+                                    : '',
+                            'email' => ($row['email'])
+                                    ? $row['email']
+                                    : '',
+                            'type' => ($row['type'])
+                                    ? $row['type']
+                                    : ''
                         ];
                     }
                 }
@@ -87,29 +97,33 @@
               }  
 
             // Check for POST            
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){                
-                              
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){    
                 // Process form
-
                 // Sanitize POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-                
-                 
-
                 //init data
                 $data = [
-                    'name' => trim($_POST['name']),
-                    'email' => trim($_POST['email']),
-                    'password' => trim($_POST['password']),
-                    'confirm_password' => trim($_POST['confirm_password']),                    
-                    'type' => $_POST['type'],
+                    'name' => isset($_POST['name'])
+                                ? trim($_POST['name'])
+                                : '',
+                    'email' => isset($_POST['email'])
+                                ? trim($_POST['email'])
+                                : '',                   
+                    'password' => isset($_POST['password'])
+                                ? trim($_POST['password'])
+                                : '',
+                    'confirm_password' => isset($_POST['confirm_password'])
+                                ? trim($_POST['confirm_password'])
+                                : '',
+                    'type' => isset($_POST['type'])
+                                ? $_POST['type']
+                                : '',
                     'name_err' => '',
                     'email_err' => '',
                     'password_err' => '',
-                    'confirm_password_err' => ''
-                ];                
-
-                
+                    'confirm_password_err' => '',
+                    'type_err' => ''
+                ];   
 
                 // Validate Email
                 if(empty($data['email'])){
@@ -146,7 +160,6 @@
                     $data['type_err'] = 'Por favor informe um tipo para o usuário';
                 }
                
-
                 // Make sure errors are empty
                 if(                    
                     empty($data['email_err']) &&
@@ -169,9 +182,7 @@
                         redirect('users/userlist');
                       } else {
                           die('Ops! Algo deu errado.');
-                      }
-                      
-
+                      }        
                       
                     } else {
                       // Load the view with errors                     
@@ -185,6 +196,7 @@
                     'name' => '',
                     'email' => '',
                     'type' => '',
+                    'type_err' => '',
                     'password' => '',
                     'confirm_password' => '',
                     'name_err' => '',
@@ -218,27 +230,40 @@
               }  
 
             // Check for POST            
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-              
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){              
                
                 // Process form
 
                 // Sanitize POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
                 
-                //init data
+                //init data     
                 $data = [
                     'id' => $id,
-                    'name' => trim($_POST['name']),
-                    'email' => trim($_POST['email']),
-                    'password' => trim($_POST['password']),
-                    'confirm_password' => trim($_POST['confirm_password']),
-                    'type' => $_POST['type'],
-                    'typedb' => $this->userModel->getUserById($id)->type,
-                    'name_err' => '',                    
+                    'name' => isset($_POST['name'])
+                                ? trim($_POST['name'])
+                                : '',
+                    'email' => isset($_POST['email'])
+                                ? trim($_POST['email'])
+                                : '',                   
+                    'password' => isset($_POST['password'])
+                                ? trim($_POST['password'])
+                                : '',
+                    'confirm_password' => isset($_POST['confirm_password'])
+                                ? trim($_POST['confirm_password'])
+                                : '',
+                    'type' => isset($_POST['type'])
+                                ? $_POST['type']
+                                : '',
+                    'typedb' => ($this->userModel->getUserById($id)->type)
+                                ? $this->userModel->getUserById($id)->type
+                                : '',
+                    'name_err' => '',
+                    'email_err' => '',
                     'password_err' => '',
-                    'confirm_password_err' => ''
-                ];                
+                    'confirm_password_err' => '',
+                    'type_err' => ''
+                ];                  
 
                
                 // Validate Name
@@ -267,13 +292,15 @@
                 }
 
                 if($data['type'] <> 'sec'){
-                    if(!$_POST['confirma']){
+                    if(!isset($_POST['confirma'])){
                         if($this->usuarioEscolaModel->getEscolasDoUsuario($id)){
                             $data['alerta'] = 'Este usuário possui vinculos com escolas e a atualização para um tipo diferente requer a remoção dos vinculos.';                        
-                        }
+                        } 
                     }
+                } else {
+                    $data['alerta'] = '';
                 }
-                
+                               
 
                 // Make sure errors are empty
                 if(   
@@ -288,12 +315,13 @@
                       // Hash Password criptografa o password
                       $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-                      // Register User
+                      // Register User                      
                       if($this->userModel->update($data)){
                         // Cria a menságem antes de chamar o view va para 
                         // views/users/login a segunda parte da menságem                        
-                        flash('message', 'Usuário atualizado com sucesso!','success');                                                                   ;
+                        flash('message', 'Usuário atualizado com sucesso!','success');
                         redirect('users/userlist');
+                        die();
                       } else {
                           die('Ops! Algo deu errado.');
                       }    
@@ -318,7 +346,13 @@
                     'name' => $user->name,
                     'email' => $user->email,                                      
                     'type' => $user->type,
-                    'typedb' => $this->userModel->getUserById($id)->type,                 
+                    'typedb' => $this->userModel->getUserById($id)->type,
+                    'alerta' => '',
+                    'name_err' => '',
+                    'email_err' => '',
+                    'password_err' => '',
+                    'confirm_password_err' => '',
+                    'type_err' => ''
                 ];
 
                 if(!isAdmin()){
@@ -357,6 +391,8 @@
                 if($qtdAdmins < 2){
                     $erro = 'Existe apenas um administrador cadastrado! Cadastre um novo administrador para ralizar esta exclusão.';
                 } 
+            } else {
+                $erro = '';
             }           
            
            //esse $_POST['delete'] vem lá do view('confirma');

@@ -1,0 +1,75 @@
+<?php
+    class Configs extends Controller{
+        public function __construct(){
+            // 1 Chama o model
+          $this->configModel = $this->model('Config');
+        }
+        // INDEX PÁGINA INICIAL LANDING PAGE
+        public function index(){
+           
+            // Posso passar valores aqui pois no view está definido um array para isso
+            // public function view($view, $data = []){
+            // 2 Chama um método
+            //$posts = $this->postModel->getPosts();
+            
+            // 3 coloca os valores no array
+            $data = [
+            'title' => 'Configurações',
+            'description'=> 'Configurações da fila única'
+            ];
+
+            // 4 Chama o view passando os dados
+            $this->view('configs/index', $data);
+        }  
+        
+        public function configCad(){
+            $data = [
+                'title' => 'Configurações',
+                'description'=> 'Configurações de cadastro',
+                'permiteCadDuplicado' => $this->configModel->getPermiteDuplicado()
+                ];
+    
+                // 4 Chama o view passando os dados
+                $this->view('configs/configCad', $data);
+        }
+
+        public function atualizConfigCad(){ 
+
+            
+
+            if((!isLoggedIn())){ 
+                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+                redirect('users/login');
+                die();
+            } else if ((!isAdmin())){                
+                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+                redirect('pages/sistem'); 
+                die();
+            }  
+
+           try{
+
+                if($this->configModel->atualizaConfigCad($_POST['situacao'])){                    
+                    //para acessar esses valores no jquery
+                    //exemplo responseObj.message
+                    $json_ret = array(
+                                        'classe'=>'success', 
+                                        'message'=>'Dados gravados com sucesso',
+                                        'error'=>false
+                                    );                     
+                    
+                    echo json_encode($json_ret); 
+                } else {                        
+                    throw new Exception('Erro ao gravar os dados!');  
+                }        
+            } catch (Exception $e) {
+                $json_ret = array(
+                        'classe'=>'error', 
+                        'message'=>$e->getMessage(),
+                        'error'=>true
+                        );                     
+                echo json_encode($json_ret); 
+            }
+        }        
+        
+}

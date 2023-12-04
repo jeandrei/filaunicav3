@@ -27,3 +27,22 @@ ALTER TABLE `escola_vagas`
   
  ALTER TABLE `escola_vagas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+  CREATE TABLE `config` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(255) NOT NULL,
+  `valor` varchar(50) NOT NULL  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `config`
+  ADD PRIMARY KEY (`id`);
+  
+ALTER TABLE `config`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+  INSERT INTO `config` (`descricao`, `valor`) VALUES
+('permiteCadDuplicado', 'sim')
+
+
+
+

@@ -25,14 +25,14 @@
                             <?php                                                    
                             foreach($data['escolas'] as $escola) : ?> 
                                 <option value="<?php echo $escola->escolaid; ?>"
-                                            <?php echo $_POST['escola_id'] == $escola->escolaid ? 'selected':'';?>                                                                                                                                   
+                                            <?php echo (isset($_POST['escola_id']) && $_POST['escola_id'] == $escola->escolaid) ? 'selected':'';?>                                                                                                                                   
                                 >
                                     <?php echo $escola->nome;?>
                                 </option>
                             <?php endforeach; ?>  
                         </select>                                           
                         <span class="text-danger">
-                                <?php echo $data['post']['escola_id_err']; ?>
+                                <?php echo (isset($data['post']['escola_id_err'])) ? $data['post']['escola_id_err'] : ''; ?>
                         </span>
                     </div>
                 </div>

@@ -6,7 +6,7 @@
         <div class="card card-body bg-ligth mt-5">
             <h2>Registrar um usuário</h2>
             <p>Por favor informe os dados do novo usuário</p>
-            <form id="newuser" action="<?php echo URLROOT; ?>/users/new" method="post">                
+            <form id="newuser_t" action="<?php echo URLROOT; ?>/users/new" method="post">                
                 
                 <!--NOME-->
                 <div class="form-group">

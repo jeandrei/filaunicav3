@@ -152,7 +152,7 @@
 
         //Traz todas as situações da tabela situacao
         public function getSituacoes(){
-            $this->db->query('SELECT * FROM situacao');          
+            $this->db->query('SELECT * FROM situacao ORDER BY ativonafila DESC,descricao  ASC');          
            
             $result = $this->db->resultSet();  
 

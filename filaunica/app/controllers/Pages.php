@@ -2,7 +2,7 @@
     class Pages extends Controller{
         public function __construct(){
             // 1 Chama o model
-          //$this->postModel = $this->model('Post');
+          $this->configModel = $this->model('Config');
         }
 
 
@@ -20,9 +20,11 @@
             // 3 coloca os valores no array
             $data = [
             'title' => 'Fila Única',
-            'description'=> 'Fila Única'
+            'description'=> 'Fila Única',
+            'urlForm' => ($this->configModel->getPermiteDuplicado() == 'sim') ? URLROOT . '/filas/cadastrar' : URLROOT . '/filas/cad'
             ];
-
+            /* urlForm dependendo do que está configurado na tabela config->PermiteCadDuplicado eu passo a url diferente se estiver configurado sim eu passo a url filas/cadastrar que lá no controller cadastrar permite registros duplicados porém emite alerta, se estiver configurado como não eu passo a url filas/cad que lá no controller cad não permite cadastros duplicados */
+            
             // 4 Chama o view passando os dados
             $this->view('pages/index', $data);
         }

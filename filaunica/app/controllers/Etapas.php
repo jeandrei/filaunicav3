@@ -266,7 +266,9 @@
                 $erro = 'ID Inválido!'; 
             } else if (!$data['etapa'] = $this->etapaModel->getEtapaById($id)){
                 $erro = 'ID inexistente';
-            }     
+            } else {
+                $erro = '';
+            }   
             
              //esse $_POST['delete'] vem lá do view('confirma');
             if(isset($_POST['delete'])){
@@ -294,7 +296,10 @@
             //se existe protocolos na fila dessa etapa aviso o usuário        
             if($this->etapaModel->etapaRegFila($id)){
                 $data['alerta'] = 'Alerta.: Existem registros na fila vinculados a esta etapa!';                   
-            }            
+            } else {
+                $data['alerta'] = '';
+            }      
+                
             $this->view('etapas/confirma',$data);
             exit();
            }                 

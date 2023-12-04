@@ -46,7 +46,7 @@
     
     <!-- ===================FORMULÁRIO DE CADASTRO========================== -->   
     <div class="container mt-3" style="background-color:#FFFAF0">
-    <form id="cadastrar_temp" action="<?php echo URLROOT; ?>/filas/cadastrar" method="post" enctype="multipart/form-data">
+    <form id="cadastrar_t" action="<?php echo $data['urlForm']; ?>" method="post" enctype="multipart/form-data">
         
         
           
@@ -239,11 +239,11 @@
                                     type="number" 
                                     name="numero" 
                                     id="numero" 
-                                    class="form-control onlynumbers <?php echo (!empty($data['number_err'])) ? 'is-invalid' : ''; ?>"                                                                                                                
+                                    class="form-control onlynumbers <?php echo (!empty($data['numero_err'])) ? 'is-invalid' : ''; ?>"                                                                                                                
                                     value="<?php htmlout($data['numero']); ?>"
                                 >
                                 <span class="text-danger">
-                                    <?php echo $data['rua_err']; ?>
+                                    <?php echo $data['numero_err']; ?>
                                 </span>
                             </div>
                             <!-- NUMERO -->

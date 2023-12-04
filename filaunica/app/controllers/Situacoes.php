@@ -52,18 +52,21 @@
                 // Sanitize POST data
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);    
 
-
                 //init data
                 $data = [
-                    'descricao' => trim($_POST['descricao']),
-                    'ativo' => trim($_POST['ativo']),
-                    'cor' => trim($_POST['cor']),                    
+                    'descricao' => isset($_POST['descricao'])
+                                    ? trim($_POST['descricao'])
+                                    : '',
+                    'ativo' => isset($_POST['ativo'])
+                                    ? trim($_POST['ativo'])
+                                    : '',
+                    'cor' => isset(($_POST['cor']))
+                                    ? trim($_POST['cor'])
+                                    : '',
                     'descricao_err' => '',
                     'ativo_err' => '',
                     'cor_err' => ''
-                ];                
-
-                
+                ];                   
 
                 // Valida Situação
                 if(empty($data['descricao'])){
@@ -79,7 +82,7 @@
                 if(empty($data['cor'])){
                     $data['cor_err'] = 'Por favor informe uma cor';
                 } 
-                              
+                             
                 
                 // Make sure errors are empty
                 if(                    
@@ -91,7 +94,7 @@
                         try {
                                 if($this->situacaoModel->register($data)){
                                     flash('message', 'Cadastro realizado com sucesso!','success');                     
-                                    $this->view('situacoes/new');
+                                    redirect('situacoes/index');
                                 } else {
                                     throw new Exception('Ops! Algo deu errado ao tentar gravar os dados!');
                                 }
@@ -113,7 +116,15 @@
                         redirect('index');
                     } 
 
-                    unset($data);                  
+                     $data = [
+                    'descricao' => '',
+                    'ativo' => '',
+                    'cor' => '',                    
+                    'descricao_err' => '',
+                    'ativo_err' => '',
+                    'cor_err' => ''
+                ];            
+
                     $this->view('situacoes/new', $data);
                 } 
         }
@@ -176,8 +187,8 @@
                     ){
                       
                         try {
-                                if($this->situacaoModel->update($data)){                                    
-                                    flash('message', 'Cadastro atualizado com sucesso!');                     
+                                if($this->situacaoModel->update($data)){ 
+                                    flash('message', 'Cadastro atualizado com sucesso!','success');             
                                     $this->view('situacoes/edit',$data);
                                 } else {
                                     throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados!');
@@ -195,20 +206,28 @@
                         }
             
             } else {
-                // get exiting user from the model
-                $situacao = $this->situacaoModel->getSituacaoByid($id);
+               
 
                 if(!isAdmin()){
                     redirect('userlist');
                 }
                
+                 // get exiting user from the model
+                if($situacao = $this->situacaoModel->getSituacaoByid($id)){
+                    $data = [
+                        'id' => $id,
+                        'descricao' => $situacao->descricao,
+                        'ativo' => $situacao->ativonafila,  
+                        'cor' => $situacao->cor,                          
+                        'descricao_err' => '',
+                        'ativo_err' => '',
+                        'cor_err' => ''
+                    ];    
+                } else {
+                    $situacao = 'null' ;
+                }
+                
 
-                $data = [
-                    'id' => $id,
-                    'descricao' => $situacao->descricao,
-                    'ativo' => $situacao->ativonafila,                                      
-                    'cor' => $situacao->cor                  
-                ];
                 // Load view
                 $this->view('situacoes/edit', $data);
             } 
@@ -231,6 +250,8 @@
                $erro = 'ID Inválido!'; 
             } else if (!$data = $this->situacaoModel->getSituacaoById($id)){
                 $erro = 'ID inexistente';
+            } else {
+                $erro = '';
             }
 
             if($erro){

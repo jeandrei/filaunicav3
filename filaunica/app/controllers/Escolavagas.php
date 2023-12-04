@@ -28,6 +28,7 @@
                 $data['escolas'] = $this->usuarioEscolaModel->getEscolasDoUsuario($user_id);
             } 
 
+            //debug($data);
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 

@@ -9,16 +9,17 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           
-              <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                      <a class="nav-link" href="<?php echo URLROOT; ?>/pages/sistem">Início</a>
-                    </li>
+              <ul class="navbar-nav mr-auto">                    
                     <li class="nav-item">
                       <a class="nav-link" href="<?php echo URLROOT; ?>/pages/about">Sobre</a>
                     </li>
 
                     
                     <?php if(isAdmin() || isUser() || isSec()) : ?>
+                    <li class="nav-item">
+                      <a class="nav-link" href="<?php echo URLROOT; ?>/configs/index">Config</a>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         CEI

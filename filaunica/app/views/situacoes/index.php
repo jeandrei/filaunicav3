@@ -39,6 +39,8 @@
                         Remover
                     </a>
                 </td>
+                <?php else: ?>
+                    <td>Ações não permitidas.</td>
                 <?php endif; ?>
             </tr>
         <?php endforeach; ?>   

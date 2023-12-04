@@ -71,49 +71,49 @@
                   'id' => $row->id,
                   'posicao' => ($this->filaModel->buscaPosicaoFila($row->protocolo)) ? $this->filaModel->buscaPosicaoFila($row->protocolo) : "-",
                   'etapa' => ($this->etapaModel->getEtapaDescricao($row->nascimento)) ? $this->etapaModel->getEtapaDescricao($row->nascimento) : "FORA ETAPAS",
-                  'nomecrianca' => ($row->nomecrianca) 
+                  'nomecrianca' => isset($row->nomecrianca) 
                                     ? $row->nomecrianca 
                                     : 'Sem informação de Nome',
-                  'nascimento' => ($row->nascimento)
+                  'nascimento' => isset($row->nascimento)
                                     ? date('d/m/Y', strtotime($row->nascimento))
                                     : 'Sem informação de Nascimento',
-                  'responsavel' => ($row->responsavel)
+                  'responsavel' => isset($row->responsavel)
                                     ? $row->responsavel
                                     : 'Sem informação de Responsável',
-                  'protocolo' => ($row->protocolo)
+                  'protocolo' => isset($row->protocolo)
                                     ? $row->protocolo
                                     : 'Registro com erro na geraçao de protocolo',
-                  'registro' => ($row->registro)
+                  'registro' => isset($row->registro)
                                     ? date('d/m/Y H:i:s', strtotime($row->registro))
                                     : 'Sem informação de registro',
-                  'telefone' => ($row->telefone)
+                  'telefone' => isset($row->telefone)
                                     ? $row->telefone
                                     : 'Sem informação de telefone',
-                  'celular' => ($row->celular)
+                  'celular' => isset($row->celular)
                                     ? $row->celular
                                     : 'Sem informação de celular',
-                  'situacao' => ($row->situacao_id)
+                  'situacao' => isset($row->situacao_id)
                                     ? $this->situacaoModel->getDescricaoSituacaoById($row->situacao_id)
                                     : 'Registro com erro na situação informada',                  
-                  'situacao_id' => ($row->situacao_id)
+                  'situacao_id' => isset($row->situacao_id)
                                     ? $row->situacao_id
                                     : 'Registro com erro na situação informada',
-                  'opcao1_id' => ($row->opcao1_id) 
+                  'opcao1_id' => isset($row->opcao1_id) 
                                     ? $this->filaModel->getEscolasById($row->opcao1_id)->nome 
                                     : '',
-                  'opcao2_id' => ($row->opcao2_id) 
+                  'opcao2_id' => isset($row->opcao2_id) 
                                     ? $this->filaModel->getEscolasById($row->opcao2_id)->nome 
                                     : '',
-                  'opcao3_id' => ($row->opcao3_id)
+                  'opcao3_id' => isset($row->opcao3_id)
                                     ? $this->filaModel->getEscolasById($row->opcao3_id)->nome
                                     : '',
-                  'opcao_matricula' => ($row->opcao_matricula)
+                  'opcao_matricula' => isset($row->opcao_matricula)
                                     ? $this->filaModel->getEscolasById($row->opcao_matricula)->nome
                                     : '',
-                  'opcao_turno' => ($row->opcao_turno)
+                  'opcao_turno' => isset($row->opcao_turno)
                                     ? $this->filaModel->getTurno($row->opcao_turno)
                                     : 'Sem opção de turno informada',
-                  'turno_matricula' => ($row->turno_matricula)
+                  'turno_matricula' => isset($row->turno_matricula)
                                     ? $this->filaModel->getTurno($row->turno_matricula)
                                     : 'Sem informação de turno para a matrícula'
                 );
@@ -175,19 +175,19 @@
                     'situacao_id' => ($row['situacao_id']) 
                               ? $row['situacao_id'] 
                               : '',
-                    'opcao1_id' => ($row['opcao1_id']) 
+                    'opcao1_id' => ($row['opcao1_id'] && $row['opcao1_id'] != 'null') 
                               ? html($this->filaModel->getEscolasById($row['opcao1_id'])->nome)
                               : '',
                     'vagas_op1' => ($row['opcao1_id']) 
                               ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao1_id'],$this->etapaModel->getEtapaId($row['nascimento'])) 
                               : '',
-                    'opcao2_id' => ($row['opcao2_id']) 
+                    'opcao2_id' => ($row['opcao2_id'] && $row['opcao2_id'] != 'null') 
                               ? html($this->filaModel->getEscolasById($row['opcao2_id'])->nome)
                               : '',
                     'vagas_op2' => ($row['opcao2_id'])
                               ? $this->escolaVagasModel->getEscolaVagasEtapa($row['opcao2_id'],$this->etapaModel->getEtapaId($row['nascimento']))
                               : '',
-                    'opcao3_id' => ($row['opcao3_id']) 
+                    'opcao3_id' => ($row['opcao3_id'] && $row['opcao3_id'] != 'null') 
                               ? html($this->filaModel->getEscolasById($row['opcao3_id'])->nome)
                               : '',
                     'vagas_op3' => ($row['opcao3_id']) 
