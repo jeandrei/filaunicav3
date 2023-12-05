@@ -2,6 +2,7 @@
 ini_set('display_errors','Off');
 require APPROOT . '/views/inc/fpdf/fpdf.php'; 
 
+
 /* foreach($data['totais'] as $total){
     echo $total['escola'];
     echo $total['totalOpcao1'];
@@ -67,8 +68,8 @@ class PDF extends FPDF
                
 
                 //se $data é falso não tem dados para emitir
-                if($data['results']['erro'] == true){
-                    $error = "Sem dados para emitir!";                   
+                if($data['results']['error'] == true){
+                    $error = $data['results']['message'];                 
                 }
                 // caso contrário monta o relatório
                 else

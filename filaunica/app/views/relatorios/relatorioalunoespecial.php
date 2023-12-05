@@ -55,8 +55,8 @@ class PDF extends FPDF
                
 
                 //se $data é falso não tem dados para emitir
-                if($data['results']['erro'] == true){
-                    $error = "Sem dados para emitir!";                   
+                if($data['results']['error'] == true){
+                    $error = $data['results']['message'];                   
                 }
                 // caso contrário monta o relatório
                 else

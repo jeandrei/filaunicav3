@@ -67,8 +67,8 @@ class PDF extends FPDF
               
 
                 //se $data é falso não tem dados para emitir
-                if($data == false){
-                    $error = "Sem dados para emitir!";                   
+                if($data['results']['error'] == true){
+                    $error = $data['results']['message'];                   
                 }
                 // caso contrário monta o relatório
                 else
@@ -87,7 +87,7 @@ class PDF extends FPDF
                      }
                     
                      $contador = 0;
-                     foreach($data as $row) { 
+                     foreach($data['results'] as $row) { 
                          $contador++;      
                          $pdf->SetFont('Arial','',7);  
                          $pdf->Ln();                          
