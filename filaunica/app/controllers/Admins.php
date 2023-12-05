@@ -809,23 +809,48 @@
       die();
     }  
    
-    $escolas = $this->escolaModel->getEscolas();
-    $etapas = $this->etapaModel->getEtapas();
-    
+    if(!$etapas = $this->etapaModel->getEtapas()){
+      $etapas = null;
+    } 
 
-    foreach($escolas as $escola){ 
-      foreach($etapas as $etapa){        
-        $quadroVagas = $this->escolaVagasModel->getEscolaVagasEtapa($escola->id,$etapa['id']);
-        $data[] = [
-          'escola_id' => $escola->id,
-          'escola' => $escola->nome,
-          'etapa' => $this->etapaModel->getEtapaById($etapa['id'])->descricao, 
-          'matutino' => $quadroVagas->matutino,
-          'vespertino' => $quadroVagas->vespertino,
-          'integral' => $quadroVagas->integral
-        ];
-      }                
-    }     
+    if(($escolas = $this->escolaModel->getEscolas()) && ($etapas != null)){
+      foreach($escolas as $escola){ 
+        foreach($etapas as $etapa){        
+          $quadroVagas = $this->escolaVagasModel->getEscolaVagasEtapa($escola->id,$etapa['id']);
+          $results[] = [
+            'escola_id' => isset($escola->id)
+                    ? $escola->id
+                    : '',
+            'escola' => isset($escola->nome)
+                    ? $escola->nome
+                    : '',
+            'etapa' => isset(($etapa['id'])->descricao)
+                    ? $this->etapaModel->getEtapaById($etapa['id'])->descricao
+                    : '', 
+            'matutino' => isset($quadroVagas->matutino)
+                    ? $quadroVagas->matutino
+                    : '',
+            'vespertino' => isset($quadroVagas->vespertino)
+                    ? $quadroVagas->vespertino
+                    : '',
+            'integral' => isset($quadroVagas->integral)
+                    ? $quadroVagas->integral
+                    : ''
+          ];
+        }                
+      }     
+    } else {
+      $results = [
+        'error' => true,
+        'message' => 'Erro ao recuperar o quadro de vagas'
+      ];
+    }
+
+    $data = [
+      'results' => $results
+    ];
+     
+    
     $this->view('relatorios/relatorioQuadrodeVagas',$data);
 }  
     
