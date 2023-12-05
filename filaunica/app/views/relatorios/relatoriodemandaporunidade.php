@@ -63,12 +63,11 @@ class PDF extends FPDF
             //$larguracoll = array(1 => 80, 2 => 80, 3 => 20, 4 => 25, 5 => 25, 6 => 30);
             $larguracoll = array(1 => 60, 2 => 15, 3 => 60, 4 => 20, 5 => 20, 6 => 15, 7 => 31, 8 => 31, 9 => 31);
 
-            $tam_fonte = 10;    
-                        
+            $tam_fonte = 10;  
                
 
                 //se $data é falso não tem dados para emitir
-                if($data == false){
+                if($data['results']['erro'] == true){
                     $error = "Sem dados para emitir!";                   
                 }
                 // caso contrário monta o relatório

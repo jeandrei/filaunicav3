@@ -2,7 +2,7 @@
 
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<h3>Relatório de Demanda por Unidade</h3> 
+<h3>Relatório de alunos especiais</h3> 
 
 <form action="<?php echo URLROOT; ?>/admins/relatorioAlunoEspecial" target="_blank" method="post" enctype="multipart/form-data">
 
