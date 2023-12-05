@@ -88,7 +88,7 @@ class PDF extends FPDF
                      }
                     
                      $contador = 0;
-                     foreach($data["dados"] as $row) { 
+                     foreach($data['results'] as $row) { 
                          $contador++;      
                          $pdf->SetFont('Arial','',7);  
                          $pdf->Ln();                          
