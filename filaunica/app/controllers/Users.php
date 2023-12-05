@@ -434,8 +434,12 @@
 
                 //init data
                 $data = [                    
-                    'email' => trim($_POST['email']),
-                    'password' => trim($_POST['password']),  
+                    'email' => isset($_POST['email'])
+                                    ? trim($_POST['email'])
+                                    : '',
+                    'password' => isset($_POST['password'])
+                                    ? trim($_POST['password'])
+                                    : '',  
                     'email_err' => '',
                     'password_err' => ''
                     
@@ -451,15 +455,12 @@
                     } else {
                     $data['email_err'] = 'Usuário não encontrado';
                     }
-                }
-               
-
-                 // Validate Password
-                 if(empty($data['password'])){
-                    $data['password_err'] = 'Por favor informe sua senha';
                 } 
 
-                
+                // Validate Password
+                if(empty($data['password'])){
+                    $data['password_err'] = 'Por favor informe sua senha';
+                }                
                                
                 // Make sure errors are empty
                 if(                    
@@ -497,7 +498,7 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => ''
-                ];
+                ];                
                 // Load view
                 $this->view('users/login', $data);
             }
