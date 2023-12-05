@@ -138,30 +138,35 @@
             rules : {	
                 nome : {
                     required : true,
-                    minlength : 6,
+                    minlength : 3,
                 },		
                 logradouro : {
                     required : true
                 },		
                 bairro_id : {
                     selectone: "null"
+                },
+                emAtividade : {
+                    required: true
                 }
                 
             },
 
             messages : {
                 nome : {
-                    required : 'Por favor informe o nome do usuário.',
-                    minlength : 'A senha deve ter, no mínimo, 6 caracteres.'
+                    required : 'Por favor informe o nome da unidade.',
+                    minlength : 'O nome deve ter no mínimo 3 caracteres.'
                 },			
                 logradouro : {
-                    required : 'Por favor informe seu email.'
+                    required : 'Por favor informe o logradouro.'
                 },
                 bairro_id : {
                     selectone: 'Por favor informe o bairro.'
+                },
+                emAtividade : {
+                    required : 'Por favor informe se unidade ativa.'
                 }
             }
         });
 });
 </script>
-

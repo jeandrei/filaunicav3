@@ -22,12 +22,24 @@
                 foreach($escolas as $row){                    
                     $data[] = [
                         'id' => $row->id,
-                        'nome' => $row->nome,
-                        'bairro_id' => $row->bairro_id,
-                        'bairro' => $this->bairroModel->getBairroById($row->bairro_id)->nome,
-                        'logradouro' => $row->logradouro,                    
-                        'numero' => ($row->numero) ? $row->numero : '',
-                        'emAtividade' => ($row->emAtividade == 1) ? 'Sim' : 'Não'
+                        'nome' => ($row->nome)
+                                    ? $row->nome
+                                    : '',
+                        'bairro_id' => ($row->bairro_id)
+                                    ? $row->bairro_id
+                                    : '',
+                        'bairro' => isset($this->bairroModel->getBairroById($row->bairro_id)->nome)
+                                    ? $this->bairroModel->getBairroById($row->bairro_id)->nome
+                                    : '',
+                        'logradouro' => isset($row->logradouro)
+                                    ? $row->logradouro
+                                    : '',                    
+                        'numero' => ($row->numero) 
+                                    ? $row->numero 
+                                    : '',
+                        'emAtividade' => ($row->emAtividade == 1) 
+                                    ? 'Sim' 
+                                    : 'Não'
                     ];       
                 }               
                 $this->view('escolas/index', $data);
@@ -68,7 +80,8 @@
                     'nome_err' => '',
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                   
-                    'emAtividade_err' => ''                    
+                    'emAtividade_err' => '',
+                    'numero_err' => ''
                 ];                
 
                 
@@ -143,7 +156,8 @@
                     'nome_err' => '',
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                   
-                    'emAtividade_err' => ''                    
+                    'emAtividade_err' => '',
+                    'numero_err' => ''                    
                 ];
                 // Load view
                 $this->view('escolas/new', $data);
@@ -261,7 +275,8 @@
                     'nome_err' => '',
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                   
-                    'emAtividade_err' => ''                    
+                    'emAtividade_err' => '',
+                    'numero_err' => ''                   
                 ];                
                 // Load view
                 $this->view('escolas/edit', $data);
@@ -269,7 +284,7 @@
         }       
         
 
-        public function delete($id){            
+        public function delete($id){           
            
             
             if((!isLoggedIn())){ 
@@ -285,20 +300,31 @@
              //VALIDAÇÃO DO ID
              if(!is_numeric($id)){
                 $erro = 'ID Inválido!'; 
-            } else if (!$data['escola'] = $this->escolaModel->getEscolaById($id)){
+            } else if (!$escolaRemover = $this->escolaModel->getEscolaById($id)){
                 $erro = 'ID inexistente';
+            } else {
+                $erro = '';
             }
+            
             
 
             if($escolas = $this->escolaModel->getEscolas()){
                                
                 foreach($escolas as $row){                    
-                    $data[] = [
+                    $listaEscolas[] = [
                         'id' => $row->id,
-                        'nome' => $row->nome,
-                        'bairro_id' => $row->bairro_id,
-                        'bairro' => $this->bairroModel->getBairroById($row->bairro_id)->nome,
-                        'logradouro' => $row->logradouro,                    
+                        'nome' => isset($row->nome)
+                                        ? $row->nome
+                                        : '',
+                        'bairro_id' => isset($row->bairro_id)
+                                        ? $row->bairro_id
+                                        : '',
+                        'bairro' => ($this->bairroModel->getBairroById($row->bairro_id))
+                                        ? $this->bairroModel->getBairroById($row->bairro_id)->nome
+                                        : '',
+                        'logradouro' => isset($row->logradouro)
+                                        ? $row->logradouro
+                                        : '',                    
                         'numero' => ($row->numero) ? $row->numero : '',
                         'emAtividade' => ($row->emAtividade == 1) ? 'Sim' : 'Não'
                     ];       
@@ -307,12 +333,10 @@
             }
             
            
-                  
+           
             
              //esse $_POST['delete'] vem lá do view('confirma');
             if(isset($_POST['delete'])){  
-                
-               
                 
                 if($erro){
                     flash('message', $erro , 'error');                     
@@ -336,8 +360,20 @@
            } else {  
             //se existe protocolos na fila dessa etapa aviso o usuário        
             if($this->escolaModel->escolaRegFila($id)){
-                $data['alerta'] = 'Alerta.: Existem registros na fila com a escola '.$data['escola']->nome. ' como opção! Todos os protocolos com esta escola ficarão sem esta opção!';                   
-            }            
+                $alerta = 'Alerta.: Existem registros na fila com a escola '.$escolaRemover->nome. ' como opção! Todos os protocolos com esta escola ficarão sem esta opção!';                   
+            } else {
+                $alerta = '';
+            }
+            
+            //ESTOU ARRUMANDO AQUI
+
+            $data = [   
+                'id' => $id,
+                'alerta' => $alerta,
+                'escolas' => $listaEscolas,
+                'escolaRemover' => $escolaRemover
+            ];            
+            
             $this->view('escolas/confirma',$data);
             exit();
            }                 

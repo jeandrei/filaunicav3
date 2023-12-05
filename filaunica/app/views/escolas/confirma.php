@@ -4,13 +4,26 @@
   
     <h2 class="mt-2">Excluir Escola</h2>
 
-    <form action="<?php echo URLROOT; ?>/escolas/delete/<?php echo $data['escola']->id;?>" method="post" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/escolas/delete/<?php echo $data['escolaRemover']->id;?>" method="post" enctype="multipart/form-data">
         
         <div class="form-group">
-            <p>Você deseja realmente excluir a Escola <strong><?php echo $data['escola']->nome; ?>?</strong></p>           
-            <?php if($data['alerta']){
-                echo $data['alerta'];
-            }?>
+            <p>Você deseja realmente excluir a Escola <strong><?php echo $data['escolaRemover']->nome; ?>?</strong></p>   
+
+            <!--ALERTA QUE JÁ EXISTEM CADASTROS NA FILA COM A ESCOLA DE OPÇÃO-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-warning" role="alert">
+                    <p><?php 
+                            if($data['alerta']){
+                                echo $data['alerta'];
+                            }
+                        ?>
+                    </p>
+                    </div>
+                </div>                    
+            </div>
+            <!--ALERTA QUE JÁ EXISTEM CADASTROS NA FILA COM A ESCOLA DE OPÇÃO-->
+
             <p>Só execute esta ação se você realmente sabe o que está fazendo.</p>
         </div>  
         
