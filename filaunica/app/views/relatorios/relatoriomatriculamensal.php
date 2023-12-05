@@ -2,6 +2,7 @@
 ini_set('display_errors','Off');
 require APPROOT . '/views/inc/fpdf/fpdf.php'; 
 
+//debug($data);
 
 //var_dump($_POST);
 
@@ -48,17 +49,17 @@ class PDF extends FPDF
             //AddPage('P') RETRATO AddPage('L') PAISAGEM
             //$pdf->AddPage('L');            
             $pdf->SetFont('Arial','B',8);
-            $colunas =array("Nº", "Nome da Criança", "Responsável pelo cadastro", "Nasc", "Etapa", "Turno", "Unidade Escolar");
+            $colunas =array("Nº", "Nome da Criança", "Responsável pelo cadastro", "Nasc", "Turno", "Unidade Escolar");
             //largura das colunas
             //$larguracoll = array(1 => 80, 2 => 80, 3 => 20, 4 => 25, 5 => 25, 6 => 30);
-            $larguracoll = array(1 => 10, 2 => 70, 3 => 70, 4 => 15, 5 => 25, 6 => 15, 7 => 75);
+            $larguracoll = array(1 => 10, 2 => 80, 3 => 80, 4 => 20, 5 => 15, 6 => 75);
 
             $tam_fonte = 10;    
                         
                
 
                 //se $data é falso não tem dados para emitir
-                if($data == false){
+                if($data['results']['error'] === true){
                     $error = "Sem dados para emitir!";                   
                 }
                 // caso contrário monta o relatório
@@ -78,17 +79,16 @@ class PDF extends FPDF
                      }
                     
                      $contador = 0;
-                     foreach($data as $row) { 
+                     foreach($data['results'] as $row) { 
                          $contador++;      
                          $pdf->SetFont('Arial','',8);  
                          $pdf->Ln(); 
                          $pdf->Cell($larguracoll[1],$tam_fonte,utf8_decode($contador),1,0,'C');  
                          $pdf->Cell($larguracoll[2],$tam_fonte,utf8_decode($row["nomecrianca"]),1,0,'C');
                          $pdf->Cell($larguracoll[3],$tam_fonte,utf8_decode($row["responsavel"]),1,0,'C');
-                         $pdf->Cell($larguracoll[4],$tam_fonte,utf8_decode($row["nascimento"]),1,0,'C');                         
-                         $pdf->Cell($larguracoll[5],$tam_fonte,utf8_decode($row["etapa"]),1,0,'C');
-                         $pdf->Cell($larguracoll[6],$tam_fonte,utf8_decode($row["turno_matricula"]),1,0,'C');
-                         $pdf->Cell($larguracoll[7],$tam_fonte,utf8_decode($row["opcao_matricula"]),1,0,'C'); 
+                         $pdf->Cell($larguracoll[4],$tam_fonte,utf8_decode($row["nascimento"]),1,0,'C');
+                         $pdf->Cell($larguracoll[5],$tam_fonte,utf8_decode($row["turno_matricula"]),1,0,'C');
+                         $pdf->Cell($larguracoll[6],$tam_fonte,utf8_decode($row["opcao_matricula"]),1,0,'C'); 
                           
                             
                          

@@ -333,15 +333,17 @@ class Fila {
 
     // Converte o código do turno em texto
     public function getTurno($num){
-        if ($num == 1){
-            $turno = "Matutino";
-        }
-        if ($num == 2){
-            $turno = "Vespertino";
-        }
-        if ($num == 3){
-            $turno = "Integral";
-        }
+        if (isset($num)) {
+            if ($num == 1){
+                $turno = "Matutino";
+            } else if ($num == 2){
+                $turno = "Vespertino";
+            } else if ($num == 3){
+                $turno = "Integral";
+            } else {
+                $turno = "null";
+            }
+        }        
         return $turno;
     }
 

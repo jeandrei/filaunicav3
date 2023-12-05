@@ -440,32 +440,73 @@
       }  
 
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
-          $fila = $this->filaModel->getMatriculadosAnoMes($_POST['ano'],$_POST['mes']);     
           
-                    
-          foreach($fila as $row){
-            $data[] = array(             
-              'etapa' => ($this->etapaModel->getEtapaDescricao($row->nascimento)) ? $this->etapaModel->getEtapaDescricao($row->nascimento) : "FORA ETAPAS",
-              'nomecrianca' => substr($row->nomecrianca,0,40),
-              'nascimento' => date('d/m/Y', strtotime($row->nascimento)),
-              'responsavel' => substr($row->responsavel,0,40),
-              'protocolo' => $row->protocolo,
-              'registro' => date('d/m/Y H:i:s', strtotime($row->registro)),
-              'telefone' => $row->telefone,
-              'celular' => $row->celular,
-              'situacao' => $this->situacaoModel->getDescricaoSituacaoById($row->situacao_id),                  
-              'situacao_id' => $row->situacao_id,
-              'opcao1_id' => $this->filaModel->getEscolasById($row->opcao1_id)->nome,
-              'opcao2_id' => $this->filaModel->getEscolasById($row->opcao2_id)->nome,
-              'opcao3_id' => $this->filaModel->getEscolasById($row->opcao3_id)->nome,
-              'opcao_matricula' => substr($this->filaModel->getEscolasById($row->opcao_matricula)->nome,0,40),
-              'opcao_turno' => $this->filaModel->getTurno($row->opcao_turno),
-              'turno_matricula' => $this->filaModel->getTurno($row->turno_matricula),              
-              'ultimo_historico' => $this->filaModel->getLastHistorico($row->id)->historico              
-            );       
-          }
-
-          //$data = array_merge($data, ['ano' => 2021, 'mes' => 01]);         
+          if($fila = $this->filaModel->getMatriculadosAnoMes($_POST['ano'],$_POST['mes'])){
+            foreach($fila as $row){
+              $results[] = array(             
+                'etapa' => ($this->etapaModel->getEtapaDescricao($row->nascimento)) 
+                          ? $this->etapaModel->getEtapaDescricao($row->nascimento) 
+                          : "FORA ETAPAS",
+                'nomecrianca' => isset($row->nomecrianca)
+                          ? substr($row->nomecrianca,0,40)
+                          : '',
+                'nascimento' => isset($row->nascimento)
+                          ? date('d/m/Y', strtotime($row->nascimento))
+                          : '',
+                'responsavel' => isset($row->responsavel)
+                          ? substr($row->responsavel,0,40)
+                          : '',
+                'protocolo' => isset($row->protocolo)
+                          ? $row->protocolo
+                          : '',
+                'registro' => isset($row->registro)
+                          ? date('d/m/Y H:i:s', strtotime($row->registro))
+                          : '',
+                'telefone' => isset($row->telefone)
+                          ? $row->telefone
+                          : '',
+                'celular' => isset($row->celular)
+                          ? $row->celular
+                          : '',
+                'situacao' => ($this->situacaoModel->getDescricaoSituacaoById($row->situacao_id))
+                          ? $this->situacaoModel->getDescricaoSituacaoById($row->situacao_id)
+                          : '',                  
+                'situacao_id' => isset($row->situacao_id)
+                          ? $row->situacao_id
+                          : '',
+                'opcao1_id' => isset($row->opcao1_id)
+                          ? $this->filaModel->getEscolasById($row->opcao1_id)->nome
+                          : '',
+                'opcao2_id' => isset($row->opcao2_id)
+                          ? $this->filaModel->getEscolasById($row->opcao2_id)->nome
+                          : '',
+                'opcao3_id' => isset($row->opcao3_id)      
+                          ? $this->filaModel->getEscolasById($row->opcao3_id)->nome
+                          : '',
+                'opcao_matricula' => isset($row->opcao_matricula)
+                          ? substr($this->filaModel->getEscolasById($row->opcao_matricula)->nome,0,40)
+                          : '',
+                'opcao_turno' => isset($row->opcao_turno)
+                          ? $this->filaModel->getTurno($row->opcao_turno)
+                          : '',
+                'turno_matricula' => isset($row->turno_matricula)
+                          ? $this->filaModel->getTurno($row->turno_matricula)
+                          : '',              
+                'ultimo_historico' => ($this->filaModel->getLastHistorico($row->id))
+                          ? $this->filaModel->getLastHistorico($row->id)->historico
+                          : ''
+              );       
+            }            
+          } else {
+            $results = [
+              'error' => true,
+              'message' => 'Erro ao tentar recuperar os dados para o relatório'
+            ];           
+          }    
+          
+          $data = [
+            'results' => $results
+          ];                
                       
           $this->view('relatorios/relatoriomatriculamensal',$data);
       } else {
