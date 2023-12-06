@@ -1,11 +1,6 @@
 <?php
     class Situacoes extends Controller{
         public function __construct(){
-            //vai procurar na pasta model um arquivo chamado User.php e incluir
-            $this->situacaoModel = $this->model('Situacao');
-        }
-
-        public function index() {
 
             if((!isLoggedIn())){ 
                 flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
@@ -15,7 +10,13 @@
                 flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
                 redirect('pages/sistem'); 
                 die();
-            }   
+            } 
+
+            //vai procurar na pasta model um arquivo chamado User.php e incluir
+            $this->situacaoModel = $this->model('Situacao');
+        }
+
+        public function index() {            
            
             $situacoes = $this->situacaoModel->getSituacoes();
 
@@ -33,17 +34,7 @@
         
         
 
-        public function new(){  
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }  
+        public function new(){             
            
             // Check for POST            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){             
@@ -131,16 +122,7 @@
 
 
 
-        public function edit($id){            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }  
+        public function edit($id){    
 
             // Check for POST            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){             
@@ -205,12 +187,7 @@
                             $this->view('situacoes/edit',$data);
                         }
             
-            } else {
-               
-
-                if(!isAdmin()){
-                    redirect('userlist');
-                }
+            } else {                
                
                  // get exiting user from the model
                 if($situacao = $this->situacaoModel->getSituacaoByid($id)){
@@ -234,17 +211,7 @@
         }
 
         public function delete($id){
-
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }              
-           
+                       
             //VALIDAÇÃO DO ID
             if(!is_numeric($id)){
                $erro = 'ID Inválido!'; 

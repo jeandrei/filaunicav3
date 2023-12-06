@@ -10,18 +10,15 @@
             <p>Você deseja realmente excluir a Escola <strong><?php echo $data['escolaRemover']->nome; ?>?</strong></p>   
 
             <!--ALERTA QUE JÁ EXISTEM CADASTROS NA FILA COM A ESCOLA DE OPÇÃO-->
+            <?php if(isset($data['alerta']) && $data['alerta'] != '') :?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="alert alert-warning" role="alert">
-                    <p><?php 
-                            if($data['alerta']){
-                                echo $data['alerta'];
-                            }
-                        ?>
-                    </p>
+                        <p><?php echo $data['alerta']; ?></p>
                     </div>
                 </div>                    
             </div>
+            <?php endif; ?>
             <!--ALERTA QUE JÁ EXISTEM CADASTROS NA FILA COM A ESCOLA DE OPÇÃO-->
 
             <p>Só execute esta ação se você realmente sabe o que está fazendo.</p>

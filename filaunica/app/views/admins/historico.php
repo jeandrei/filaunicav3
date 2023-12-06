@@ -5,7 +5,7 @@
 
 <br>
 
-<?php if($data['erro']!=null){die($data['erro']);}?>
+<?php if(isset($data['erro']) && $data['erro']!=null){die($data['erro']);}?>
 
 <table class="table table-striped">
   <thead>

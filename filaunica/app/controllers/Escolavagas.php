@@ -1,6 +1,17 @@
 <?php
     class Escolavagas extends Controller{
         public function __construct(){
+
+            if((!isLoggedIn())){ 
+                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+                redirect('users/login');
+                die();
+            } else if ((!isAdmin()) && (!isSec())){                
+                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+                redirect('pages/sistem'); 
+                die();
+            }  
+
             //vai procurar na pasta model um arquivo chamado User.php e incluir
             $this->escolaModel = $this->model('Escola');
             $this->escolaVagasModel = $this->model('Escolavaga');
@@ -9,24 +20,19 @@
         }
 
         public function index() { 
-            
+
             //pego o id do usuário
             $user_id = $_SESSION[DB_NAME . '_user_id'];
 
-            if((!isLoggedIn()) && (!isAdmin() || !isUser() || !isSec())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } 
-
-
             //se o usuário for admin ou user eu pego todas as escolas
-            if(isAdmin() || isUser()){                    
+            if(isAdmin()){                    
                 $data['escolas'] = $this->usuarioEscolaModel->getAllEscolas();                 
             // se não eu pego só as escolaspages/login cadastradas para o usuário    
-            } else {
+            } else if(isSec()) {
                 $data['escolas'] = $this->usuarioEscolaModel->getEscolasDoUsuario($user_id);
-            } 
+            } else {
+                $data['escolas'] = '';
+            }
 
             //debug($data);
 
@@ -83,14 +89,7 @@
 
         
 
-        public function vagas($escola_id){
-                      
-            if((!isLoggedIn()) && (!isAdmin() || !isUser() || !isSec())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } 
-
+        public function vagas($escola_id){   
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
              
@@ -197,11 +196,6 @@
                 }               
                 $this->view('escolavagas/vagas',$data);
             }  //IF POST
-            
-          
-
-
-
 
             
          

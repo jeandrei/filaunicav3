@@ -1,6 +1,17 @@
 <?php 
     class Filas extends Controller{
         public function __construct(){
+            
+            if((!isLoggedIn())){ 
+                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+                redirect('users/login');
+                die();
+            } else if ((!isAdmin())){                
+                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+                redirect('pages/sistem'); 
+                die();
+            } 
+
             //vai procurar na pasta model um arquivo chamado Fila.php e incluir
             $this->filaModel = $this->model('Fila');
             $this->etapaModel = $this->model('Etapa');

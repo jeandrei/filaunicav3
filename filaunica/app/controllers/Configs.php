@@ -1,41 +1,6 @@
 <?php
     class Configs extends Controller{
         public function __construct(){
-            // 1 Chama o model
-          $this->configModel = $this->model('Config');
-        }
-        // INDEX PÁGINA INICIAL LANDING PAGE
-        public function index(){
-           
-            // Posso passar valores aqui pois no view está definido um array para isso
-            // public function view($view, $data = []){
-            // 2 Chama um método
-            //$posts = $this->postModel->getPosts();
-            
-            // 3 coloca os valores no array
-            $data = [
-            'title' => 'Configurações',
-            'description'=> 'Configurações da fila única'
-            ];
-
-            // 4 Chama o view passando os dados
-            $this->view('configs/index', $data);
-        }  
-        
-        public function configCad(){
-            $data = [
-                'title' => 'Configurações',
-                'description'=> 'Configurações de cadastro',
-                'permiteCadDuplicado' => $this->configModel->getPermiteDuplicado()
-                ];
-    
-                // 4 Chama o view passando os dados
-                $this->view('configs/configCad', $data);
-        }
-
-        public function atualizConfigCad(){ 
-
-            
 
             if((!isLoggedIn())){ 
                 flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
@@ -47,11 +12,35 @@
                 die();
             }  
 
-           try{
+            // 1 Chama o model
+            $this->configModel = $this->model('Config');
+        }
 
-                if($this->configModel->atualizaConfigCad($_POST['situacao'])){                    
-                    //para acessar esses valores no jquery
-                    //exemplo responseObj.message
+        // INDEX PÁGINA INICIAL LANDING PAGE
+        public function index(){ 
+
+            $data = [
+            'title' => 'Configurações',
+            'description'=> 'Configurações da fila única'
+            ];
+
+            $this->view('configs/index', $data);
+        }  
+        
+        public function configCad(){
+
+            $data = [
+                'title' => 'Configurações',
+                'description'=> 'Configurações de cadastro',
+                'permiteCadDuplicado' => $this->configModel->getPermiteDuplicado()
+            ];    
+               
+            $this->view('configs/configCad', $data);
+        }
+
+        public function atualizConfigCad(){  
+           try{
+                if($this->configModel->atualizaConfigCad($_POST['situacao'])){  
                     $json_ret = array(
                                         'classe'=>'success', 
                                         'message'=>'Dados gravados com sucesso',
@@ -70,6 +59,5 @@
                         );                     
                 echo json_encode($json_ret); 
             }
-        }        
-        
+        }   
 }

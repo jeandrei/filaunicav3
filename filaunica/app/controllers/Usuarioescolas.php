@@ -1,37 +1,30 @@
 <?php
     class Usuarioescolas extends Controller{
         public function __construct(){
+
+            if((!isLoggedIn())){ 
+                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+                redirect('users/login');
+                die();
+            } else if ((!isAdmin())){                
+                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+                redirect('pages/sistem'); 
+                die();
+            } 
             //vai procurar na pasta model um arquivo chamado User.php e incluir
             $this->usuarioEscolaModel = $this->model('Usuarioescola');
             $this->escolaModel = $this->model('Escola');
             $this->userModel = $this->model('User');
         }
 
-        public function index($id) {
-            
-            if((!isAdmin()) && (!isSec())){ 
-                flash('message', 'Você ser tem permissão para acessar esta página!', 'error'); 
-                redirect('pages/sistem');
-                die();
-            }   
-
+        public function index($id) {   
             $data['escolasusuario'] = $this->usuarioEscolaModel->getEscolasDoUsuario($id);
             $data['user'] = $this->userModel->getUserById($id);
             $this->view('usuarioescolas/index', $data);            
            
         }
 
-        public function new($id){                
-           
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-              } else if ((!isAdmin()) && (!isSec())){              
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem');
-                die();
-              }  
+        public function new($id){              
               
             // Check for POST            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){                
@@ -103,13 +96,9 @@
                     'confirm_password_err' => '',
                     'erro' => ''
                 ];
-                if(!isAdmin()){
-                    redirect('index');
-                } else {
-                     // Load view
-                    $this->view('usuarioescolas/new', $data);
-                }
-               
+                
+                // Load view
+                $this->view('usuarioescolas/new', $data);               
                 
             } 
         }
@@ -117,17 +106,7 @@
        
         
 
-        public function delete($id){              
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-              } else if ((!isAdmin()) && (!isUser())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem');
-                die();
-              }                 
+        public function delete($id){   
                               
               //pego o id do usuário
               $userid = $this->usuarioEscolaModel->getUserId($id);

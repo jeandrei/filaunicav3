@@ -58,7 +58,7 @@ class PDF extends FPDF
                      $pdf->Cell(70,10,utf8_decode("Protocolo: "),0,0,'R');      
                      $pdf->Cell(120,10,utf8_decode($data["protocolo"]),0,0,'L');
                      $pdf->Ln(); 
-                     $pdf->SetFont('Arial','',14); 
+                     $pdf->SetFont('Arial','',12); 
                      $pdf->Cell(70,10,utf8_decode("Unidade de encaminhamento: "),0,0,'R');  
                      $pdf->Cell(120,10,utf8_decode($data["unidade_matricula"]),0,0,'L');                     
                      

@@ -6,7 +6,7 @@
                 $msg = 'Você deseja atualizar o quadro de vagas da escola <strong>';
                 switch ($data['turno_matricula']) {
                     case 1:
-                        if($data['vagas']->matutino>0){
+                        if(isset($data['vagas']->matutino) && $data['vagas']->matutino>0){
                             $msg.= $data['unidade_matricula'].'</strong>, etapa <strong>'.$data['etapa'].'</strong> e turno <strong>'.'MATUTINO</strong> para '.($data['vagas']->matutino-1) . ' vagas?';
                         } else {
                             $erro = true;
@@ -15,7 +15,7 @@
                         }
                         break;
                     case 2:
-                        if($data['vagas']->vespertino>0){
+                        if(isset($data['vagas']->vespertino) && $data['vagas']->vespertino>0){
                             $msg.= $data['unidade_matricula'].'</strong>, etapa <strong>'.$data['etapa'].'</strong> e turno <strong>'.'VESPERTINO</strong> para '.($data['vagas']->vespertino-1) . ' vagas?';
                         } else {
                             $erro = true;
@@ -24,7 +24,7 @@
                         }
                         break;
                     case 3:
-                        if($data['vagas']->integral>0){
+                        if(isset($data['vagas']->integral) && $data['vagas']->integral>0){
                             $msg.= $data['unidade_matricula'].'</strong>, etapa <strong>'.$data['etapa'].'</strong> e turno <strong>'.'INTEGRAL</strong> para '.($data['vagas']->integral-1) . ' vagas?';
                         } else {
                             $erro = true;

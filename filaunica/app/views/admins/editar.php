@@ -380,11 +380,12 @@ $(document).ready(function(){
                 </div>
                 <!--linha 01 editar-->
 
+                
                 <!--linha 02 editar-->
                 <div class="row">   
                     <div class="form-group col-lg-12">
                         <label for="historico">Histórico</label>
-                        <textarea class="form-control rounded-0" name="historico" id="historico" rows="4"><?php echo ($data['historico']) ?  $data['historico'] : $_POST['historico'] ;?></textarea>
+                        <textarea class="form-control rounded-0" name="historico" id="historico" rows="4"><?php isset($_POST['historico']) ?  $_POST['historico'] : '' ;?></textarea>
                     </div>
                 </div>
                 <!--linha 02 editar--> 

@@ -182,8 +182,7 @@
 
 
         
-        public function atualizaSituacao($id,$situacao){            
-            
+        public function atualizaSituacao($id,$situacao){         
             
             if($situacao == 'true')          {
                 $sql = 'UPDATE escola SET emAtividade = 1 WHERE id = :id';

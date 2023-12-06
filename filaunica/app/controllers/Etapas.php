@@ -1,11 +1,6 @@
 <?php
     class Etapas extends Controller{
         public function __construct(){
-            //vai procurar na pasta model um arquivo chamado User.php e incluir
-            $this->etapaModel = $this->model('Etapa');
-        }
-
-        public function index() { 
             
             if((!isLoggedIn())){ 
                 flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
@@ -15,8 +10,14 @@
                 flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
                 redirect('pages/sistem'); 
                 die();
-            }  
-            
+            } 
+
+            //vai procurar na pasta model um arquivo chamado User.php e incluir
+            $this->etapaModel = $this->model('Etapa');
+        }
+
+        public function index() { 
+
             if($data['etapas'] = $this->etapaModel->getAllEtapas()){                
                 $this->view('etapas/index', $data);
             } else {                                 
@@ -24,17 +25,7 @@
             }   
         }
 
-        public function new(){  
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }   
+        public function new(){   
            
             // Check for POST            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -114,10 +105,6 @@
             
             } else {
 
-                if(!isAdmin()){
-                    redirect('index');
-                } 
-
                 // Init data
                 $data = [
                     'data_ini' => '',
@@ -134,17 +121,7 @@
         }
 
        
-        public function edit($id){
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }  
+        public function edit($id){           
             
             // Check for POST            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){  
@@ -230,11 +207,7 @@
             
             } else {
                 // get exiting user from the model
-                $etapa = $this->etapaModel->getEtapaByid($id);
-
-                if(!isAdmin()){
-                    redirect('userlist');
-                }
+                $etapa = $this->etapaModel->getEtapaByid($id);              
                
 
                 $data = [
@@ -250,16 +223,6 @@
 
 
         public function delete($id){ 
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }  
 
              //VALIDAÇÃO DO ID
              if(!is_numeric($id)){

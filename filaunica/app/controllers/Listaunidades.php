@@ -1,23 +1,23 @@
 <?php
     class Listaunidades extends Controller{
         public function __construct(){
+
+            if((!isLoggedIn())){ 
+                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+                redirect('users/login');
+                die();
+            } else if ((!isAdmin())){                
+                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+                redirect('pages/sistem'); 
+                die();
+            } 
+
             //vai procurar na pasta model um arquivo chamado User.php e incluir
             $this->escolaModel = $this->model('Escola');
             $this->bairroModel = $this->model('Bairro')            ;
         }
 
-        public function index() {          
-            
-            if((!isLoggedIn())){ 
-                flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                redirect('users/login');
-                die();
-            } else if ((!isAdmin()) && (!isUser())){                
-                flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                redirect('pages/sistem'); 
-                die();
-            }  
-            
+        public function index() {  
             if($escolas = $this->escolaModel->getEscolas()){
                                
                 foreach($escolas as $row){                    
