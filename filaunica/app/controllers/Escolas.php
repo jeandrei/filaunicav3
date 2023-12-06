@@ -262,8 +262,7 @@
                 }                   
                 $this->view('escolas/edit', $data);
             } 
-        }       
-        
+        }      
 
         public function delete($id){                
             

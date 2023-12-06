@@ -20,63 +20,88 @@
         }
 
         public function index() { 
-
-            //pego o id do usuário
+            
             $user_id = $_SESSION[DB_NAME . '_user_id'];
 
             //se o usuário for admin ou user eu pego todas as escolas
             if(isAdmin()){                    
-                $data['escolas'] = $this->usuarioEscolaModel->getAllEscolas();                 
+                $escolasUser = $this->usuarioEscolaModel->getAllEscolas();                 
             // se não eu pego só as escolaspages/login cadastradas para o usuário    
             } else if(isSec()) {
-                $data['escolas'] = $this->usuarioEscolaModel->getEscolasDoUsuario($user_id);
+                $escolasUser = $this->usuarioEscolaModel->getEscolasDoUsuario($user_id);
             } else {
-                $data['escolas'] = '';
+                $escolasUser = '';
             }
 
-            //debug($data);
-
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){                
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
-                //init data
-                $data['post'] = [
-                    'escola_id' => ($_POST['escola_id']),                 
+                $post = [
+                    'escola_id' => isset($_POST['escola_id'])
+                                ? ($_POST['escola_id'])
+                                : '',                 
                     'escola_id_err' => ''                   
-                ];   
-                
-                              
+                ];                                
                 
                 // Valida escola_id
-                if(empty($data['post']['escola_id']) || $data['post']['escola_id'] == 'NULL'){
-                    $data['post']['escola_id_err'] = 'Por favor informe a escola';
+                if(empty($post['escola_id']) || $post['escola_id'] == 'NULL'){
+                    $post['escola_id_err'] = 'Por favor informe a escola';
                 } 
-
                 
                 if(                    
-                    empty($data['post']['escola_id_err'])
+                    empty($post['escola_id_err'])
                 ){
                     if($escola_vaga = $this->escolaVagasModel->getEscolaVagas($_POST['escola_id'])){
                         foreach ($escola_vaga as $row){
-                            $data['etapas'][] = [
+                            $etapas[] = [
                                 'id' => $row->id,
-                                'descricao' => $row->descricao,
-                                'matutino' => $row->matutino,
-                                'vespertino' => $row->vespertino,
-                                'integral' => $row->integral
+                                'descricao' => isset($row->descricao)
+                                            ? $row->descricao
+                                            : '',
+                                'matutino' => isset($row->matutino)
+                                            ? $row->matutino
+                                            : '',
+                                'vespertino' => isset($row->vespertino)
+                                            ? $row->vespertino
+                                            : '',
+                                'integral' => isset($row->integral)
+                                            ? $row->integral
+                                            : ''
                             ];     
                         }
                     } else {
-                        $data['etapas'] = $this->etapaModel->getEtapas();
-                    }  
+                        if(!$etapas = $this->etapaModel->getEtapas()){
+                            $etapas = '';
+                        }
+                    }                      
+                    $data = [
+                        'post' => isset($post)
+                                    ? $post
+                                    : '',
+                        'etapas' => isset($etapas)
+                                    ? $etapas
+                                    : ''
+                    ];  
                     $this->view('escolavagas/vagas', $data);
                 } else { 
+                    $data = [
+                        'post' => isset($post)
+                                    ? $post
+                                    : '',
+                        'etapas' => isset($etapas)
+                                    ? $etapas
+                                    : '',
+                        'escolas' => isset($escolasUser)
+                                ? $escolasUser
+                                : ''
+                    ];                     
                     $this->view('escolavagas/index', $data);
                 }
-
-
             } else {
+                $data = [
+                    'escolas' => isset($escolasUser)
+                                ? $escolasUser
+                                : ''
+                ];
                 if($data['escolas']){                    
                     $this->view('escolavagas/index', $data);
                 } else {                                 
@@ -84,66 +109,69 @@
                 }  
             }         
              
-        }
+        }        
 
+        public function vagas($escola_id){ 
 
-        
-
-        public function vagas($escola_id){   
+            if(!is_numeric($escola_id)){
+                die('Erro ao recuperar o id! Tente novamente');
+            }  
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
              
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-                $data['post'] = [
+                $post = [
                     'escola_id' => $escola_id,                 
                     'escola_id_err' => ''                                       
                 ]; 
                 
+                $erro = false;
 
                 /*Vai verificar para cada post se foi passado a quantidade e se é numérico*/ 
-                               
-                $etapas = $this->etapaModel->getEtapas();
-                $erro = false;
-                foreach($etapas as $etapa){
-                    $matutino = $_POST['matutino_'.$etapa['id']];
-                    $vespertino = $_POST['vespertino_'.$etapa['id']];
-                    $integral = $_POST['integral_'.$etapa['id']];
-                                       
-                                        
-                    if($matutino == ""){
-                        $erro = true;
-                    } else if(!is_numeric($matutino)){
-                        $erro = true;
-                    } else if ((intval($matutino)<0)){
-                        $erro = true;
+                if($etapas = $this->etapaModel->getEtapas()){
+                    foreach($etapas as $etapa){
+                        $matutino = $_POST['matutino_'.$etapa['id']];
+                        $vespertino = $_POST['vespertino_'.$etapa['id']];
+                        $integral = $_POST['integral_'.$etapa['id']];
+                                           
+                                            
+                        if($matutino == ""){
+                            $erro = true;
+                        } else if(!is_numeric($matutino)){
+                            $erro = true;
+                        } else if ((intval($matutino)<0)){
+                            $erro = true;
+                        }
+                        
+                        if($vespertino == ""){
+                            $erro = true;
+                        } else if(!is_numeric($vespertino)){
+                            $erro = true;
+                        } else if ((intval($vespertino)<0)){
+                            $erro = true;
+                        }
+                         
+                        if($integral == ""){
+                            $erro = true;
+                        } else if(!is_numeric($integral)){
+                            $erro = true;
+                        } else if ((intval($integral)<0)){
+                            $erro = true;
+                        }                   
+    
                     }
-                    
-                    if($vespertino == ""){
-                        $erro = true;
-                    } else if(!is_numeric($vespertino)){
-                        $erro = true;
-                    } else if ((intval($vespertino)<0)){
-                        $erro = true;
-                    }
-                     
-                    if($integral == ""){
-                        $erro = true;
-                    } else if(!is_numeric($integral)){
-                        $erro = true;
-                    } else if ((intval($integral)<0)){
-                        $erro = true;
-                    }                   
-
-                }                
-                
+                } else {
+                    $etapas = '';
+                }                               
+               
                 if($erro == true){
-                    $data['post']['escola_id_err'] = 'Valor inválido informado!';
+                    $post['escola_id_err'] = 'Valor inválido informado!';
                 }
                          
 
                 if(                    
-                    empty($data['post']['escola_id_err']) 
+                    empty($post['escola_id_err']) 
                    
                 ){
                     try { 
@@ -153,21 +181,38 @@
                             }  
                           
                         }  
-
                       
                         flash('message', 'Dados gravados com sucesso!','success');
-                        $escola_vaga = $this->escolaVagasModel->getEscolaVagas($escola_id); 
-                        
-                        foreach ($escola_vaga as $row){
-                            $data['etapas'][] = [
-                                'id' => $row->id,
-                                'descricao' => $row->descricao,
-                                'matutino' => $row->matutino,
-                                'vespertino' => $row->vespertino,
-                                'integral' => $row->integral
-                            ];     
-                        }
 
+                        if($escola_vaga = $this->escolaVagasModel->getEscolaVagas($escola_id)){
+                            unset($etapas);
+                            foreach ($escola_vaga as $row){
+                                $etapas[] = [
+                                    'id' => $row->id,
+                                    'descricao' => isset($row->descricao)
+                                                ? $row->descricao
+                                                : '',
+                                    'matutino' => isset($row->matutino)
+                                                ? $row->matutino
+                                                : '',
+                                    'vespertino' => isset($row->vespertino)
+                                                ? $row->vespertino
+                                                : '',
+                                    'integral' => isset($row->integral)
+                                                ? $row->integral
+                                                : ''
+                                ];     
+                            }
+                        } 
+                        $data = [
+                            'post' => isset($post)
+                                        ? $post
+                                        : '',
+                            'etapas' => isset($etapas)
+                                        ? $etapas
+                                        : ''
+                        ];
+                        
                         $this->view('escolavagas/vagas', $data);
 
                     } catch (Exception $e) {                        
@@ -176,29 +221,46 @@
                         $this->view('escolasvagas/vagas',$data);
                     }                      
                 } else {   
-                    $data['etapas'] = $this->etapaModel->getEtapas();                 
+                    $data = [
+                        'etapas' => ($this->etapaModel->getEtapas())
+                                    ? $this->etapaModel->getEtapas()
+                                    : ''
+                    ];                                   
                     $this->view('escolavagas/vagas',$data);
                 }
 
             } else {                
                 if($escola_vaga = $this->escolaVagasModel->getEscolaVagas($escola_id)){
                     foreach ($escola_vaga as $row){
-                        $data['etapas'][] = [
+                        $etapas[] = [
                             'id' => $row->id,
-                            'descricao' => $row->descricao,
-                            'matutino' => $row->matutino,
-                            'vespertino' => $row->vespertino,
-                            'integral' => $row->integral 
+                            'descricao' => isset($row->descricao)
+                                        ? $row->descricao
+                                        : '',
+                            'matutino' => isset($row->matutino)
+                                        ? $row->matutino
+                                        : '',
+                            'vespertino' => isset($row->vespertino)
+                                        ? $row->vespertino
+                                        : '',
+                            'integral' => isset($row->integral)
+                                        ? $row->integral
+                                        : '' 
                         ];     
                     }
                 } else {
-                    $data['etapas'] = $this->etapaModel->getEtapas(); 
-                }               
+                    if(!$etapas = $this->etapaModel->getEtapas()){
+                        $etapas = '';
+                    }
+                }      
+                
+                $data = [
+                    'etapas' => isset($etapas)
+                                ? $etapas
+                                : ''
+                ];
                 $this->view('escolavagas/vagas',$data);
-            }  //IF POST
-
-            
-         
+            }  //IF POST         
         }
 
               
