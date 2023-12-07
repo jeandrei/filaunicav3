@@ -9,7 +9,7 @@
         }
 
         // Registra Etapa
-        public function register($data){
+        public function register($data){            
             $this->db->query('INSERT INTO etapa (data_ini, data_fin, descricao) VALUES (:data_ini, :data_fin, :descricao)');
             // Bind values
             $this->db->bind(':data_ini',$data['data_ini']);
@@ -25,7 +25,7 @@
         }
 
         // Update Etapa
-        public function update($data){
+        public function update($data){            
             $this->db->query('UPDATE etapa SET data_ini = :data_ini, data_fin = :data_fin, descricao = :descricao WHERE id = :id');
             // Bind values
             $this->db->bind(':id',$data['id']);
@@ -57,7 +57,7 @@
         }
 
          // Deleta etapa por id
-         public function delEtapaByid($id){
+         public function delEtapaByid($id){             
             //remove todas as vagas da etapa
             $this->deletaTodosEscolaVagaEtapa($id);
 
@@ -86,9 +86,7 @@
             } else {
                 return false;
             } 
-        }
-
-        
+        }        
 
         // RETORNA O ID DE UMA ETAPA A PARTIR DA DATA DE NASCIMENTO
         public function getEtapaId($nasc) {  
@@ -125,7 +123,6 @@
         
         }
         
-
         // RETORNA TODAS AS ETAPAS
         public function getEtapas() {
             $this->db->query("SELECT * FROM etapa ORDER BY descricao");
@@ -181,8 +178,8 @@
         
         }
      
-         // Busca etapa por id
-         public function getEtapaByid($id){
+        // Busca etapa por id
+        public function getEtapaByid($id){
             $this->db->query('SELECT * FROM etapa WHERE id = :id');
             // Bind value
             $this->db->bind(':id', $id);
@@ -253,8 +250,8 @@
 
         }
 
-         // VERIFICA SE A DATA FINAL PASSADA ESTÁ ENTRE ALGUMA DATA DE INICIO E FIM DE TODAS AS ETAPAS
-         public function etapaDataFin($dataini,$datafin){
+        // VERIFICA SE A DATA FINAL PASSADA ESTÁ ENTRE ALGUMA DATA DE INICIO E FIM DE TODAS AS ETAPAS
+        public function etapaDataFin($dataini,$datafin){
             // pego todas as etapas
             $etapas = $this->getEtapas();           
                 $this->db->query('SELECT * FROM etapa WHERE data_fin BETWEEN :dataini AND :datafin');
@@ -267,11 +264,7 @@
             } else {
                 return false;
             }
-
         }
-
-
-         
 
     }//etapa
     

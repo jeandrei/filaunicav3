@@ -65,9 +65,8 @@
                
                 if($this->etapaModel->verificaEtapaPeriodo($data['data_ini'],$data['data_fin'])){
                     $erro = 'Existem etapas cadastradas que conflitam com este período';                    
-                }               
+                }   
                 
-                // Make sure errors are empty
                 if(                    
                     empty($data['data_ini_err']) &&
                     empty($data['data_fin_err']) && 
@@ -98,9 +97,7 @@
                       
                     }    
             
-            } else {
-
-                // Init data
+            } else {               
                 $data = [
                     'data_ini' => '',
                     'data_fin' => '',
@@ -109,8 +106,7 @@
                     'data_fin_err' => '',
                     'erro' => '',
                     'descricao_err' => ''                    
-                ];
-                // Load view
+                ];               
                 $this->view('etapas/newetapa', $data);
             } 
         }
@@ -246,7 +242,7 @@
                 } catch (Exception $e) {
                     $erro = 'Erro: '.  $e->getMessage();
                     flash('message', $erro,'error');
-                    $this->view('etapas/index');
+                    redirect('etapas/index');
                 }                
            } else {  
             //se existe protocolos na fila dessa etapa aviso o usuário        

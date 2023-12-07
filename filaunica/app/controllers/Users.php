@@ -169,27 +169,31 @@
                     empty($data['confirm_password_err']) 
 
                     ){
-                      //Validated
+                        //Validated
                       
-                      // Hash Password criptografa o password
-                      $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+                        // Hash Password criptografa o password
+                        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+                        try {     
+                            if($lastId = $this->userModel->register($data)){
+                                flash('message', 'Cadastro realizado com sucesso!','success'); 
+                                redirect('users/userlist');
+                                die();
+                            } else {                        
+                                throw new Exception('Ops! Algo deu errado ao tentar gravar os dados!');
+                            }
 
-                      // Register User
-                      if($this->userModel->register($data)){
-                        // Cria a menságem antes de chamar o view va para 
-                        // views/users/login a segunda parte da menságem
-                        flash('message', 'Usuário registrado com sucesso!','success');                        
-                        redirect('users/userlist');
-                      } else {
-                          die('Ops! Algo deu errado.');
-                      }        
+                        } catch (Exception $e) {                         
+                            $erro = 'Erro: '.  $e->getMessage();                      
+                            flash('message', $erro,'error');
+                            $data['password'] = $data['confirm_password'];
+                            $this->view('users/newuser',$data);
+                            die();
+                        }  
                       
                     } else {
                       // Load the view with errors                     
                       $this->view('users/newuser', $data);
                     }               
-
-            
             } else {   
                 // Init data
                 $data = [
@@ -381,10 +385,10 @@
                $erro = 'ID Inválido!'; 
             // se no id não existir
             } else if (!$data = $this->userModel->getUserById($id)){
-               $erro = 'ID inexistente';
+                $erro = 'ID inexistente';
             //se o usuário estiver tentando excluir seu próprio registro
             } else if($_SESSION[DB_NAME . '_user_id'] == $id){            
-            $erro = 'Você não pode excluir seu próprio usuário!';
+                $erro = 'Você não pode excluir seu próprio usuário!';            
             //não precisaria dessa linha mas é garantia que pelo menos um usuário administrador fique no bd
             } else if ($data->type == 'admin'){ 
                 $qtdAdmins = $this->userModel->existeUserAdmin();
@@ -393,15 +397,15 @@
                 } 
             } else {
                 $erro = '';
-            }           
+            } 
            
            //esse $_POST['delete'] vem lá do view('confirma');
            if(isset($_POST['delete'])){           
                
-               if($erro){
-                   flash('message', $erro , 'alert alert-danger'); 
+               if($erro !== ''){
+                   flash('message', $erro , 'error'); 
                    $data = $this->userModel->getUsers();   
-                   $this->view('users/index',$data);
+                   redirect('users/index');
                    die();
                }                   
 
@@ -415,7 +419,7 @@
                } catch (Exception $e) {
                    $erro = 'Erro: '.  $e->getMessage();
                    flash('message', $erro,'error');
-                   $this->view('users/index');
+                   redirect('users/index');
                }                
           } else { 
            $this->view('users/confirma',$data);

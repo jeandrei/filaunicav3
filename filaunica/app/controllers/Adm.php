@@ -2,7 +2,7 @@
     class Adm extends Controller{
         public function __construct(){         
             // 1 Chama o model               
-            if((!isLoggedIn())){               
+            if((!isLoggedIn())){              
               redirect('users/login');
               die();
             }                

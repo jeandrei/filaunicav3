@@ -9,8 +9,7 @@
         }
 
         // Register User
-        public function register($data){            
-           
+        public function register($data){              
             $this->db->query('INSERT INTO users (name, email, password, type) VALUES (:name, :email, :password, :type)');
             // Bind values
             $this->db->bind(':name',$data['name']);
@@ -50,7 +49,7 @@
         }
 
       
-        public function deleteescolasusuario($userId){
+        public function deleteescolasusuario($userId){           
             $this->db->query('DELETE FROM userescola WHERE userid = :userId');
             // Bind value
             $this->db->bind(':userId', $userId);
@@ -116,7 +115,7 @@
         }
 
          // Find user by email
-         public function delUserByid($id){
+         public function delUserByid($id){          
             // se tem usuarioescola vinculado ao usuário excluo tudo primeiro             
             if($this->temUsuarioEscola($id)){
                 $this->deleteescolasusuario($id);

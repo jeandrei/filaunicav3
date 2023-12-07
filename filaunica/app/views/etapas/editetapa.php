@@ -48,7 +48,7 @@
             rules : {	
                 descricao : {
                     required : true,
-                    minlength : 6,
+                    minlength : 3,
                 },		
                 data_ini : {
                     required : true
@@ -60,15 +60,14 @@
 
             messages : {
                 descricao : {
-                    required : 'Por favor informe o nome do usuário.',
-                    minlength : 'A senha deve ter, no mínimo, 6 caracteres.'
+                    required : 'Por favor informe a descrição da etapa.',
+                    minlength : 'A descrição deve ter, no mínimo, 3 caracteres.'
                 },			
                 data_ini : {
-                    required : 'Por favor informe seu email.'
+                    required : 'Por favor informe a data inicial.'
                 },
                 data_fin : {
-                    required : 'Por favor informe sua senha.',
-                    minlength : 'A senha deve ter, no mínimo, 3 caracteres.'
+                    required : 'Por favor informe sua data final.'                    
                 }
             }
         });
