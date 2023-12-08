@@ -11,7 +11,7 @@
 
 
         // Registra Situação
-        public function register($data){
+        public function register($data){            
             $this->db->query('INSERT INTO situacao (descricao, cor, ativonafila) VALUES (:descricao, :cor, :ativonafila)');
             // Bind values
             $this->db->bind(':descricao',$data['descricao']);
@@ -27,8 +27,7 @@
         }
 
         // Update Situacao
-        public function update($data){
-            
+        public function update($data){            
             $this->db->query('UPDATE situacao SET descricao = :descricao, cor = :cor, ativonafila = :ativonafila WHERE id = :id');
             // Bind values
             $this->db->bind(':id',$data['id']);
@@ -88,8 +87,7 @@
         
 
         // Deleta situacao por id
-        public function delete($id){
-            
+        public function delete($id){            
             //não permito a exclusão da situação Arquivado
             if($this->getDescricaoSituacaoById($id) == 'Arquivado'){
                 return false;

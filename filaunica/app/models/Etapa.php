@@ -9,7 +9,7 @@
         }
 
         // Registra Etapa
-        public function register($data){            
+        public function register($data){  
             $this->db->query('INSERT INTO etapa (data_ini, data_fin, descricao) VALUES (:data_ini, :data_fin, :descricao)');
             // Bind values
             $this->db->bind(':data_ini',$data['data_ini']);
@@ -25,7 +25,7 @@
         }
 
         // Update Etapa
-        public function update($data){            
+        public function update($data){                      
             $this->db->query('UPDATE etapa SET data_ini = :data_ini, data_fin = :data_fin, descricao = :descricao WHERE id = :id');
             // Bind values
             $this->db->bind(':id',$data['id']);
@@ -57,7 +57,7 @@
         }
 
          // Deleta etapa por id
-         public function delEtapaByid($id){             
+         public function delEtapaByid($id){                       
             //remove todas as vagas da etapa
             $this->deletaTodosEscolaVagaEtapa($id);
 

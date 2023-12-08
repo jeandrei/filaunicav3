@@ -23,27 +23,25 @@
             foreach($situacoes as $row){
                 $data[] = array(
                   'id' => $row->id,
-                  'descricao' => $row->descricao, 
-                  'ativo' => $row->ativonafila == 1 ? 'SIM' : 'NÃO',
-                  'cor' => $row->cor
+                  'descricao' => isset($row->descricao)
+                                ? $row->descricao
+                                : '', 
+                  'ativo' => $row->ativonafila == 1 
+                                ? 'SIM' 
+                                : 'NÃO',
+                  'cor' => isset($row->cor)
+                                ? $row->cor
+                                : ''
                 );       
             } 
-
             $this->view('situacoes/index', $data);
         }
         
         
 
-        public function new(){             
-           
-            // Check for POST            
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){             
-                // Process form
-                
-                // Sanitize POST data
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);    
-
-                //init data
+        public function new(){                         
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){   
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);  
                 $data = [
                     'descricao' => isset($_POST['descricao'])
                                     ? trim($_POST['descricao'])
@@ -72,16 +70,14 @@
                 // Valida cor
                 if(empty($data['cor'])){
                     $data['cor_err'] = 'Por favor informe uma cor';
-                } 
-                             
+                }                              
                 
                 // Make sure errors are empty
                 if(                    
                     empty($data['descricao_err']) &&
                     empty($data['ativo_err']) && 
                     empty($data['cor_err'])
-                    ){
-                      
+                    ){                      
                         try {
                                 if($this->situacaoModel->register($data)){
                                     flash('message', 'Cadastro realizado com sucesso!','success');                     
@@ -93,46 +89,32 @@
                             } catch (Exception $e) {
                                 $erro = 'Erro: '.  $e->getMessage();
                                 flash('message', $erro,'error');
-                                $this->view('situacoes/new');
+                                $this->view('situacoes/new', $data);
                             }                  
                         } else {
                             //Validação falhou
-                            flash('message', 'Erro ao efetuar o cadastro, verifique os dados informados!','error');                     
+                            flash('message', 'Erro ao efetuar o cadastro, verifique os dados informados!','error');                            
                             $this->view('situacoes/new',$data);
                         }     
 
-                } else {
-
-                    if(!isAdmin()){
-                        redirect('index');
-                    } 
-
+                } else {  
                      $data = [
-                    'descricao' => '',
-                    'ativo' => '',
-                    'cor' => '',                    
-                    'descricao_err' => '',
-                    'ativo_err' => '',
-                    'cor_err' => ''
-                ];            
-
+                        'descricao' => '',
+                        'ativo' => '',
+                        'cor' => '',                    
+                        'descricao_err' => '',
+                        'ativo_err' => '',
+                        'cor_err' => ''
+                    ]; 
                     $this->view('situacoes/new', $data);
                 } 
         }
 
 
 
-        public function edit($id){    
-
-            // Check for POST            
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){             
-                // Process form
-                
-                // Sanitize POST data
-                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);    
-
-
-                //init data
+        public function edit($id){                      
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){  
+                $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING); 
                 $data = [
                     'id' => $id,
                     'descricao' => trim($_POST['descricao']),
@@ -141,9 +123,7 @@
                     'descricao_err' => '',
                     'ativo_err' => '',
                     'cor_err' => ''
-                ];                
-
-                
+                ];                   
 
                 // Valida Situação
                 if(empty($data['descricao'])){
@@ -158,8 +138,7 @@
                 // Valida cor
                 if(empty($data['cor'])){
                     $data['cor_err'] = 'Por favor informe uma cor';
-                } 
-                              
+                }                               
                 
                 // Make sure errors are empty
                 if(                    
@@ -171,7 +150,8 @@
                         try {
                                 if($this->situacaoModel->update($data)){ 
                                     flash('message', 'Cadastro atualizado com sucesso!','success');             
-                                    $this->view('situacoes/edit',$data);
+                                    redirect('situacoes/index');
+                                    die();
                                 } else {
                                     throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados!');
                                 }
@@ -179,7 +159,7 @@
                             } catch (Exception $e) {
                                 $erro = 'Erro: '.  $e->getMessage();
                                 flash('message', $erro,'error');
-                                $this->view('situacoes/edit');
+                                $this->view('situacoes/edit', $data);
                             }                  
                         } else {
                             //Validação falhou
@@ -187,9 +167,7 @@
                             $this->view('situacoes/edit',$data);
                         }
             
-            } else {                
-               
-                 // get exiting user from the model
+            } else { 
                 if($situacao = $this->situacaoModel->getSituacaoByid($id)){
                     $data = [
                         'id' => $id,
@@ -202,10 +180,7 @@
                     ];    
                 } else {
                     $situacao = 'null' ;
-                }
-                
-
-                // Load view
+                }                
                 $this->view('situacoes/edit', $data);
             } 
         }
@@ -239,7 +214,7 @@
                 } catch (Exception $e) {
                     $erro = 'Erro: '.  $e->getMessage();
                     flash('message', $erro,'error');
-                    $this->view('situacoes/index');
+                    redirect('situacoes/index');
                 }                
            } else {              
             $this->view('situacoes/confirma',$data);
