@@ -21,7 +21,8 @@
                 $data = [
                     'etapas' => isset($etapas)
                                 ? $etapas
-                                : ''
+                                : '',
+                    'nav' => 'Cadastros\\Etapas\\'
                 ];       
                 $this->view('etapas/index', $data);
             } else {                                 
@@ -45,7 +46,8 @@
                                     : '',                    
                     'data_ini_err' => '',
                     'data_fin_err' => '',
-                    'descricao_err' => ''
+                    'descricao_err' => '',
+                    'nav' => 'Cadastros\\Etapas\\Nova Etapa\\'
                 ];                    
 
                 // Valida data Inicial
@@ -105,7 +107,8 @@
                     'data_ini_err' => '',
                     'data_fin_err' => '',
                     'erro' => '',
-                    'descricao_err' => ''                    
+                    'descricao_err' => '',
+                    'nav' => 'Cadastros\\Etapas\\Nova Etapa\\'                    
                 ];               
                 $this->view('etapas/newetapa', $data);
             } 
@@ -133,7 +136,8 @@
                                     : '',                    
                     'data_ini_err' => '',
                     'data_fin_err' => '',
-                    'descricao_err' => ''
+                    'descricao_err' => '',
+                    'nav' => 'Cadastros\\Etapas\\Editar Etapa\\'  
                 ];    
 
                 // Valida data Inicial
@@ -202,7 +206,8 @@
                                         : '',                                      
                         'descricao' => isset($etapa->descricao)
                                         ? $etapa->descricao
-                                        : ''
+                                        : '',
+                        'nav' => 'Cadastros\\Etapas\\Editar Etapa\\'  
                     ];
                 } else {
                     $data = '';
@@ -212,10 +217,10 @@
         }
 
 
-        public function delete($id){              
+        public function delete($id){            
              if(!is_numeric($id)){
                 $erro = 'ID Inválido!'; 
-            } else if (!$data['etapa'] = $this->etapaModel->getEtapaById($id)){
+            } else if (!$etapa = $this->etapaModel->getEtapaById($id)){
                 $erro = 'ID inexistente';
             } else {
                 $erro = '';
@@ -225,9 +230,14 @@
                 
                 if($erro){
                     flash('message', $erro , 'error'); 
-                    if(!$data['etapas'] = $this->etapaModel->getAllEtapas()){
-                        $data['etapas'] = '';
+                    if(!$etapas = $this->etapaModel->getAllEtapas()){
+                        $etapas = '';
                     }
+                    $data = [
+                        'etapa' => $etapa, 
+                        'etapas' => $etapas,
+                        'nav' => 'Cadastros\\Etapas\\Excluir Etapa\\'
+                    ];
                     $this->view('etapas/index',$data);
                     die();
                 }                   
@@ -246,12 +256,20 @@
                 }                
            } else {  
             //se existe protocolos na fila dessa etapa aviso o usuário        
-            if($this->etapaModel->etapaRegFila($id)){
-                $data['alerta'] = 'Alerta.: Existem registros na fila vinculados a esta etapa!';                   
+            if($this->etapaModel->etapaRegFila($id)){                
+                $data = [
+                    'alerta' => 'Alerta.: Existem registros na fila vinculados a esta etapa!',
+                    'etapa' => $this->etapaModel->getEtapaById($id),
+                    'nav' => 'Cadastros\\Etapas\\Excluir Etapa\\'
+                ];               
             } else {
-                $data['alerta'] = '';
+                $data = [
+                    'alerta' => '',
+                    'etapa' => $this->etapaModel->getEtapaById($id),
+                    'nav' => 'Cadastros\\Etapas\\Excluir Etapa\\'
+                ];                 
             }      
-                
+            //die(var_dump($data['etapa']->descricao)); 
             $this->view('etapas/confirma',$data);
             exit();
            }                 

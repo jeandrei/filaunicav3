@@ -1,8 +1,10 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 
-<main>
-  
-    <h2 class="mt-2">Excluir Escola</h2>
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
+<main> 
 
     <form action="<?php echo URLROOT; ?>/escolas/delete/<?php echo $data['escolaRemover']->id;?>" method="post" enctype="multipart/form-data">
         

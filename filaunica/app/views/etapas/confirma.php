@@ -1,8 +1,11 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 
-<main>
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
+<main> 
   
-    <h2 class="mt-2">Excluir Etapa</h2>
 
     <form action="<?php echo URLROOT; ?>/etapas/delete/<?php echo $data['etapa']->id;?>" method="post" enctype="multipart/form-data">
         

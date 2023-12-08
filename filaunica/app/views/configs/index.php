@@ -3,11 +3,8 @@
 <?php flash('message'); ?>
 
 
-<!-- ADD NEW -->
-<div class="row mb-3">
-    <div class="col-md-12 text-center">
-        <h1><?php echo $data['title']; ?></h1>
-    </div>  
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
 </div>
 
 <ul class="list-group">

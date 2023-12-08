@@ -21,7 +21,8 @@
 
             $data = [
             'title' => 'Configurações',
-            'description'=> 'Configurações da fila única'
+            'description'=> 'Configurações da fila única',
+            'nav' => 'Configurações\\'
             ];
 
             $this->view('configs/index', $data);
@@ -32,6 +33,7 @@
             $data = [
                 'title' => 'Configurações',
                 'description'=> 'Configurações de cadastro',
+                'nav' => 'Configurações\\',
                 'permiteCadDuplicado' => $this->configModel->getPermiteDuplicado()
             ];    
                

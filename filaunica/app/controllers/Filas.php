@@ -85,7 +85,8 @@
                     'opcao2_err' => '',
                     'opcao3_err' => '',
                     'cadastroDuplicado' => false,
-                    'urlForm' => URLROOT . '/filas/cad'
+                    'urlForm' => URLROOT . '/filas/cad',
+                    'nav' => 'Registros\\Fila de Espera\\'
                 ];
                                   
                     
@@ -288,7 +289,8 @@
                     'opcao3_err' => '',
                     'opcao_turno_err' => '',
                     'cadastroDuplicado' => false,
-                    'urlForm' => URLROOT . '/filas/cad'
+                    'urlForm' => URLROOT . '/filas/cad',
+                    'nav' => 'Registros\\Fila de Espera\\'
                 ];                
                 $this->view('filas/cadastrar', $data);
             }    

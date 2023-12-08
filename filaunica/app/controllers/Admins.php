@@ -115,7 +115,8 @@
                                     : 'Sem opção de turno informada',
                   'turno_matricula' => isset($row->turno_matricula)
                                     ? $this->filaModel->getTurno($row->turno_matricula)
-                                    : 'Sem informação de turno para a matrícula'
+                                    : 'Sem informação de turno para a matrícula',
+                  'nav' => 'Registros\\Fila de Espera\\'
                 );
               }
             } else {
@@ -218,8 +219,9 @@
                               ? $this->filaModel->getBairroByid($row['bairro_id']) 
                               : '',
                     'historico' => ($this->adminModel->getHistoricoById($row['id'])) 
-                              ? $this->adminModel->getHistoricoById($row['id']) 
-                              : ''
+                              ? $this->adminModel->getHistoricoById($row['id'])
+                              : '',
+                    'nav' => 'Registros\\Fila de Espera\\'
                   ];
                 }
               } else {
@@ -231,7 +233,8 @@
           //fim se o usuáro clicar em atualizar     
           $data = [
             'paginate' => $paginate,
-            'results' => $results
+            'results' => $results,
+            'nav' => 'Registros\\Fila de Espera\\'
           ];
           $this->view('admins/index', $data);
         }

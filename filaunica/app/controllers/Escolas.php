@@ -17,11 +17,10 @@
             $this->bairroModel = $this->model('Bairro');
         }
 
-        public function index() { 
-            
+        public function index() {             
             if($escolas = $this->escolaModel->getEscolas()){
                 foreach($escolas as $row){                    
-                    $data[] = [
+                    $results[] = [
                         'id' => $row->id,
                         'nome' => ($row->nome)
                                     ? $row->nome
@@ -40,9 +39,13 @@
                                     : '',
                         'emAtividade' => ($row->emAtividade == 1) 
                                     ? 'Sim' 
-                                    : 'Não'
+                                    : 'Não'                        
                     ];       
-                }               
+                } 
+                $data = [
+                    'results' => $results,
+                    'nav' => 'Cadastros\\Unidades\\'
+                ];           
                 $this->view('escolas/index', $data);
             } else {                                 
                 $this->view('escolas/index');
@@ -75,7 +78,8 @@
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                   
                     'emAtividade_err' => '',
-                    'numero_err' => ''
+                    'numero_err' => '',
+                    'nav' => 'Cadastros\\Unidades\\Registrar uma unidade\\'
                 ];                   
 
                 // Valida nome
@@ -139,7 +143,8 @@
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                   
                     'emAtividade_err' => '',
-                    'numero_err' => ''                    
+                    'numero_err' => '',
+                    'nav' => 'Cadastros\\Unidades\\Registrar uma unidade\\'                    
                 ];               
                 $this->view('escolas/new', $data);
             } 
@@ -175,9 +180,11 @@
                                 ? trim($_POST['emAtividade'])
                                 : '',
                     'nome_err' => '',
+                    'numero_err' => '',
                     'bairro_id_err' => '',
                     'logradouro_err' => '',                    
-                    'emAtividade_err' => ''                    
+                    'emAtividade_err' => '',
+                    'nav' => 'Cadastros\\Unidades\\Atualizar uma unidade\\'                       
                 ];    
 
                 // Valida nome
@@ -219,7 +226,7 @@
                     } catch (Exception $e) {                         
                         $erro = 'Erro: '.  $e->getMessage();                      
                         flash('message', $erro,'error');
-                        $this->view('escolas/new',$data);
+                        $this->view('escolas/edit',$data);
                         die();
                     }                      
                 } else {
@@ -255,7 +262,8 @@
                         'bairro_id_err' => '',
                         'logradouro_err' => '',                   
                         'emAtividade_err' => '',
-                        'numero_err' => ''                   
+                        'numero_err' => '',
+                        'nav' => 'Cadastros\\Unidades\\Atualizar uma unidade\\'                      
                     ];         
                 } else {
                     die('Erro ao tentar recuperar os dados da escola! Tente novamente');
@@ -322,7 +330,7 @@
                 } catch (Exception $e) {                    
                     $erro = 'Erro: '.  $e->getMessage();                   
                     flash('message', $erro,'error');                    
-                    redirect('escolas/index',$data);
+                    redirect('escolas/index');
                     die();
                 }                
            } else {  
@@ -337,7 +345,8 @@
                 'id' => $id,
                 'alerta' => $alerta,
                 'escolas' => $listaEscolas,
-                'escolaRemover' => $escolaRemover
+                'escolaRemover' => $escolaRemover,
+                'nav' => 'Cadastros\\Unidades\\Excluir uma unidade\\'   
             ];            
             
             $this->view('escolas/confirma',$data);

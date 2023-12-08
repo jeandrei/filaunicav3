@@ -1,11 +1,16 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
+<?php flash('message');?>
+
 <div class="row">
-    <div class="col-md-6 mx-auto">
-    <?php flash('message');?>
+    <div class="col-md-6 mx-auto">   
     <a href="<?php echo URLROOT; ?>/escolas" class="btn btn-light mt-3"><i class="fa fa-backward"></i>Voltar</a>
         <div class="card card-body bg-ligth mt-5">
-            <h2>Registrar uma escola</h2>
+            <h2>Registrar uma unidade</h2>
             <p>Por favor informe os dados da nova escola</p>
             <form id="newescola" action="<?php echo URLROOT; ?>/escolas/new" method="post">                
                 

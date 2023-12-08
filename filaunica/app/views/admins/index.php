@@ -110,18 +110,16 @@ h1 {
 //die(var_dump($situacoes));
 //var_dump($_GET);
 
-
-
 ?>
-
-
-
-
 
 
 <!-- LINHA PARA A MENSÁGEM DO JQUERY -->
 <div class="container">
-    <?php flash('register_success');?>
+    <?php flash('message');?>
+</div>
+
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
 </div>
 
 

@@ -8,7 +8,7 @@
         }
 
         // Registra Etapa
-        public function register($data){            
+        public function register($data){                      
             $this->db->query('INSERT INTO escola (nome, bairro_id, logradouro, numero, emAtividade) VALUES (:nome, :bairro_id, :logradouro, :numero, :emAtividade)');
             // Bind values
             $this->db->bind(':nome',$data['nome']);
@@ -26,8 +26,7 @@
         }
 
         // Update Escola
-        public function update($data){             
-            
+        public function update($data){ 
             $this->db->query('UPDATE escola SET nome = :nome, bairro_id = :bairro_id, logradouro = :logradouro, numero = :numero, emAtividade = :emAtividade WHERE id = :id');
             // Bind values
             $this->db->bind(':id',$data['id']);
@@ -124,8 +123,7 @@
         }
 
          // Deleta escola por id
-         public function delete($id){ 
-            
+         public function delete($id){            
             //verifico se tem quadro de vagas cadastrado
             if($this->getQuadroVagasEscola($id)){
                  //apago todo o quadro de vagas da escola primeiro

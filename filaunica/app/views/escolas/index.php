@@ -1,15 +1,21 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
- <div class="row align-items-center mb-3"> 
-    <div class="col-md-10">
-        <h1>Escolas</h1>
+
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div> 
+
+ <div class="row">
+    <div class="col">
+        <div class="text-end">
+            <a href="<?php echo URLROOT; ?>/escolas/new" class="btn btn-primary pull-right">
+                <i class="fa fa-pencil"></i> Adicionar
+            </a>
+        </div>
     </div>
-    <div class="col-md-2">
-        <a href="<?php echo URLROOT; ?>/escolas/new" class="btn btn-primary pull-right">
-            <i class="fa fa-pencil"></i> Adicionar
-        </a>
-    </div>
- </div> 
- <?php flash('message');?>
+</div>
+
+<?php flash('message');?>
+
 <table class="table table-striped">
     <thead>
         <tr class="text-center">      
@@ -23,7 +29,7 @@
     </thead>
     <tbody>
     <?php if($data) : ?>
-        <?php foreach($data as $escola) : ?>
+        <?php foreach($data['results'] as $escola) : ?>
             <tr class="text-center">
                 <td><?php echo $escola['nome'];?></td>
                 <td><?php echo $escola['logradouro'];?></td>
