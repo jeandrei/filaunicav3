@@ -1,5 +1,9 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
  <div class="row align-items-center mb-3"> 
     <div class="col-md-8">
         <h2>Escolas do usuário <?php echo $data['user']->name;?></h2>

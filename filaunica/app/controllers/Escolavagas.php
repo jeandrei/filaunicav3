@@ -79,7 +79,8 @@
                                     : '',
                         'etapas' => isset($etapas)
                                     ? $etapas
-                                    : ''
+                                    : '',
+                        'nav' => 'CEI\\Quadro de Vagas'
                     ];  
                     $this->view('escolavagas/vagas', $data);
                 } else { 
@@ -92,7 +93,8 @@
                                     : '',
                         'escolas' => isset($escolasUser)
                                 ? $escolasUser
-                                : ''
+                                : '',
+                        'nav' => 'CEI\\Quadro de Vagas'
                     ];                     
                     $this->view('escolavagas/index', $data);
                 }
@@ -100,7 +102,8 @@
                 $data = [
                     'escolas' => isset($escolasUser)
                                 ? $escolasUser
-                                : ''
+                                : '',
+                    'nav' => 'CEI\\Quadro de Vagas'
                 ];
                 if($data['escolas']){                    
                     $this->view('escolavagas/index', $data);
@@ -123,7 +126,8 @@
 
                 $post = [
                     'escola_id' => $escola_id,                 
-                    'escola_id_err' => ''                                       
+                    'escola_id_err' => '',
+                    'nav' => 'CEI\\Quadro de Vagas'                                      
                 ]; 
                 
                 $erro = false;
@@ -210,7 +214,8 @@
                                         : '',
                             'etapas' => isset($etapas)
                                         ? $etapas
-                                        : ''
+                                        : '',
+                            'nav' => 'CEI\\Quadro de Vagas'
                         ];
                         
                         $this->view('escolavagas/vagas', $data);
@@ -224,7 +229,8 @@
                     $data = [
                         'etapas' => ($this->etapaModel->getEtapas())
                                     ? $this->etapaModel->getEtapas()
-                                    : ''
+                                    : '',
+                        'nav' => 'CEI\\Quadro de Vagas'
                     ];                                   
                     $this->view('escolavagas/vagas',$data);
                 }

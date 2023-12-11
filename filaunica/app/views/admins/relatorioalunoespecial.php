@@ -2,7 +2,9 @@
 
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<h3>Relatório de alunos especiais</h3> 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
 
 <form action="<?php echo URLROOT; ?>/admins/relatorioAlunoEspecial" target="_blank" method="post" enctype="multipart/form-data">
 

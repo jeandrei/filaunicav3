@@ -599,12 +599,16 @@
           }    
           
           $data = [
-            'results' => $results
+            'results' => $results,
+            'nav' => 'Relatórios\\Relatório de Matrícula Mensal'
           ];                
                       
           $this->view('relatorios/relatoriomatriculamensal',$data);
       } else {
-          $this->view('admins/relatoriomatriculamensal');
+        $data = [                
+                'nav' => 'Relatórios\\Relatório de Matrícula Mensal\\'
+        ];    
+        $this->view('admins/relatoriomatriculamensal',$data);
       }      
       
   }
@@ -709,8 +713,11 @@
         );       
                     
         $this->view('relatorios/relatoriodemandaporunidade',$data);
-    } else {        
-        $this->view('admins/relatoriodemandaporunidade');
+    } else { 
+        $data = [                
+                'nav' => 'Relatórios\\Relatório de Demanda por Unidade\\'
+        ];        
+        $this->view('admins/relatoriodemandaporunidade',$data);
     }   
 }
 
@@ -786,7 +793,10 @@
       ];         
       $this->view('relatorios/relatorioalunoespecial',$data);
     } else {        
-      $this->view('admins/relatorioalunoespecial');
+        $data = [                
+                'nav' => 'Relatórios\\Relatório de Alunos Especiais\\'
+        ];  
+        $this->view('admins/relatorioalunoespecial',$data);
     }      
     
   }
@@ -854,8 +864,8 @@
       }
       
       $data = [
-        'results' => $results
-      ];  
+        'results' => $results        
+      ];        
       
       $this->view('relatorios/relatorioaguardandoalfabetica',$data);
   }  
@@ -942,17 +952,15 @@
   }
 
 
-  public function analiseDeRegistrosDuplicados(){   
-
-    $duplicados = $this->filaModel->getDuplicados();
+  public function analiseDeRegistrosDuplicados(){       
    
     $indiciDuplicado = 0;
-    if($duplicados){
+    if($duplicados = $this->filaModel->getDuplicados()){
       foreach($duplicados as $row){
         $indiciDuplicado++;
         $registrosDuplicados = $this->filaModel->getRegistroByNomeNascimento($row->nomecrianca, $row->nascimento);
         foreach($registrosDuplicados as $registro){
-          $data[] = array(
+          $results[] = array(
             'id' => $registro->id,
             'indiceDuplicado' => $indiciDuplicado,
             'protocolo' => $registro->protocolo,
@@ -971,6 +979,12 @@
     } else {
       die('Sem cadastros duplicados no momento.');
     }
+
+    $data = [
+        'results' => $results,
+        'nav' => 'Registros\\Análise de Registros Duplicados'
+    ];
+
     $this->view('analiseduplicados/index',$data);
   }
 

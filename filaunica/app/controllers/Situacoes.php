@@ -21,7 +21,7 @@
             $situacoes = $this->situacaoModel->getSituacoes();
 
             foreach($situacoes as $row){
-                $data[] = array(
+                $results[] = array(
                   'id' => $row->id,
                   'descricao' => isset($row->descricao)
                                 ? $row->descricao
@@ -34,6 +34,12 @@
                                 : ''
                 );       
             } 
+
+            $data = [
+                'results' => $results,
+                'nav' => 'Cadastros\\Situações\\'
+            ];
+
             $this->view('situacoes/index', $data);
         }
         
@@ -54,7 +60,8 @@
                                     : '',
                     'descricao_err' => '',
                     'ativo_err' => '',
-                    'cor_err' => ''
+                    'cor_err' => '',
+                    'nav' => 'Cadastros\\Situações\\Adicionar Situação\\'
                 ];                   
 
                 // Valida Situação
@@ -104,7 +111,8 @@
                         'cor' => '',                    
                         'descricao_err' => '',
                         'ativo_err' => '',
-                        'cor_err' => ''
+                        'cor_err' => '',
+                        'nav' => 'Cadastros\\Situações\\Adicionar Situação\\'
                     ]; 
                     $this->view('situacoes/new', $data);
                 } 
@@ -122,7 +130,8 @@
                     'cor' => trim($_POST['cor']),                    
                     'descricao_err' => '',
                     'ativo_err' => '',
-                    'cor_err' => ''
+                    'cor_err' => '',
+                    'nav' => 'Cadastros\\Situações\\Editar Situação\\'
                 ];                   
 
                 // Valida Situação
@@ -176,7 +185,8 @@
                         'cor' => $situacao->cor,                          
                         'descricao_err' => '',
                         'ativo_err' => '',
-                        'cor_err' => ''
+                        'cor_err' => '',
+                        'nav' => 'Cadastros\\Situações\\Editar Situação\\'
                     ];    
                 } else {
                     $situacao = 'null' ;
@@ -190,7 +200,7 @@
             //VALIDAÇÃO DO ID
             if(!is_numeric($id)){
                $erro = 'ID Inválido!'; 
-            } else if (!$data = $this->situacaoModel->getSituacaoById($id)){
+            } else if (!$situacao = $this->situacaoModel->getSituacaoById($id)){
                 $erro = 'ID inexistente';
             } else {
                 $erro = '';
@@ -216,7 +226,12 @@
                     flash('message', $erro,'error');
                     redirect('situacoes/index');
                 }                
-           } else {              
+           } else {   
+            
+            $data = [
+                'situacao' => $situacao,
+                'nav' => 'Cadastros\\Situações\\Remover Situação'
+            ];
             $this->view('situacoes/confirma',$data);
             exit();
            }  

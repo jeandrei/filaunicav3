@@ -33,7 +33,7 @@
             $data = [
                 'title' => 'Configurações',
                 'description'=> 'Configurações de cadastro',
-                'nav' => 'Configurações\\',
+                'nav' => 'Configurações\\Configurações de cadastro',
                 'permiteCadDuplicado' => $this->configModel->getPermiteDuplicado()
             ];    
                

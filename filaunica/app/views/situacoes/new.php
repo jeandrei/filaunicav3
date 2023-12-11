@@ -1,7 +1,13 @@
 <?php require APPROOT . '/views/inc/header.php';?>
+
+<?php flash('message');?>
+
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
 <div class="row">
-    <div class="col-md-6 mx-auto">
-    <?php flash('message');?>
+    <div class="col-md-6 mx-auto">    
     <a href="<?php echo URLROOT; ?>/situacoes" class="btn btn-light mt-3"><i class="fa fa-backward"></i>Voltar</a>
         <div class="card card-body bg-ligth mt-5">
             <h2>Registrar uma situação</h2>

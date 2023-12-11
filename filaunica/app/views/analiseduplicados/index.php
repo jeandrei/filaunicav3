@@ -82,9 +82,12 @@
  
 </style>
  
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
   
   <?php $currentDuplicado = 0; $cores = ['#ff0000','#8000ff','#00bfff','#ffbf00','#ffff00','#80ff00','#4d4d4d']; $currentCor = 0;?>
-  <?php foreach($data as $row) : ?>
+  <?php foreach($data['results'] as $row) : ?>
     <?php 
           if($currentDuplicado <> $row['indiceDuplicado']){
             $currentDuplicado = $row['indiceDuplicado'];

@@ -21,7 +21,7 @@
             if($escolas = $this->escolaModel->getEscolas()){
                                
                 foreach($escolas as $row){                    
-                    $data[] = [
+                    $results[] = [
                         'id' => $row->id,
                         'nome' => ($row->nome)
                                     ? $row->nome
@@ -42,7 +42,13 @@
                                     ? 'Sim' 
                                     : 'Não'
                     ];       
-                }                 
+                } 
+                
+                $data = [
+                    'results' => $results,
+                    'nav' => 'Registros\\Lista de Unidades\\'
+                ];
+
                 $this->view('listaunidades/index', $data);
             } else {                                 
                 $this->view('listaunidades/index');

@@ -263,7 +263,7 @@
                         'logradouro_err' => '',                   
                         'emAtividade_err' => '',
                         'numero_err' => '',
-                        'nav' => 'Cadastros\\Unidades\\Atualizar uma unidade\\'                      
+                        'nav' => 'Cadastros\\Unidades\\Editar uma unidade\\'                      
                     ];         
                 } else {
                     die('Erro ao tentar recuperar os dados da escola! Tente novamente');

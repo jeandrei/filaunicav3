@@ -1,5 +1,9 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
 <?php if($data['alerta']) : ?>
     <div class="alert alert-warning" role="alert">
         <?php echo $data['alerta'];?>

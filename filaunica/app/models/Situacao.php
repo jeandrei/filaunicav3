@@ -8,10 +8,8 @@
             $this->db = new Database;
         }
 
-
-
         // Registra Situação
-        public function register($data){            
+        public function register($data){                  
             $this->db->query('INSERT INTO situacao (descricao, cor, ativonafila) VALUES (:descricao, :cor, :ativonafila)');
             // Bind values
             $this->db->bind(':descricao',$data['descricao']);
@@ -27,7 +25,7 @@
         }
 
         // Update Situacao
-        public function update($data){            
+        public function update($data){                      
             $this->db->query('UPDATE situacao SET descricao = :descricao, cor = :cor, ativonafila = :ativonafila WHERE id = :id');
             // Bind values
             $this->db->bind(':id',$data['id']);
@@ -62,9 +60,7 @@
                 return false;
             }
         }
-
-        
-
+       
         public function arquivaProtocolos($situacaoId){
             //pega a o id da situação arquivado
             $situacaoArquivadoId = $this->getIdSituacaoArquivado();
@@ -82,12 +78,10 @@
             } else {
                 return false;
             }
-        }
-
-        
+        }        
 
         // Deleta situacao por id
-        public function delete($id){            
+        public function delete($id){                      
             //não permito a exclusão da situação Arquivado
             if($this->getDescricaoSituacaoById($id) == 'Arquivado'){
                 return false;
@@ -112,10 +106,7 @@
                 return false;
             }
         }       
-
-       
-
-        
+            
 
         // RETORNA A SITUAÇÃO POR ID
         public function getDescricaoSituacaoById($id) {  
@@ -132,8 +123,8 @@
         
         }
 
-          // RETORNA A SITUAÇÃO POR ID
-          public function getCorSituacaoById($id) {  
+        // RETORNA A SITUAÇÃO POR ID
+        public function getCorSituacaoById($id) {  
             //pega o id da etapa
             $this->db->query("SELECT * FROM situacao WHERE id = :id");
             $this->db->bind(':id',$id);                  
@@ -143,10 +134,8 @@
             }
             else{
                 return false;
-            }
-        
+            }       
         }
-
 
         //Traz todas as situações da tabela situacao
         public function getSituacoes(){

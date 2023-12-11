@@ -1,15 +1,24 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
- <div class="row align-items-center mb-3"> 
-    <div class="col-md-10">
-        <h1>Situações</h1>
+
+
+<?php flash('message');?>
+
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
+ <div class="row">
+    <div class="col">
+        <div class="text-end">
+            <a href="<?php echo URLROOT; ?>/situacoes/new" class="btn btn-primary pull-right">
+                <i class="fa fa-pencil"></i> Adicionar
+            </a>
+        </div>
     </div>
-    <div class="col-md-2">
-        <a href="<?php echo URLROOT; ?>/situacoes/new" class="btn btn-primary pull-right">
-            <i class="fa fa-pencil"></i> Adicionar
-        </a>
-    </div>
- </div> 
- <?php flash('message');?>
+</div>
+
+
+
 <table class="table table-striped">
     <thead>
         <tr class="text-center">      
@@ -20,7 +29,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($data as $row) : ?>
+        <?php foreach($data['results'] as $row) : ?>
             <tr class="text-center">
                 <td><?php echo $row['descricao'];?></td>
                 <td><?php echo $row['ativo'];?></td>

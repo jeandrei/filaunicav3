@@ -1,10 +1,11 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
- <div class="row align-items-center mb-3"> 
-    <div class="col-md-10">
-        <h1>Lista de Unidades</h1>
-    </div>    
- </div> 
+ 
  <?php flash('message');?>
+
+ <div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr class="text-center">      
@@ -16,8 +17,8 @@
         </tr>
     </thead>
     <tbody>
-    <?php if($data) : ?>
-        <?php foreach($data as $escola) : ?>
+    <?php if($data['results']) : ?>
+        <?php foreach($data['results'] as $escola) : ?>
             <tr class="text-center">
                 <td><?php echo $escola['nome'];?></td>
                 <td><?php echo $escola['logradouro'];?></td>

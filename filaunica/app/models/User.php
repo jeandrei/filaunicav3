@@ -115,7 +115,7 @@
         }
 
          // Find user by email
-         public function delUserByid($id){          
+         public function delUserByid($id){                     
             // se tem usuarioescola vinculado ao usuário excluo tudo primeiro             
             if($this->temUsuarioEscola($id)){
                 $this->deleteescolasusuario($id);

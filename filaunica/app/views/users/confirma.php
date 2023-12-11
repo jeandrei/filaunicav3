@@ -1,13 +1,17 @@
 <?php require APPROOT . '/views/inc/header.php';?>
 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
 <main>
   
     <h2 class="mt-2">Excluir Usuário</h2>
 
-    <form action="<?php echo URLROOT; ?>/users/delete/<?php echo $data->id;?>" method="post" enctype="multipart/form-data">
+    <form action="<?php echo URLROOT; ?>/users/delete/<?php echo $data['user']->id;?>" method="post" enctype="multipart/form-data">
         
         <div class="form-group">
-            <p>Você deseja realmente excluir o Usuário <strong><?php echo $data->name; ?>?</strong></p>
+            <p>Você deseja realmente excluir o Usuário <strong><?php echo $data['user']->name; ?>?</strong></p>
         </div>  
         
         <div class="form-group mt-3">

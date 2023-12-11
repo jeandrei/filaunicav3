@@ -41,19 +41,15 @@
 
             $pagination = $this->userModel->getUsersPag($page,$options); 
 
-            if($pagination->success == true){
-                //Aqui passo apenas a paginação
-                $data['pagination'] = $pagination; 
-               
+            if($pagination->success == true){ 
                 
                 //Aqui pego apenas os resultados do banco de dados
-                $results = $pagination->resultset->fetchAll();
-                
+                $results = $pagination->resultset->fetchAll();                
                 
                 //Monto o array data['results'][] com os resultados
                 if(!empty($results)){
                     foreach($results as $row){
-                        $data['results'][] = [
+                        $results[] = [
                             'id'   => $row['id'],
                             'name' => ($row['name'])
                                     ? $row['name']
@@ -69,8 +65,18 @@
                 }
                      
             } else {
-                $data['results'] = false;
+                $results = false;
             }
+
+            $data = [
+                'pagination' => isset($pagination)
+                                ? $pagination
+                                : '',
+                'results' => isset($results)
+                                ? $results
+                                : '',
+                'nav' => 'Cadastros\\Usuários\\'
+            ];
             
             $this->view('users/index', $data);
             die();
@@ -79,9 +85,7 @@
                 $this->view('users/index', $data);                
             }  else {                
                 die('Falha! Nenhum usuário encontrado cadastrado!');
-            }
-            
-           
+            }      
         }
 
         public function new(){                
@@ -122,7 +126,8 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => '',
-                    'type_err' => ''
+                    'type_err' => '',
+                    'nav' => 'Cadastros\\Usuários\\Adicionar Usuário\\'
                 ];   
 
                 // Validate Email
@@ -207,7 +212,8 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => '',
-                    'erro' => ''
+                    'erro' => '',
+                    'nav' => 'Cadastros\\Usuários\\Adicionar Usuário\\'
                 ];
                 if(!isAdmin()){
                     redirect('index');
@@ -266,7 +272,8 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => '',
-                    'type_err' => ''
+                    'type_err' => '',
+                    'nav' => 'Cadastros\\Usuários\\Editar Usuário\\'
                 ];                  
 
                
@@ -356,7 +363,8 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => '',
-                    'type_err' => ''
+                    'type_err' => '',
+                    'nav' => 'Cadastros\\Usuários\\Editar Usuário\\'
                 ];
 
                 if(!isAdmin()){
@@ -384,13 +392,13 @@
             if(!is_numeric($id)){
                $erro = 'ID Inválido!'; 
             // se no id não existir
-            } else if (!$data = $this->userModel->getUserById($id)){
+            } else if (!$user = $this->userModel->getUserById($id)){
                 $erro = 'ID inexistente';
             //se o usuário estiver tentando excluir seu próprio registro
             } else if($_SESSION[DB_NAME . '_user_id'] == $id){            
                 $erro = 'Você não pode excluir seu próprio usuário!';            
             //não precisaria dessa linha mas é garantia que pelo menos um usuário administrador fique no bd
-            } else if ($data->type == 'admin'){ 
+            } else if ($user->type == 'admin'){ 
                 $qtdAdmins = $this->userModel->existeUserAdmin();
                 if($qtdAdmins < 2){
                     $erro = 'Existe apenas um administrador cadastrado! Cadastre um novo administrador para ralizar esta exclusão.';
@@ -404,7 +412,7 @@
                
                if($erro !== ''){
                    flash('message', $erro , 'error'); 
-                   $data = $this->userModel->getUsers();   
+                   //$data = $this->userModel->getUsers();   
                    redirect('users/index');
                    die();
                }                   
@@ -421,9 +429,15 @@
                    flash('message', $erro,'error');
                    redirect('users/index');
                }                
-          } else { 
-           $this->view('users/confirma',$data);
-           exit();
+          } else {
+            
+            $data = [
+                'user' => $user,
+                'nav' => 'Cadastros\\Usuários\\Remover Usuário\\'
+            ];
+
+            $this->view('users/confirma',$data);
+            exit();
           }                 
        }       
             

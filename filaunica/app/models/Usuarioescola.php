@@ -9,9 +9,7 @@
         }
 
         // Register User
-        public function register($data){  
-           
-           
+        public function register($data){                              
             $this->db->query('INSERT INTO userescola (userid, escolaid) VALUES (:userid, :escolaid)');
             // Bind values
             $this->db->bind(':userid',$data['user']->id);
@@ -108,10 +106,7 @@
         }
 
 
-
-
-
-        public function delete($id){
+        public function delete($id){            
             $this->db->query('DELETE FROM userescola WHERE id = :id');
             // Bind value
             $this->db->bind(':id', $id);

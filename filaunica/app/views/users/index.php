@@ -19,18 +19,21 @@ function limpar(){
 
 </script>
 
- <div class="row align-items-center mb-3"> 
-    <div class="col-md-10">
-        <h1>Usuários do sistema</h1>
-    </div>
-    <div class="col-md-2">
-        <a href="<?php echo URLROOT; ?>/users/new" class="btn btn-primary pull-right">
-            <i class="fa fa-pencil"></i> Adicionar
-        </a>
-    </div>
- </div> 
  <?php flash('message');?>
 
+ <div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
+ <div class="row">
+    <div class="col">
+        <div class="text-end">
+            <a href="<?php echo URLROOT; ?>/users/new" class="btn btn-primary pull-right">
+                <i class="fa fa-pencil"></i> Adicionar
+            </a>
+        </div>
+    </div>
+</div>
 
 <!-- FORMULÁRIO -->
 <form id="filtrar" action="<?php echo URLROOT; ?>/users/index" method="get" enctype="multipart/form-data">

@@ -2,7 +2,9 @@
 
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<h3>Relatório de demanda por Unidade</h3> 
+<div class="alert alert-light" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
 
 <form action="<?php echo URLROOT; ?>/admins/relatorioDemanda" target="_blank" method="post" enctype="multipart/form-data">
 

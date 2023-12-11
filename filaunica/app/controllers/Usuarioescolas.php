@@ -17,9 +17,18 @@
             $this->userModel = $this->model('User');
         }
 
-        public function index($id) {   
-            $data['escolasusuario'] = $this->usuarioEscolaModel->getEscolasDoUsuario($id);
-            $data['user'] = $this->userModel->getUserById($id);
+        public function index($id) {               
+
+            $data = [
+                'escolasusuario' => ($this->usuarioEscolaModel->getEscolasDoUsuario($id))
+                                ? $this->usuarioEscolaModel->getEscolasDoUsuario($id)
+                                : '',
+                'user' => ($this->userModel->getUserById($id))
+                                ? $this->userModel->getUserById($id)
+                                : '',
+                'nav' => 'Cadastros\\Usuários\\Editar Usuário\\Vincular Escola\\'
+            ];
+
             $this->view('usuarioescolas/index', $data);            
            
         }
@@ -38,11 +47,18 @@
 
                 //init data
                 $data = [
-                    'user' => $this->userModel->getUserById($id),
-                    'escolas' => $this->escolaModel->getEscolas(),
-                    'escolaid' => trim($_POST['escolaid']),                    
+                    'user' => ($this->userModel->getUserById($id))
+                                ? $this->userModel->getUserById($id)
+                                : '',
+                    'escolas' => ($this->escolaModel->getEscolas())
+                                ? $this->escolaModel->getEscolas()
+                                : '',
+                    'escolaid' => isset($_POST['escolaid'])
+                                ? trim($_POST['escolaid'])
+                                : '',                    
                     'userid_err' => '',
-                    'escolaid_err' => ''
+                    'escolaid_err' => '',
+                    'nav' => 'Cadastros\\Usuários\\Editar Usuário\\Vincular Escola\\Adicionar'
                 ];          
                    
 
@@ -60,19 +76,28 @@
                 if(  
                     empty($data['escolaid_err']) 
                     ){ 
+
                         if($data['user']->type == 'sec'){
-                            // Register userescola
-                            if($this->usuarioEscolaModel->register($data)){
-                                // Cria a menságem antes de chamar o view va para 
-                                // views/users/login a segunda parte da menságem
-                                flash('message', 'Escola vinculada com sucesso!','success');                        
-                                redirect('usuarioescolas/'.$id);
-                            } else {
-                                die('Ops! Algo deu errado.');
-                            }
+
+
+                            try {     
+                                if($lastId = $this->usuarioEscolaModel->register($data)){
+                                    flash('message', 'Cadastro realizado com sucesso!','success'); 
+                                    redirect('usuarioescolas/' . $id);
+                                    die();
+                                } else {                        
+                                    throw new Exception('Ops! Algo deu errado ao tentar gravar os dados!');
+                                }
+
+                            } catch (Exception $e) {                         
+                                $erro = 'Erro: '.  $e->getMessage();                      
+                                flash('message', $erro,'error');                                
+                                redirect('usuarioescolas/' . $id);
+                                die();
+                            }  
                         } else {
                             die('Só é permitido vincular escolas a usuários do tipo sec');
-                        }
+                        }                       
                       
                     } else {
                       // Load the view with errors                     
@@ -83,8 +108,15 @@
             } else {   
                 // Init data
                 $data = [
-                    'user' => $this->userModel->getUserById($id),
-                    'escolas' => $this->escolaModel->getEscolas(),
+                    'user' => ($this->userModel->getUserById($id))
+                                ? $this->userModel->getUserById($id)
+                                : '',
+                    'escolas' => ($this->escolaModel->getEscolas())
+                                ? $this->escolaModel->getEscolas()
+                                : '',
+                    'escolaid' => isset($_POST['escolaid'])
+                    ? trim($_POST['escolaid'])
+                    : '',    
                     'name' => '',
                     'email' => '',
                     'type' => '',
@@ -94,7 +126,9 @@
                     'email_err' => '',
                     'password_err' => '',
                     'confirm_password_err' => '',
-                    'erro' => ''
+                    'escolaid_err' => '',
+                    'erro' => '',
+                    'nav' => 'Cadastros\\Usuários\\Editar Usuário\\Vincular Escola\\Adicionar'
                 ];
                 
                 // Load view
@@ -114,14 +148,14 @@
                try {                    
                    if($this->usuarioEscolaModel->delete($id)){
                        flash('message', 'Registro excluido com sucesso!', 'success'); 
-                       redirect('usuarioescolas/index/'.$userid );
+                       redirect('usuarioescolas/'.$userid );
                    } else {
                        throw new Exception('Ops! Algo deu errado ao tentar excluir os dados!');
                    }
                } catch (Exception $e) {
                    $erro = 'Erro: '.  $e->getMessage();
                    flash('message', $erro,'error');
-                   $this->view('usuarioescolas/index');
+                   redirect('usuarioescolas/'.$userid);
                }                
                           
        }    
