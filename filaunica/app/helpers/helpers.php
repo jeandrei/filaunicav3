@@ -7,6 +7,20 @@ function html($data)
 	return $data;
 }
 
+function getTurno($turno){
+	switch ($turno){
+		case 1:
+			return "matutino";
+			break;
+		case 2:
+			return "vespertino";
+			break;
+		case 3:
+			return "integral";
+			break;
+	}					
+}
+
 function htmlout($text)
 {
 	echo html($text);

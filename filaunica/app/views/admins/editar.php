@@ -4,6 +4,10 @@
 
 <?php flash('message');?>
 
+<div class="alert alert-secondary" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div>
+
 <style>
  body {
     background-color:#F2F3F4;
@@ -85,7 +89,7 @@ $(document).ready(function(){
 <div class="row row-cols-1 mt-3 gy-2 bg-dark text-white">
     <!-- COL -->
     <div class="col">
-        <h3>Nome da criança: <?php echo $data['nomecrianca'];?></h3> 
+        <h3>Nome da criança: <?php echo $data['results']['nomecrianca'];?></h3> 
     </div>
     <!-- COL -->
 </div>
@@ -110,11 +114,11 @@ $(document).ready(function(){
                     <div class="card-body">
                         <i class="fa fa-list-alt fa-2x"></i>
                         <h4 class="card-title pricing-card-title">Protocolo</h4>
-                        <p class="mt-1 mb-1">Nº: <?php echo $data['protocolo'];?>
+                        <p class="mt-1 mb-1">Nº: <?php echo $data['results']['protocolo'];?>
                         </p> 
-                        <p class="mt-1 mb-1">Registrado em: <?php echo $data['registro'];?>
+                        <p class="mt-1 mb-1">Registrado em: <?php echo $data['results']['registro'];?>
                         </p>  
-                        <p class="mt-1 mb-1">Situação:<b> <?php echo $data['situacao'];?></b>
+                        <p class="mt-1 mb-1">Situação:<b> <?php echo $data['results']['situacao'];?></b>
                         </p>  
                     </div>
                     <!--  class="card-body -->
@@ -127,9 +131,9 @@ $(document).ready(function(){
                     <div class="card-body">
                         <i class="fa fa-birthday-cake fa-2x"></i>
                         <h4 class="card-title pricing-card-title">Nascimento</h4>
-                        <p class="mt-1 mb-1"><?php echo $data['nascimento'];?>
+                        <p class="mt-1 mb-1"><?php echo $data['results']['nascimento'];?>
                         </p>
-                        <p class="mt-1 mb-1">Idade: <?php echo CalculaIdade($data['nascimento']);?>
+                        <p class="mt-1 mb-1">Idade: <?php echo CalculaIdade($data['results']['nascimento']);?>
                         </p>
                     </div>
                     <!--  class="card-body -->
@@ -142,7 +146,7 @@ $(document).ready(function(){
                     <div class="card-body">
                         <i class="fa fa-list-ol fa-2x"></i>
                         <h4 class="card-title pricing-card-title">Etapa</h4>
-                        <p class="mt-1 mb-1"><?php echo $data['etapa'];?>
+                        <p class="mt-1 mb-1"><?php echo $data['results']['etapa'];?>
                         </p>                        
                     </div>
                     <!--  class="card-body -->
@@ -155,7 +159,7 @@ $(document).ready(function(){
                     <div class="card-body">
                         <i class="fa fa-clock fa-2x"></i>
                         <h4 class="card-title pricing-card-title">Turno Desejado</h4>
-                        <p class="mt-1 mb-1"><?php echo $data['opcao_turno'];?>
+                        <p class="mt-1 mb-1"><?php echo $data['results']['opcao_turno'];?>
                         </p>                        
                     </div>
                     <!--  class="card-body -->
@@ -168,7 +172,7 @@ $(document).ready(function(){
                     <div class="card-body">
                         <i class="fa fa-wheelchair fa-2x"></i>
                         <h4 class="card-title pricing-card-title">Espceial</h4>
-                        <p class="mt-1 mb-1"><?php echo $data['deficiencia'];?>
+                        <p class="mt-1 mb-1"><?php echo $data['results']['deficiencia'];?>
                         </p>                        
                     </div>
                     <!--  class="card-body -->
@@ -194,8 +198,8 @@ $(document).ready(function(){
                     <h5 class="mb-1">Responsável</h5>
                 </div>
                 <!-- <div class="d-flex w-100 -->
-                <p class="mb-1"><b>Nome:</b> <?php echo $data['responsavel'];?></p>
-                <p class="mb-1"><b>CPF:</b> <?php echo $data['cpfresponsavel'];?></p>
+                <p class="mb-1"><b>Nome:</b> <?php echo $data['results']['responsavel'];?></p>
+                <p class="mb-1"><b>CPF:</b> <?php echo $data['results']['cpfresponsavel'];?></p>
                 </div>
             </div>
             <!-- RESPONSAVEL -->
@@ -208,10 +212,10 @@ $(document).ready(function(){
                     <h5 class="mb-1">Endereço</h5>
                 </div>
                 <!-- <div class="d-flex w-100 -->
-                <p class="mb-1"><b>Logradouro:</b> <?php echo $data['logradouro'];?></p>
-                <p class="mb-1"><b>Número:</b> <?php echo $data['numero'];?></p>
-                <p class="mb-1"><b>Bairro:</b> <?php echo $data['bairro'];?></p>
-                <p class="mb-1"><b>Complemento:</b> <?php echo $data['complemento'];?></p>
+                <p class="mb-1"><b>Logradouro:</b> <?php echo $data['results']['logradouro'];?></p>
+                <p class="mb-1"><b>Número:</b> <?php echo $data['results']['numero'];?></p>
+                <p class="mb-1"><b>Bairro:</b> <?php echo $data['results']['bairro'];?></p>
+                <p class="mb-1"><b>Complemento:</b> <?php echo $data['results']['complemento'];?></p>
                 </div>
             </div>
             <!-- RESPONSAVEL -->
@@ -224,9 +228,9 @@ $(document).ready(function(){
                     <h5 class="mb-1">Contato</h5>
                 </div>
                 <!-- <div class="d-flex w-100 -->
-                <p class="mb-1"><b>E-mail:</b> <?php echo $data['email'];?></p>
-                <p class="mb-1"><b>Telefone:</b> <?php echo $data['telefone'];?></p>
-                <p class="mb-1"><b>Celular:</b> <?php echo $data['celular'];?></p>
+                <p class="mb-1"><b>E-mail:</b> <?php echo $data['results']['email'];?></p>
+                <p class="mb-1"><b>Telefone:</b> <?php echo $data['results']['telefone'];?></p>
+                <p class="mb-1"><b>Celular:</b> <?php echo $data['results']['celular'];?></p>
                 </div>
             </div>
             <!-- CONTATO -->
@@ -239,26 +243,26 @@ $(document).ready(function(){
                     <h5 class="mb-1">Opções de matrícula</h5>
                 </div>
                 <!-- <div class="d-flex w-100 -->
-                <?php if($data['opcao1_id']) : ?>
-                    <p class="mb-1"><b>Opção 01:</b> <?php echo $data['opcao1_id'];?></p><p>Vagas: 
-                        Mat.(<?php echo ($data['vagas_op1']->matutino)?$data['vagas_op1']->matutino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op1']->vespertino)?$data['vagas_op1']->vespertino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op1']->integral)?$data['vagas_op1']->integral:'NI';?>)
+                <?php if($data['results']['opcao1_id']) : ?>
+                    <p class="mb-1"><b>Opção 01:</b> <?php echo $data['results']['opcao1_id'];?></p><p>Vagas: 
+                        Mat.(<?php echo ($data['results']['vagas_op1']->matutino)?$data['results']['vagas_op1']->matutino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op1']->vespertino)?$data['results']['vagas_op1']->vespertino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op1']->integral)?$data['results']['vagas_op1']->integral:'NI';?>)
                     </p>
                 <?php endif; ?>
 
-                <?php if($data['opcao2_id']) : ?>
-                    <p class="mb-1"><b>Opção 02:</b> <?php echo $data['opcao2_id'];?></p><p>Vagas: 
-                        Mat.(<?php echo ($data['vagas_op2']->matutino)?$data['vagas_op2']->matutino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op2']->vespertino)?$data['vagas_op2']->vespertino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op2']->integral)?$data['vagas_op2']->integral:'NI';?>)
+                <?php if($data['results']['opcao2_id']) : ?>
+                    <p class="mb-1"><b>Opção 02:</b> <?php echo $data['results']['opcao2_id'];?></p><p>Vagas: 
+                        Mat.(<?php echo ($data['results']['vagas_op2']->matutino)?$data['results']['vagas_op2']->matutino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op2']->vespertino)?$data['results']['vagas_op2']->vespertino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op2']->integral)?$data['results']['vagas_op2']->integral:'NI';?>)
                     </p>
                 <?php endif; ?>
-                <?php if($data['opcao3_id']) : ?>
-                    <p class="mb-1"><b>Opção 03:</b> <?php echo $data['opcao3_id'];?></p><p>Vagas: 
-                        Mat.(<?php echo ($data['vagas_op3']->matutino)?$data['vagas_op3']->matutino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op3']->vespertino)?$data['vagas_op3']->vespertino:'NI';?>)
-                        Mat.(<?php echo ($data['vagas_op3']->integral)?$data['vagas_op3']->integral:'NI';?>)
+                <?php if($data['results']['opcao3_id']) : ?>
+                    <p class="mb-1"><b>Opção 03:</b> <?php echo $data['results']['opcao3_id'];?></p><p>Vagas: 
+                        Mat.(<?php echo ($data['results']['vagas_op3']->matutino)?$data['results']['vagas_op3']->matutino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op3']->vespertino)?$data['results']['vagas_op3']->vespertino:'NI';?>)
+                        Mat.(<?php echo ($data['results']['vagas_op3']->integral)?$data['results']['vagas_op3']->integral:'NI';?>)
                     </p>
                 <?php endif; ?>
                 
@@ -274,7 +278,7 @@ $(document).ready(function(){
                     <h5 class="mb-1">Observações</h5>
                 </div>
                 <!-- <div class="d-flex w-100 -->
-                <p class="mb-1"><?php echo $data['observacao'];?></p>
+                <p class="mb-1"><?php echo $data['results']['observacao'];?></p>
                 </div>
             </div>
             <!-- OBSERVAÇÕES -->
@@ -304,7 +308,7 @@ $(document).ready(function(){
             <!-- <div class="card-body -->
             <div class="card-body">                
                 <h4 class="card-title pricing-card-title">Editar</h4>
-                <form id="editprotocolo" action="<?php echo URLROOT; ?>/admins/edit/<?php echo $data['id']; ?>" method="post"> 
+                <form id="editprotocolo" action="<?php echo URLROOT; ?>/admins/edit/<?php echo $data['results']['id']; ?>" method="post"> 
                 <!--linha 01 editar-->
                 <div class="row">
                     <!-- COLUNA 1 SITUAÇÃO-->
@@ -323,7 +327,7 @@ $(document).ready(function(){
                         foreach($situacoes as $row) : ?> 
                             <option value="<?php echo $row->id; ?>"
                                 <?php 
-                                echo $data['situacao_id'] == $row->id ? 'selected':'';  
+                                echo $data['results']['situacao_id'] == $row->id ? 'selected':'';  
                                 ?>
                             >
                                 <?php echo $row->descricao;?>
@@ -348,7 +352,7 @@ $(document).ready(function(){
                             foreach($escolas as $row) : ?> 
                                 <option value="<?php echo $row->id; ?>"
                                     <?php 
-                                    echo $data['opcao_matricula'] == $row->id ? 'selected':'';
+                                    echo $data['results']['opcao_matricula'] == $row->id ? 'selected':'';
                                     ?>
                                 >
                                     <?php echo $row->nome;?>
@@ -366,14 +370,14 @@ $(document).ready(function(){
                         <select 
                             name="turno_matricula" 
                             id="turno_matricula" 
-                            class="form-control <?php echo (!empty($data['turno_matricula_err'])) ? 'is-invalid' : ''; ?>"                                       
+                            class="form-control <?php echo (!empty($data['results']['turno_matricula_err'])) ? 'is-invalid' : ''; ?>"                                       
                         >
                             <option value="">Selecione o turno</option>
-                            <option value="1" <?php echo $data['turno_matricula'] == '1' ? 'selected':'';?>>Matutino</option>
-                            <option value="2" <?php echo $data['turno_matricula'] == '2' ? 'selected':'';?>>Vespertino</option>        
+                            <option value="1" <?php echo $data['results']['turno_matricula'] == '1' ? 'selected':'';?>>Matutino</option>
+                            <option value="2" <?php echo $data['results']['turno_matricula'] == '2' ? 'selected':'';?>>Vespertino</option>        
                         </select>                                           
                         <span class="invalid-feedback">
-                                <?php echo $data['turno_matricula_err'];?>
+                                <?php echo $data['results']['turno_matricula_err'];?>
                         </span>
                     </div>
                     <!--COLUNA 3 TURNO MATRICULA--> 
@@ -394,7 +398,7 @@ $(document).ready(function(){
                 <div class="row" style="margin-top:30px;">
                     <div class="col-md-12 text-center">                        
                         <input type="submit" value="Gravar" class="btn btn-success">  
-                        <a href="<?php echo URLROOT; ?>/admins/historico/<?php echo  $data['id'];?>" class="btn btn-warning"><i class="fa fa-list"></i> Histórico</a>                           
+                        <a href="<?php echo URLROOT; ?>/admins/historico/<?php echo  $data['results']['id'];?>" class="btn btn-warning"><i class="fa fa-list"></i> Histórico</a>                           
                         <input type="submit" name="botao" id="botao" class="btn btn-primary" value="Imprimir" onClick="newtab()">
                     </div> 
                 </div>

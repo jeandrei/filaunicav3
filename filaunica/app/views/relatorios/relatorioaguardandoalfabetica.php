@@ -96,7 +96,11 @@ class PDF extends FPDF
                          $pdf->Cell($larguracoll[3],$tam_fonte,utf8_decode($row["responsavel"]),1,0,'C');                          
                          $pdf->Cell($larguracoll[4],$tam_fonte,utf8_decode($row["protocolo"]),1,0,'C');                                                              
                          $pdf->Cell($larguracoll[5],$tam_fonte,utf8_decode($row["etapa"]),1,0,'C');
-                         $pdf->Cell($larguracoll[6],$tam_fonte,utf8_decode($row["opcao_turno"]),1,0,'C');
+                         $pdf->Cell($larguracoll[6],$tam_fonte,
+																															($row["opcao_turno"] != "null") 
+																																? utf8_decode($row["opcao_turno"]) 
+																																: '',
+																																1,0,'C');
                          $pdf->Cell($larguracoll[7],$tam_fonte,utf8_decode($row["opcao1_id"]),1,0,'C'); 
                          $pdf->Cell($larguracoll[8],$tam_fonte,utf8_decode($row["opcao2_id"]),1,0,'C'); 
                          $pdf->Cell($larguracoll[9],$tam_fonte,utf8_decode($row["registro"]),1,0,'C'); 

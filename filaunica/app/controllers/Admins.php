@@ -2,46 +2,43 @@
     class Admins extends Controller{
         public function __construct(){
 
-                if((!isLoggedIn())){ 
-                        flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-                        redirect('users/login');
-                        die();
-                }  else if ((!isAdmin()) && (!isUser())){               
-                        flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-                        redirect('pages/sistem'); 
-                        die();
-                }  
+					if((!isLoggedIn())){ 
+									flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+									redirect('users/login');
+									die();
+					}  else if ((!isAdmin()) && (!isUser())){               
+									flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+									redirect('pages/sistem'); 
+									die();
+					}  
 
-                // 1 Chama o model
-                $this->adminModel = $this->model('Admin'); 
-                $this->filaModel = $this->model('Fila'); 
-                $this->etapaModel = $this->model('Etapa');           
-                $this->situacaoModel = $this->model('Situacao'); 
-                $this->escolaVagasModel = $this->model('Escolavaga');
-                $this->escolaModel = $this->model('Escola');
+					// 1 Chama o model
+					$this->adminModel = $this->model('Admin'); 
+					$this->filaModel = $this->model('Fila'); 
+					$this->etapaModel = $this->model('Etapa');           
+					$this->situacaoModel = $this->model('Situacao'); 
+					$this->escolaVagasModel = $this->model('Escolavaga');
+					$this->escolaModel = $this->model('Escola');
         }
 
         /*INDEX*/
         public function index(){            
 
-          // passa a página da paginação
-           if(isset($_GET['page']))
-          {
-            //ENTRA AQUI SE FOR CLICADO PELO LINK DA PAGINAÇÃO
-            $page = $_GET['page'];                 
-          }
-          else
-          {        
-            $page = 1;
-          }                
-            
+					// passa a página da paginação
+					if(isset($_GET['page'])) {
+						//ENTRA AQUI SE FOR CLICADO PELO LINK DA PAGINAÇÃO
+						$page = $_GET['page'];                 
+					}
+					else {        
+						$page = 1;
+					}  
 
-          /*inicialização dos dados da paginação */
-         if(!isset($_GET['protocolo'])){$_GET['protocolo'] = '';}
-         if(!isset($_GET['situacao_id'])){$_GET['situacao_id'] = 'null';}
-         if(!isset($_GET['etapa_id'])){$_GET['etapa_id'] = 'null';}
-         if(!isset($_GET['escola_id'])){$_GET['escola_id'] = 'null';}
-         if(!isset($_GET['nome'])){$_GET['nome'] = '';}         
+					/*inicialização dos dados da paginação */
+					if(!isset($_GET['protocolo'])){$_GET['protocolo'] = '';}
+					if(!isset($_GET['situacao_id'])){$_GET['situacao_id'] = 'null';}
+					if(!isset($_GET['etapa_id'])){$_GET['etapa_id'] = 'null';}
+					if(!isset($_GET['escola_id'])){$_GET['escola_id'] = 'null';}
+					if(!isset($_GET['nome'])){$_GET['nome'] = '';}         
          
 
           //valores e atributos da paginação
@@ -61,8 +58,8 @@
           //se o usuário clicar em imprimir
           if(isset($_GET['botao']) && $_GET['botao'] == "Imprimir"){
             
-            //pego os resultados da pesquisa
-            $result = $this->filaModel->getFilaBusca($relatorio=true, $page=NULL, $options);
+						//pego os resultados da pesquisa
+						$result = $this->filaModel->getFilaBusca($relatorio=true, $page=NULL, $options);
 
             if(!empty($result)){
               //faço o foreach para poder utilizar os métodos
@@ -238,36 +235,29 @@
           ];
           $this->view('admins/index', $data);
         }
-        /*INDEX*/
-        
-        
+        /*INDEX*/                
 
       //aqui é o método chamado pelo jquery lá no index, verifico se o id tem algum valor se sim eu chamo o método changeStatus no model
       public function gravar(){   
-            try{
-                    
-              // DEPOIS TEM QUE TIRAR ESSE 1 AÍ DA FRENTE E COLOCAR A VARIÁVEL POST COM O ID DO MUNICIPIO
-              // IMPORTANTE lá na função changeStatus se executar tem que retornar true para funcionar aqui
-              
-              if($this->adminModel->gravaHistorico($_POST['id'],$_POST['status'],$_POST['txthist'], $_SESSION[DB_NAME . '_user_name'])){
-                  
-                  /* aqui passo a classe da mensagem e a mensagem de sucesso */
-                  $json_ret = array('classe'=>'alert alert-success', 'mensagem'=>'Dados gravados com sucesso');                     
-                  echo json_encode($json_ret);                     
-              } else {
-                  $json_ret = array('classe'=>'alert alert-danger', 'mensagem'=>'Erro ao tentar gravar os dados');                     
-                  echo json_encode($json_ret);                     
-              }                
+				try{               
+					if($this->adminModel->gravaHistorico($_POST['id'],$_POST['status'],$_POST['txthist'], $_SESSION[DB_NAME . '_user_name'])){
+							
+							/* aqui passo a classe da mensagem e a mensagem de sucesso */
+							$json_ret = array('classe'=>'alert alert-success', 'mensagem'=>'Dados gravados com sucesso');                     
+							echo json_encode($json_ret);                     
+					} else {
+							$json_ret = array('classe'=>'alert alert-danger', 'mensagem'=>'Erro ao tentar gravar os dados');                     
+							echo json_encode($json_ret);                     
+					}                
 
-          } catch (Exception $e) 
-          {
-              $json_ret = array('classe'=>'alert alert-danger', 'mensagem'=>'Erro ao gravar os dados');                     
-              echo json_encode($json_ret);
-          } 
-       
+				} catch (Exception $e) 
+				{
+						$json_ret = array('classe'=>'alert alert-danger', 'mensagem'=>'Erro ao gravar os dados');                     
+						echo json_encode($json_ret);
+				}        
       }
        
-      public function historico($id){         
+      public function historico($id){  
 
         if($data = $this->adminModel->getHistoricoById($id)){     
           $this->view('admins/historico', $data);
@@ -276,260 +266,505 @@
           $this->view('admins/historico', $data);
         }
       }
-
-
-      /*PRECISA MELHORAR ESSE CÓDIGO AQUI */
-      public function edit($id){    
-      
-      // se o usuário tiver clicado em gravar
-      if($_SERVER['REQUEST_METHOD'] == 'POST'){        
-      
-        
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-      
-        //pego os dados do registro da fila
      
-        if($fila = $this->filaModel->buscaFilaById($id)){
-          $data = [
-            'id' => $id,                        
-            'situacao_id' => isset($_POST['situacao'])
-                    ? $_POST['situacao']
-                    : '',         
-            'opcao_matricula' => isset($_POST['escolamatricula'])
-                    ? $_POST['escolamatricula']
-                    : '',
-            'unidade_matricula' => isset($_POST['escolamatricula'])
-                    ? $this->filaModel->getEscolasById($_POST['escolamatricula'])->nome
-                    : '',
-            'escola_id' => isset($_POST['escolamatricula'])
-                    ? $_POST['escolamatricula']
-                    : '',
-            'historico' => isset($_POST['historico'])
-                    ? $_POST['historico']
-                    : '',
-            'usuario' => isset($_SESSION[DB_NAME . '_user_name'])
-                    ? $_SESSION[DB_NAME . '_user_name']
-                    : 'Usuário Indefinido',
-            'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
-                    ? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
-                    : "FORA DE TODAS AS ETAPAS",
-            'etapa_id' => ($this->etapaModel->getEtapaId($fila->nascimento)) 
-                    ? $this->etapaModel->getEtapaId($fila->nascimento) 
-                    : false,
-            'nomecrianca' => isset($fila->nomecrianca)
-                    ? $fila->nomecrianca
-                    : '',
-            'nascimento' => isset($fila->nascimento)
-                    ? date('d/m/Y', strtotime($fila->nascimento))
-                    : '',
-            'responsavel' => isset($fila->responsavel)
-                    ? $fila->responsavel
-                    : '',
-            'protocolo' => isset($fila->protocolo)
-                    ? $fila->protocolo
-                    : '', 
-            'telefone' => isset($fila->telefone)
-                    ? $fila->telefone
-                    : '',
-            'celular' => isset($fila->celular)
-                    ? $fila->celular
-                    : '',
-            'email' => isset($fila->email)
-                    ? $fila->email
-                    : '', 
-            'logradouro' => isset($fila->logradouro)
-                    ? $fila->logradouro
-                    : '',
-            'bairro' => isset($fila->bairro_id)
-                    ? $this->filaModel->getBairroByid($fila->bairro_id)
-                    : '',
-            'numero' => isset($fila->numero)
-                    ? $fila->numero
-                    : '',
-            'complemento' => isset($fila->complemento)
-                    ? $fila->complemento
-                    : '',
-            'situacao' => isset($_POST['situacao']) 
-                    ? ($this->situacaoModel->getDescricaoSituacaoById($_POST['situacao'])) 
-                    : $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id), 
-            'turno_descricao' => isset($fila->turno_matricula)
-                    ? $this->filaModel->getTurno($fila->turno_matricula)
-                    : '',
-            'turno_matricula' => isset($_POST['turno_matricula'])
-                    ? $_POST['turno_matricula']
-                    : '',
-            'opcao_turno' => isset($fila->opcao_turno)
-                    ? $this->filaModel->getTurno($fila->opcao_turno)
-                    : '',
-            'observacao' => isset($fila->observacao)
-                    ? $fila->observacao
-                    : '',
-            'deficiencia' => $fila->deficiencia == 1 
-                    ? 'Sim'
-                    : 'Não',
-            'cpfresponsavel' => isset($fila->cpfresponsavel)
-                    ? $fila->cpfresponsavel
-                    : '',
-            'certidaonascimento' => isset($fila->certidaonascimento)
-                    ? $fila->certidaonascimento 
-                    : ''
-          ];  
-        } else {
-          $data = [
-            'error' => true,
-            'message' => 'Erro ao tentar recuperar os dados!'
-          ];
-        } 
+      public function edit($id){ 
+				
+				if(!is_numeric($id)){
+					$erro = 'ID Inválido!'; 
+				} else if (!$fila = $this->filaModel->buscaFilaById($id)){
+					$erro = 'ID inexistente';
+				} else {
+					$erro = '';
+				}  
+				
+				if($erro){
+					flash('message', $erro, 'error');                        
+					redirect('admins/index');
+					die();
+				}
+			
+				//IF POST  
+				if($_SERVER['REQUEST_METHOD'] == 'POST'){
+					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+					$results = [
+						'id' => $id,                        
+						'situacao_id' => isset($_POST['situacao'])
+										? $_POST['situacao']
+										: '',         
+						'opcao_matricula' => isset($_POST['escolamatricula'])
+										? $_POST['escolamatricula']
+										: '',
+						'unidade_matricula' => isset($_POST['escolamatricula'])
+										? $this->filaModel->getEscolasById($_POST['escolamatricula'])->nome
+										: '',
+						'escola_id' => isset($_POST['escolamatricula'])
+										? $_POST['escolamatricula']
+										: '',
+						'historico' => isset($_POST['historico'])
+										? $_POST['historico']
+										: '',
+						'usuario' => isset($_SESSION[DB_NAME . '_user_name'])
+										? $_SESSION[DB_NAME . '_user_name']
+										: 'Usuário Indefinido',
+						'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
+										? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
+										: "FORA DE TODAS AS ETAPAS",
+						'etapa_id' => ($this->etapaModel->getEtapaId($fila->nascimento)) 
+										? $this->etapaModel->getEtapaId($fila->nascimento) 
+										: false,
+						'nomecrianca' => isset($fila->nomecrianca)
+										? $fila->nomecrianca
+										: '',
+						'nascimento' => isset($fila->nascimento)
+										? date('d/m/Y', strtotime($fila->nascimento))
+										: '',
+						'responsavel' => isset($fila->responsavel)
+										? $fila->responsavel
+										: '',
+						'protocolo' => isset($fila->protocolo)
+										? $fila->protocolo
+										: '', 
+						'telefone' => isset($fila->telefone)
+										? $fila->telefone
+										: '',
+						'celular' => isset($fila->celular)
+										? $fila->celular
+										: '',
+						'email' => isset($fila->email)
+										? $fila->email
+										: '', 
+						'logradouro' => isset($fila->logradouro)
+										? $fila->logradouro
+										: '',
+						'bairro' => isset($fila->bairro_id)
+										? $this->filaModel->getBairroByid($fila->bairro_id)
+										: '',
+						'numero' => isset($fila->numero)
+										? $fila->numero
+										: '',
+						'complemento' => isset($fila->complemento)
+										? $fila->complemento
+										: '',
+						'situacao' => isset($_POST['situacao']) 
+										? ($this->situacaoModel->getDescricaoSituacaoById($_POST['situacao'])) 
+										: $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id), 
+						'turno_descricao' => isset($fila->turno_matricula)
+										? $this->filaModel->getTurno($fila->turno_matricula)
+										: '',
+						'turno_matricula' => isset($_POST['turno_matricula'])
+										? $_POST['turno_matricula']
+										: '',
+						'opcao_turno' => isset($fila->opcao_turno)
+										? $this->filaModel->getTurno($fila->opcao_turno)
+										: '',
+						'observacao' => isset($fila->observacao)
+										? $fila->observacao
+										: '',
+						'deficiencia' => $fila->deficiencia == 1 
+										? 'Sim'
+										: 'Não',
+						'cpfresponsavel' => isset($fila->cpfresponsavel)
+										? $fila->cpfresponsavel
+										: '',
+						'certidaonascimento' => isset($fila->certidaonascimento)
+										? $fila->certidaonascimento 
+										: ''
+					];  				
 
-        //SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO EU IMPRIMO O ENCAMINHAMENTO          
-        if(isset($_POST['botao']) && $_POST['botao'] == "Imprimir"){             
-          // E AQUI CHAMO O RELATÓRIO          
-          $this->view('relatorios/relatoriomatricula' ,$data);
-            //CASO NÃO FOR O BOTÃO IMPRIMIR EU ATUALIZO OS DADOS DO CADASTRO E REGISTRO NO HISTÓRICO
-            die();
-        } 
-          
-        if (isset($_POST['botao']) && $_POST['botao'] == 'atualizavaga'){ 
-          switch ($_POST['turno_matricula']){
-            case 1:
-              $turno = "matutino";
-              break;
-            case 2:
-              $turno = "vespertino";
-              break;
-            case 3:
-              $turno = "integral";
-              break;
-        }     
+					$data = [
+						'results' => $results,
+						'nav' => 'Registrando\\Fila de Espera\\Editar\\'
+					];
 
-        $this->escolaVagasModel->atualizaVaga($_POST['escola_id'], $data['etapa_id'],$turno);
-        redirect('admins/edit/' . $data['id']);
-        die();
-        }
-           
-           
-        if (($this->filaModel->update($data)) &&  ($this->adminModel->gravaHistorico($data['id'],$data['situacao_id'],$data['historico'],$data['usuario']))){            
-          if($data['situacao'] == 'Matriculado') {
-            $data['vagas'] = $this->escolaVagasModel->getEscolaVagasEtapa($data['escola_id'],$data['etapa_id']);
-            $this->view('admins/confirma',$data);
-            die();
-            //$this->escolaVagasModel->atualizaVaga($data['escola_id'],$data['etapa_id']);
-          }                                
-          flash('message', 'Protocolo atualizado com sucesso!','success');                        
-          redirect('admins/edit/' . $data['id']);
-        }             
-          else {    
-          die('Ops! Algo deu errado.');
-        }  
-              
-      } else { 
-        // se o usuário não clicou em gravar carrega os dados atuais       
-        if($fila = $this->filaModel->buscaFilaById($id)){
-          $data = [
-            'id' => $id,
-            'posicao' =>  ($this->filaModel->buscaPosicaoFila($fila->protocolo)) 
-                    ? $this->filaModel->buscaPosicaoFila($fila->protocolo) 
-                    : "-",
-            'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
-                    ? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
-                    : "FORA DE TODAS AS ETAPAS",
-            'nomecrianca' => isset($fila->nomecrianca)
-                    ? $fila->nomecrianca
-                    : '',
-            'nascimento' => isset($fila->nascimento)
-                    ? date('d/m/Y', strtotime($fila->nascimento))
-                    : '',
-            'responsavel' => isset($fila->responsavel)
-                    ? $fila->responsavel
-                    : '',
-            'protocolo' => isset($fila->protocolo)
-                    ? $fila->protocolo
-                    : '',
-            'registro' => isset($fila->registro)
-                    ? date('d/m/Y H:i:s', strtotime($fila->registro))
-                    : '',
-            'telefone' => isset($fila->telefone)
-                    ? $fila->telefone
-                    : '',
-            'celular' => isset($fila->celular)
-                    ? $fila->celular
-                    : '',
-            'email' => isset($fila->email)
-                    ? $fila->email
-                    : '', 
-            'logradouro' => isset($fila->logradouro)
-                    ? $fila->logradouro
-                    : '',
-            'bairro' => isset($fila->bairro_id)
-                    ? $this->filaModel->getBairroByid($fila->bairro_id)
-                    : '',
-            'numero' => isset($fila->numero)
-                    ? $fila->numero
-                    : '',
-            'complemento' => isset($fila->complemento)
-                    ? $fila->complemento
-                    : '',
-            'situacao' => isset($fila->situacao_id)
-                    ? $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id)
-                    : '',                  
-            'situacao_id' => isset($fila->situacao_id)
-                    ? $fila->situacao_id
-                    : '',
-            'opcao1_id' => ($this->filaModel->getEscolasById($fila->opcao1_id))
-                    ? $this->filaModel->getEscolasById($fila->opcao1_id)->nome
-                    : '',
-            'vagas_op1' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento)))
-                    ? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento))
-                    : '',
-            'opcao2_id' => ($this->filaModel->getEscolasById($fila->opcao2_id))
-                    ? $this->filaModel->getEscolasById($fila->opcao2_id)->nome
-                    : '',
-            'vagas_op2' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento)))
-                    ? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento))
-                    : '',
-            'opcao3_id' => ($this->filaModel->getEscolasById($fila->opcao3_id))
-                    ?$this->filaModel->getEscolasById($fila->opcao3_id)->nome
-                    : '',
-            'vagas_op3' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento)))
-                    ? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento))
-                    : '',
-            'turno_descricao' => isset($fila->turno_matricula)
-                    ?$this->filaModel->getTurno($fila->turno_matricula)
-                    : '',
-            'turno_matricula' => isset($fila->turno_matricula)
-                    ? $fila->turno_matricula
-                    : '',
-            'opcao_turno' => isset($fila->opcao_turno)
-                    ? $this->filaModel->getTurno($fila->opcao_turno)
-                    : '',
-            'opcao_matricula' => isset($fila->opcao_matricula)
-                    ? $fila->opcao_matricula
-                    : '',
-            'observacao' => isset($fila->observacao)
-                    ? $fila->observacao
-                    : '',
-            'deficiencia' => $fila->deficiencia == 1 
-                    ? 'Sim'
-                    : 'Não',
-            'cpfresponsavel' => isset($fila->cpfresponsavel)
-                    ? $fila->cpfresponsavel
-                    : '',
-            'certidaonascimento' => isset($fila->certidaonascimento)
-                    ? $fila->certidaonascimento
-                    : '',
-            'historico' => ''
-          ];
-        } else {
-          $data = [
-            'error' => true,
-            'message' => 'Erro ao tentar recuperar os dados!'
-          ];
-        }                
-       
-        $this->view('admins/editar', $data);
-      }
-         
-    }
+					//SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO EU IMPRIMO O ENCAMINHAMENTO          
+					if(isset($_POST['botao']) && $_POST['botao'] == "Imprimir"){             
+						// E AQUI CHAMO O RELATÓRIO          
+						$this->view('relatorios/relatoriomatricula' ,$data['results']);
+							//CASO NÃO FOR O BOTÃO IMPRIMIR EU ATUALIZO OS DADOS DO CADASTRO E REGISTRO NO HISTÓRICO
+							die();
+					} 				
+
+					if (isset($_POST['botao']) && $_POST['botao'] == 'atualizavaga'){ 
+						$turno = getTurno($_POST['turno_matricula']);						
+						$this->escolaVagasModel->atualizaVaga($_POST['escola_id'], $data['results']['etapa_id'],$turno);
+        		redirect('admins/edit/' . $data['results']['id']);
+        		die();
+					}		
+
+					//FAZER AQUI COM O TRY CATCH
+					
+					if (($this->filaModel->update($data['results'])) && ($this->adminModel->gravaHistorico($data['results']['id'],$data['results']['situacao_id'],$data['results']['historico'],$data['results']['usuario']))){            
+						if($data['results']['situacao'] == 'Matriculado') {
+							$data['results']['vagas'] = $this->escolaVagasModel->getEscolaVagasEtapa($data['results']['escola_id'],$data['results']['etapa_id']);
+							$this->view('admins/confirma',$data['results']);
+							die();
+							//$this->escolaVagasModel->atualizaVaga($data['escola_id'],$data['etapa_id']);
+						} 
+						flash('message', 'Protocolo atualizado com sucesso!','success');                        
+						redirect('admins/edit/' . $data['results']['id']);
+					}             
+						else {    
+						die('Ops! Algo deu errado.');
+					}
+				} else {
+				//IF POST 
+					// se o usuário não clicou em gravar carrega os dados atuais       
+					if($fila = $this->filaModel->buscaFilaById($id)){
+						$results = [
+							'id' => $id,
+							'posicao' =>  ($this->filaModel->buscaPosicaoFila($fila->protocolo)) 
+											? $this->filaModel->buscaPosicaoFila($fila->protocolo) 
+											: "-",
+							'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
+											? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
+											: "FORA DE TODAS AS ETAPAS",
+							'nomecrianca' => isset($fila->nomecrianca)
+											? $fila->nomecrianca
+											: '',
+							'nascimento' => isset($fila->nascimento)
+											? date('d/m/Y', strtotime($fila->nascimento))
+											: '',
+							'responsavel' => isset($fila->responsavel)
+											? $fila->responsavel
+											: '',
+							'protocolo' => isset($fila->protocolo)
+											? $fila->protocolo
+											: '',
+							'registro' => isset($fila->registro)
+											? date('d/m/Y H:i:s', strtotime($fila->registro))
+											: '',
+							'telefone' => isset($fila->telefone)
+											? $fila->telefone
+											: '',
+							'celular' => isset($fila->celular)
+											? $fila->celular
+											: '',
+							'email' => isset($fila->email)
+											? $fila->email
+											: '', 
+							'logradouro' => isset($fila->logradouro)
+											? $fila->logradouro
+											: '',
+							'bairro' => isset($fila->bairro_id)
+											? $this->filaModel->getBairroByid($fila->bairro_id)
+											: '',
+							'numero' => isset($fila->numero)
+											? $fila->numero
+											: '',
+							'complemento' => isset($fila->complemento)
+											? $fila->complemento
+											: '',
+							'situacao' => isset($fila->situacao_id)
+											? $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id)
+											: '',                  
+							'situacao_id' => isset($fila->situacao_id)
+											? $fila->situacao_id
+											: '',
+							'opcao1_id' => ($this->filaModel->getEscolasById($fila->opcao1_id))
+											? $this->filaModel->getEscolasById($fila->opcao1_id)->nome
+											: '',
+							'vagas_op1' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'opcao2_id' => ($this->filaModel->getEscolasById($fila->opcao2_id))
+											? $this->filaModel->getEscolasById($fila->opcao2_id)->nome
+											: '',
+							'vagas_op2' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'opcao3_id' => ($this->filaModel->getEscolasById($fila->opcao3_id))
+											?$this->filaModel->getEscolasById($fila->opcao3_id)->nome
+											: '',
+							'vagas_op3' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'turno_descricao' => isset($fila->turno_matricula)
+											?$this->filaModel->getTurno($fila->turno_matricula)
+											: '',
+							'turno_matricula' => isset($fila->turno_matricula)
+											? $fila->turno_matricula
+											: '',
+							'opcao_turno' => isset($fila->opcao_turno)
+											? $this->filaModel->getTurno($fila->opcao_turno)
+											: '',
+							'opcao_matricula' => isset($fila->opcao_matricula)
+											? $fila->opcao_matricula
+											: '',
+							'observacao' => isset($fila->observacao)
+											? $fila->observacao
+											: '',
+							'deficiencia' => $fila->deficiencia == 1 
+											? 'Sim'
+											: 'Não',
+							'cpfresponsavel' => isset($fila->cpfresponsavel)
+											? $fila->cpfresponsavel
+											: '',
+							'certidaonascimento' => isset($fila->certidaonascimento)
+											? $fila->certidaonascimento
+											: '',
+							'historico' => ''
+						];
+					} else {
+						$data = [
+							'error' => true,
+							'message' => 'Erro ao tentar recuperar os dados!'
+						];
+					}
+					
+					$data = [
+						'results' => $results,
+						'nav' => 'Registrando\\Fila de Espera\\Editar\\'
+					];
+					$this->view('admins/editar', $data);				
+				} 
+				//ELSE IF POST 
+    	}
+
+
+			public function editBkp($id){  
+				//IF POST  
+				if($_SERVER['REQUEST_METHOD'] == 'POST'){
+					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+					//$fila = $this->filaModel->buscaFilaById($id)
+					if($fila = $this->filaModel->buscaFilaById($id)){
+						$data = [
+							'id' => $id,                        
+							'situacao_id' => isset($_POST['situacao'])
+											? $_POST['situacao']
+											: '',         
+							'opcao_matricula' => isset($_POST['escolamatricula'])
+											? $_POST['escolamatricula']
+											: '',
+							'unidade_matricula' => isset($_POST['escolamatricula'])
+											? $this->filaModel->getEscolasById($_POST['escolamatricula'])->nome
+											: '',
+							'escola_id' => isset($_POST['escolamatricula'])
+											? $_POST['escolamatricula']
+											: '',
+							'historico' => isset($_POST['historico'])
+											? $_POST['historico']
+											: '',
+							'usuario' => isset($_SESSION[DB_NAME . '_user_name'])
+											? $_SESSION[DB_NAME . '_user_name']
+											: 'Usuário Indefinido',
+							'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
+											? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
+											: "FORA DE TODAS AS ETAPAS",
+							'etapa_id' => ($this->etapaModel->getEtapaId($fila->nascimento)) 
+											? $this->etapaModel->getEtapaId($fila->nascimento) 
+											: false,
+							'nomecrianca' => isset($fila->nomecrianca)
+											? $fila->nomecrianca
+											: '',
+							'nascimento' => isset($fila->nascimento)
+											? date('d/m/Y', strtotime($fila->nascimento))
+											: '',
+							'responsavel' => isset($fila->responsavel)
+											? $fila->responsavel
+											: '',
+							'protocolo' => isset($fila->protocolo)
+											? $fila->protocolo
+											: '', 
+							'telefone' => isset($fila->telefone)
+											? $fila->telefone
+											: '',
+							'celular' => isset($fila->celular)
+											? $fila->celular
+											: '',
+							'email' => isset($fila->email)
+											? $fila->email
+											: '', 
+							'logradouro' => isset($fila->logradouro)
+											? $fila->logradouro
+											: '',
+							'bairro' => isset($fila->bairro_id)
+											? $this->filaModel->getBairroByid($fila->bairro_id)
+											: '',
+							'numero' => isset($fila->numero)
+											? $fila->numero
+											: '',
+							'complemento' => isset($fila->complemento)
+											? $fila->complemento
+											: '',
+							'situacao' => isset($_POST['situacao']) 
+											? ($this->situacaoModel->getDescricaoSituacaoById($_POST['situacao'])) 
+											: $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id), 
+							'turno_descricao' => isset($fila->turno_matricula)
+											? $this->filaModel->getTurno($fila->turno_matricula)
+											: '',
+							'turno_matricula' => isset($_POST['turno_matricula'])
+											? $_POST['turno_matricula']
+											: '',
+							'opcao_turno' => isset($fila->opcao_turno)
+											? $this->filaModel->getTurno($fila->opcao_turno)
+											: '',
+							'observacao' => isset($fila->observacao)
+											? $fila->observacao
+											: '',
+							'deficiencia' => $fila->deficiencia == 1 
+											? 'Sim'
+											: 'Não',
+							'cpfresponsavel' => isset($fila->cpfresponsavel)
+											? $fila->cpfresponsavel
+											: '',
+							'certidaonascimento' => isset($fila->certidaonascimento)
+											? $fila->certidaonascimento 
+											: ''
+						];  
+					} else {
+						$data = [
+							'error' => true,
+							'message' => 'Erro ao tentar recuperar os dados!'
+						];
+					}
+					//$fila = $this->filaModel->buscaFilaById($id) 
+
+					//SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO EU IMPRIMO O ENCAMINHAMENTO          
+					if(isset($_POST['botao']) && $_POST['botao'] == "Imprimir"){             
+						// E AQUI CHAMO O RELATÓRIO          
+						$this->view('relatorios/relatoriomatricula' ,$data);
+							//CASO NÃO FOR O BOTÃO IMPRIMIR EU ATUALIZO OS DADOS DO CADASTRO E REGISTRO NO HISTÓRICO
+							die();
+					} 
+
+					if (isset($_POST['botao']) && $_POST['botao'] == 'atualizavaga'){ 
+						switch ($_POST['turno_matricula']){
+							case 1:
+								$turno = "matutino";
+								break;
+							case 2:
+								$turno = "vespertino";
+								break;
+							case 3:
+								$turno = "integral";
+								break;
+						}					
+						$this->escolaVagasModel->atualizaVaga($_POST['escola_id'], $data['etapa_id'],$turno);
+        		redirect('admins/edit/' . $data['id']);
+        		die();
+					}
+
+					if (($this->filaModel->update($data)) &&  ($this->adminModel->gravaHistorico($data['id'],$data['situacao_id'],$data['historico'],$data['usuario']))){            
+						if($data['situacao'] == 'Matriculado') {
+							$data['vagas'] = $this->escolaVagasModel->getEscolaVagasEtapa($data['escola_id'],$data['etapa_id']);
+							$this->view('admins/confirma',$data);
+							die();
+							//$this->escolaVagasModel->atualizaVaga($data['escola_id'],$data['etapa_id']);
+						}                                
+						flash('message', 'Protocolo atualizado com sucesso!','success');                        
+						redirect('admins/edit/' . $data['id']);
+					}             
+						else {    
+						die('Ops! Algo deu errado.');
+					}
+				} else {
+				//IF POST 
+					// se o usuário não clicou em gravar carrega os dados atuais       
+					if($fila = $this->filaModel->buscaFilaById($id)){
+						$data = [
+							'id' => $id,
+							'posicao' =>  ($this->filaModel->buscaPosicaoFila($fila->protocolo)) 
+											? $this->filaModel->buscaPosicaoFila($fila->protocolo) 
+											: "-",
+							'etapa' => ($this->etapaModel->getEtapaDescricao($fila->nascimento)) 
+											? $this->etapaModel->getEtapaDescricao($fila->nascimento) 
+											: "FORA DE TODAS AS ETAPAS",
+							'nomecrianca' => isset($fila->nomecrianca)
+											? $fila->nomecrianca
+											: '',
+							'nascimento' => isset($fila->nascimento)
+											? date('d/m/Y', strtotime($fila->nascimento))
+											: '',
+							'responsavel' => isset($fila->responsavel)
+											? $fila->responsavel
+											: '',
+							'protocolo' => isset($fila->protocolo)
+											? $fila->protocolo
+											: '',
+							'registro' => isset($fila->registro)
+											? date('d/m/Y H:i:s', strtotime($fila->registro))
+											: '',
+							'telefone' => isset($fila->telefone)
+											? $fila->telefone
+											: '',
+							'celular' => isset($fila->celular)
+											? $fila->celular
+											: '',
+							'email' => isset($fila->email)
+											? $fila->email
+											: '', 
+							'logradouro' => isset($fila->logradouro)
+											? $fila->logradouro
+											: '',
+							'bairro' => isset($fila->bairro_id)
+											? $this->filaModel->getBairroByid($fila->bairro_id)
+											: '',
+							'numero' => isset($fila->numero)
+											? $fila->numero
+											: '',
+							'complemento' => isset($fila->complemento)
+											? $fila->complemento
+											: '',
+							'situacao' => isset($fila->situacao_id)
+											? $this->situacaoModel->getDescricaoSituacaoById($fila->situacao_id)
+											: '',                  
+							'situacao_id' => isset($fila->situacao_id)
+											? $fila->situacao_id
+											: '',
+							'opcao1_id' => ($this->filaModel->getEscolasById($fila->opcao1_id))
+											? $this->filaModel->getEscolasById($fila->opcao1_id)->nome
+											: '',
+							'vagas_op1' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao1_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'opcao2_id' => ($this->filaModel->getEscolasById($fila->opcao2_id))
+											? $this->filaModel->getEscolasById($fila->opcao2_id)->nome
+											: '',
+							'vagas_op2' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao2_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'opcao3_id' => ($this->filaModel->getEscolasById($fila->opcao3_id))
+											?$this->filaModel->getEscolasById($fila->opcao3_id)->nome
+											: '',
+							'vagas_op3' => ($this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento)))
+											? $this->escolaVagasModel->getEscolaVagasEtapa($fila->opcao3_id,$this->etapaModel->getEtapaId($fila->nascimento))
+											: '',
+							'turno_descricao' => isset($fila->turno_matricula)
+											?$this->filaModel->getTurno($fila->turno_matricula)
+											: '',
+							'turno_matricula' => isset($fila->turno_matricula)
+											? $fila->turno_matricula
+											: '',
+							'opcao_turno' => isset($fila->opcao_turno)
+											? $this->filaModel->getTurno($fila->opcao_turno)
+											: '',
+							'opcao_matricula' => isset($fila->opcao_matricula)
+											? $fila->opcao_matricula
+											: '',
+							'observacao' => isset($fila->observacao)
+											? $fila->observacao
+											: '',
+							'deficiencia' => $fila->deficiencia == 1 
+											? 'Sim'
+											: 'Não',
+							'cpfresponsavel' => isset($fila->cpfresponsavel)
+											? $fila->cpfresponsavel
+											: '',
+							'certidaonascimento' => isset($fila->certidaonascimento)
+											? $fila->certidaonascimento
+											: '',
+							'historico' => ''
+						];
+					} else {
+						$data = [
+							'error' => true,
+							'message' => 'Erro ao tentar recuperar os dados!'
+						];
+					}  
+					$this->view('admins/editar', $data);				
+				} 
+				//ELSE IF POST 
+    	}
 
     public function relatorioMensal(){      
 
@@ -865,8 +1100,8 @@
       
       $data = [
         'results' => $results        
-      ];        
-      
+      ];              
+			
       $this->view('relatorios/relatorioaguardandoalfabetica',$data);
   }  
 

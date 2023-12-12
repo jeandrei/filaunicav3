@@ -82,7 +82,7 @@
  
 </style>
  
-<div class="alert alert-light" role="alert">
+<div class="alert alert-secondary" role="alert">
   <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
 </div>
   

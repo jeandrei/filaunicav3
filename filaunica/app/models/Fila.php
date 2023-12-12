@@ -343,7 +343,9 @@ class Fila {
             } else {
                 $turno = "null";
             }
-        }        
+        } else {
+					$turno = "null";
+				}       
         return $turno;
     }
 
