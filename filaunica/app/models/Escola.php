@@ -19,7 +19,7 @@
 
             // Execute
             if($this->db->execute()){
-                return true;
+							return $this->db->lastId;
             } else {
                 return false;
             }

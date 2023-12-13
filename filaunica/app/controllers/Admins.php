@@ -257,14 +257,29 @@
 				}        
       }
        
-      public function historico($id){  
+      public function historico($id){
+				
+				if(!is_numeric($id)){
+					$erro = 'ID Inválido!'; 
+				} else if (!$results = $this->adminModel->getHistoricoById($id)){
+					$erro = 'ID inexistente';
+				} else {
+					$erro = '';
+				}  
+				
+				if($erro){
+					flash('message', $erro, 'error');                        
+					redirect('admins/index');
+					die();
+				}  
 
-        if($data = $this->adminModel->getHistoricoById($id)){     
-          $this->view('admins/historico', $data);
-        } else {
-          $data['erro'] = "Sem dados de histórico.";
-          $this->view('admins/historico', $data);
-        }
+				$data = [
+					'results' => $results,
+					'nav' => 'Registros\\Fila de Espera\\Editar\\Histórico'
+				];	
+				
+				$this->view('admins/historico', $data);        
+				
       }
      
       public function edit($id){ 
@@ -373,7 +388,7 @@
 
 					$data = [
 						'results' => $results,
-						'nav' => 'Registrando\\Fila de Espera\\Editar\\'
+						'nav' => 'Registros\\Fila de Espera\\Editar\\'
 					];
 
 					//SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO EU IMPRIMO O ENCAMINHAMENTO          
@@ -389,23 +404,35 @@
 						$this->escolaVagasModel->atualizaVaga($_POST['escola_id'], $data['results']['etapa_id'],$turno);
         		redirect('admins/edit/' . $data['results']['id']);
         		die();
-					}		
+					}							
 
-					//FAZER AQUI COM O TRY CATCH
-					
-					if (($this->filaModel->update($data['results'])) && ($this->adminModel->gravaHistorico($data['results']['id'],$data['results']['situacao_id'],$data['results']['historico'],$data['results']['usuario']))){            
-						if($data['results']['situacao'] == 'Matriculado') {
-							$data['results']['vagas'] = $this->escolaVagasModel->getEscolaVagasEtapa($data['results']['escola_id'],$data['results']['etapa_id']);
-							$this->view('admins/confirma',$data['results']);
+					try {    
+						if($lastId = $this->adminModel->gravaHistorico($data['results']['id'],$data['results']['situacao_id'],$data['results']['historico'],$data['results']['usuario'])){							
+							if($this->filaModel->update($data['results'])){
+								if($data['results']['situacao'] == 'Matriculado') {
+									$data['results']['vagas'] = $this->escolaVagasModel->getEscolaVagasEtapa($data['results']['escola_id'],$data['results']['etapa_id']);
+									$this->view('admins/confirma',$data['results']);
+									die();							
+								} 
+								flash('message', 'Protocolo atualizado com sucesso!','success');                        
+								redirect('admins/edit/' . $data['results']['id']);
+							} else {
+								if($this->adminModel->removeHistorico($lastId)){
+									throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados!');
+								} else {
+									throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados! Porém o histórico foi gravado sob o id:' + $lastId);
+								}								
+							}								
+						} else {  							                      
+								throw new Exception('Ops! Algo deu errado ao tentar atualizar o histórico!');
+						}
+
+					} catch (Exception $e) {                         
+							$erro = 'Erro: '.  $e->getMessage();                      
+							flash('message', $erro,'error');
+							redirect('admins/edit/' . $data['results']['id']);
 							die();
-							//$this->escolaVagasModel->atualizaVaga($data['escola_id'],$data['etapa_id']);
-						} 
-						flash('message', 'Protocolo atualizado com sucesso!','success');                        
-						redirect('admins/edit/' . $data['results']['id']);
-					}             
-						else {    
-						die('Ops! Algo deu errado.');
-					}
+					}   
 				} else {
 				//IF POST 
 					// se o usuário não clicou em gravar carrega os dados atuais       
@@ -513,7 +540,7 @@
 					
 					$data = [
 						'results' => $results,
-						'nav' => 'Registrando\\Fila de Espera\\Editar\\'
+						'nav' => 'Registros\\Fila de Espera\\Editar\\'
 					];
 					$this->view('admins/editar', $data);				
 				} 

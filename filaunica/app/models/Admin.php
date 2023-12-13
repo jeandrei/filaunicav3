@@ -27,11 +27,22 @@
             $this->db->bind(':usuario',$usuario); 
             $this->db->bind(':situacao_id',$status);             
             if($this->db->execute()){
-                return true;
+								return $this->db->lastId;
             } else {
                 return false;
             }
         }
+
+				 // Remove um histórico a partir de um id
+				 public function removeHistorico($id){				
+					$this->db->query('DELETE FROM historico_id_fila WHERE id = :id');
+					$this->db->bind(':id',$id); 					             
+					if($this->db->execute()){
+							return true;
+					} else {
+							return false;
+					}
+				}	
 
         // Pega o Histórico a partir do id
         public function getHistoricoById($id) {

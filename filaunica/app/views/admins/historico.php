@@ -1,11 +1,14 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<h1>Histórico</h1>
+
+<div class="alert alert-secondary" role="alert">
+  <?php echo isset($data['nav']) ? $data['nav'] : ''; ?>
+</div> 
+
+
 <a href="<?php echo URLROOT; ?>/admins" class="btn btn-light mt-3" style="margin:2em 0;"><i class="fa fa-backward"></i> Voltar para o início</a>
 
 <br>
-
-<?php if(isset($data['erro']) && $data['erro']!=null){die($data['erro']);}?>
 
 <table class="table table-striped">
   <thead>
@@ -18,7 +21,7 @@
   </thead>
   <tbody>
     
-    <?php foreach ($data as $registro): ?>
+    <?php foreach ($data['results'] as $registro): ?>
         <tr>      
             <td><?php echo $registro['registro']; ?></td>
             <td><?php echo $registro['usuario']; ?></td>

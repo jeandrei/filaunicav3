@@ -204,7 +204,7 @@
 
             // Check row
             if($this->db->rowCount() > 0){
-                return true;
+								return $this->db->lastId;
             } else {
                 return false;
             }
