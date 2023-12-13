@@ -420,7 +420,7 @@
 								if($this->adminModel->removeHistorico($lastId)){
 									throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados!');
 								} else {
-									throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados! Porém o histórico foi gravado sob o id:' + $lastId);
+									throw new Exception('Ops! Algo deu errado ao tentar atualizar os dados! Porém o histórico foi gravado sob o id: ' . $lastId);
 								}								
 							}								
 						} else {  							                      

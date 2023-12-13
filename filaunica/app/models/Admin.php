@@ -34,7 +34,7 @@
         }
 
 				 // Remove um histórico a partir de um id
-				 public function removeHistorico($id){				
+				 public function removeHistorico($id){							
 					$this->db->query('DELETE FROM historico_id_fila WHERE id = :id');
 					$this->db->bind(':id',$id); 					             
 					if($this->db->execute()){

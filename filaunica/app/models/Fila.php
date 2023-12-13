@@ -351,7 +351,7 @@ class Fila {
 
 
     // Atualiza um registro da fila
-    public function update($data){ 						     
+    public function update($data){ 							     
         $this->db->query('UPDATE fila SET opcao_matricula = :opcao_matricula, situacao_id = :situacao_id, turno_matricula = :turno_matricula WHERE id = :id');
         // Bind values
         $this->db->bind(':id',$data['id']);
