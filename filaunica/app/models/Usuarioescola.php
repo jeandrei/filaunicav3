@@ -8,6 +8,18 @@
             $this->db = new Database;
         }
 
+				 // Find userescola by id
+				public function getuserescolaById($id){
+					$this->db->query('SELECT * FROM userescola WHERE id = :id'); 
+					$this->db->bind(':id', $id);
+					$result = $this->db->single();					
+					if($this->db->rowCount() > 0){
+						return $result;
+					} else {
+						return false;
+					}
+				}
+
         // Register User
         public function register($data){                              
             $this->db->query('INSERT INTO userescola (userid, escolaid) VALUES (:userid, :escolaid)');
@@ -106,7 +118,7 @@
         }
 
 
-        public function delete($id){            
+        public function delete($id){   
             $this->db->query('DELETE FROM userescola WHERE id = :id');
             // Bind value
             $this->db->bind(':id', $id);

@@ -174,7 +174,7 @@
             messages : {
                 name : {
                     required : 'Por favor informe o nome do usuário.',
-                    minlength : 'A senha deve ter, no mínimo, 6 caracteres.'
+                    minlength : 'O nome deve ter no mínimo 6 caracteres.'
                 },			
                 email : {
                     required : 'Por favor informe seu email.',
@@ -182,8 +182,8 @@
                 },
                 password : {
                     required : 'Por favor informe sua senha.',
-                    minlength : 'A senha deve ter, no mínimo, 3 caracteres.',
-                    maxlength : 'A senha deve ter, no máximo, 20 caracteres.'
+                    minlength : 'A senha deve ter no mínimo 3 caracteres.',
+                    maxlength : 'A senha deve ter no máximo 20 caracteres.'
                 },
                 confirm_password : {
                     required : 'Por favor confirme sua senha.',

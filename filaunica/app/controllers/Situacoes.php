@@ -1,7 +1,6 @@
 <?php
     class Situacoes extends Controller{
 			public function __construct(){
-
 				if((!isLoggedIn())){ 
 						flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
 						redirect('users/login');
@@ -10,8 +9,7 @@
 						flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
 						redirect('pages/sistem'); 
 						die();
-				} 
-									
+				} 									
 				$this->situacaoModel = $this->model('Situacao');
 			}
 

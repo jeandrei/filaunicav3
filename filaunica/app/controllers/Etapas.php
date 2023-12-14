@@ -1,17 +1,17 @@
 <?php
     class Etapas extends Controller{
-        public function __construct(){            
-					if((!isLoggedIn())){ 
-							flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
-							redirect('users/login');
-							die();
-					} else if ((!isAdmin())){                
-							flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
-							redirect('pages/sistem'); 
-							die();
-					}
-					$this->etapaModel = $this->model('Etapa');
-        }
+			public function __construct(){            
+				if((!isLoggedIn())){ 
+						flash('message', 'Você deve efetuar o login para ter acesso a esta página', 'error'); 
+						redirect('users/login');
+						die();
+				} else if ((!isAdmin())){                
+						flash('message', 'Você não tem permissão de acesso a esta página', 'error'); 
+						redirect('pages/sistem'); 
+						die();
+				}
+				$this->etapaModel = $this->model('Etapa');
+			}
 
 			//Carrega as etapas existentes
 			public function index() { 
