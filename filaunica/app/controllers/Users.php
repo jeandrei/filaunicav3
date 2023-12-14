@@ -6,6 +6,7 @@
 					$this->usuarioEscolaModel = $this->model('Usuarioescola');
 			}
 
+			//Carrega os usuários registrados na tabela users
 			public function index() {
 
 				if((!isAdmin())){ 
@@ -76,6 +77,7 @@
 				$this->view('users/index', $data);				
 			}
 
+			//Cadastra um usuário na tabela users
 			public function new(){                
 					
 				if((!isLoggedIn())){ 
@@ -204,10 +206,7 @@
 				} 
 			}
 
-      
-		
-
-
+			//Edita um usuário na tabela users
 			public function edit($id){             
 					
 				if((!isLoggedIn())){ 
@@ -232,8 +231,7 @@
 					flash('message', $erro, 'error');                        
 					redirect('users/index');
 					die();
-				}      
-
+				}   
 					          
 				if($_SERVER['REQUEST_METHOD'] == 'POST'){ 
 					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -357,6 +355,7 @@
 				} 
 			}
 
+			//Remove um usuário da tabela users
 			public function delete($id){              
 					
 				if((!isLoggedIn())){ 
@@ -418,7 +417,7 @@
 				}                 
 			}       
             
-
+			//Efetua o logi do usuário
 			public function login(){ 
 				if($_SERVER['REQUEST_METHOD'] == 'POST'){
 					$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -486,6 +485,7 @@
 				}
 			}
 
+			// Cria uma sessão para o usuário
 			public function createUserSession($user){
 				// $user->id vem do model na função login() retorna a row com todos os campos
 				// da consulta na tabela users
@@ -496,6 +496,7 @@
 				redirect('pages/sistem');			
 			}
 
+			//Efetua o logoff do usuário
 			public function logout(){
 				unset($_SESSION[DB_NAME . '_user_id']);
 				unset($_SESSION[DB_NAME . '_user_email']);
@@ -505,6 +506,7 @@
 				redirect('pages/login'); 
 			}    
 
+			//Retorna o tipo de usuário se adm, sec etc...
 			public function getType($id){
 					$userType = $this->userModel->getUserType($id);
 					return $userType;

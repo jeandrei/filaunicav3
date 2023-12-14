@@ -16,8 +16,9 @@
 				$this->userModel = $this->model('User');
 			}
 
+			//Carrega o usuário e suas escolas registradas para dar acesso ao cadastro de vagas tabela userescola
 			public function index($id) { 
-
+			
 				if(!is_numeric($id)){
 					$erro = 'ID Inválido!'; 
 				} else if (!$user = $this->userModel->getUserByid($id)){
@@ -44,6 +45,7 @@
 				$this->view('usuarioescolas/index', $data);
 			}
 
+			//Vincula um usuário a uma escola na tabela userescola
 			public function new($id){
 				
 				if(!is_numeric($id)){
@@ -138,7 +140,8 @@
 					$this->view('usuarioescolas/new', $data); 
 				} 
 			}
-         
+        
+			//Remove um registro da tabela userescola
 			public function delete($id){ 
 
 				if(!is_numeric($id)){
