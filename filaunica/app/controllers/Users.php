@@ -37,9 +37,9 @@
 			$pagination = $this->userModel->getUsersPag($page,$options); 
 
 			if($pagination->success == true){ 
-				$results = $pagination->resultset->fetchAll(); 
-				if(!empty($results)){
-					foreach($results as $row){
+				$users = $pagination->resultset->fetchAll(); 
+				if(!empty($users)){
+					foreach($users as $row){
 						$results[] = [
 							'id'   => $row['id'],
 							'name' => ($row['name'])
@@ -57,7 +57,7 @@
 			} else {
 				$results = false;
 			}
-
+			
 			$data = [
 				'pagination' => isset($pagination)
 												? $pagination
