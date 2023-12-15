@@ -97,6 +97,6 @@
 			}
 		}
 			
-	}//escola vaga
+	}//fim da classe
     
 ?>

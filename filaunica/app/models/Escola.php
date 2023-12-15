@@ -155,6 +155,6 @@
 			}
 		}
 
-	}//escola
+	}//fim da classe
     
 ?>

@@ -43,6 +43,6 @@
 			}
 		}
 			
-	}//config
+	}//fim da classe
     
 ?>

@@ -223,6 +223,6 @@
 				}
 			}
 
-	}//etapa
+	}//fim da classe
     
 ?>
