@@ -32,3 +32,6 @@
   
 </head>
 <body>
+
+<!-- as mensagens são adicionadas pelo javascript nesse elemento toasts -->
+<div id="toasts"></div>

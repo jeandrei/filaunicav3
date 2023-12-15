@@ -4,15 +4,11 @@
 					// 1 Chama o model
 				$this->configModel = $this->model('Config');
 			}
-
-			// INDEX PÁGINA INICIAL LANDING PAGE
+		
 			public function index(){			
 				$data = [
 					'title' => 'Fila Única',
-					'description'=> 'Fila Única',
-					'urlForm' => ($this->configModel->getPermiteDuplicado() == 'sim') 
-										? URLROOT . '/filas/cadastrar' 
-										: URLROOT . '/filas/cad'
+					'description'=> 'Fila Única'					 										
 				];				
 				$this->view('pages/index', $data);
 			}

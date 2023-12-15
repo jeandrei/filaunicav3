@@ -44,5 +44,24 @@ ALTER TABLE `config`
 ('permiteCadDuplicado', 'sim')
 
 
+-- TRIGGERS TRIGGER PARA GERAR O PROTOCOLO DIRETO NO BANCO DE DADOS PARE EVITAR PROTOCOLO DUPLICADO
+DELIMITER $
+
+CREATE TRIGGER geraproto BEFORE INSERT
+ON fila
+FOR EACH ROW
+BEGIN
+	SET @lastID = (SELECT id FROM fila ORDER BY id DESC LIMIT 1);
+	IF @lastID IS NULL OR @lastID = '' THEN
+			SET @lastID = 0;
+	END IF;
+	SET @lastID = @lastID + 1;
+	SET new.protocolo = concat(@lastID, YEAR(NOW()));
+END$
+
+
+DELIMITER ;
+
+
 
 

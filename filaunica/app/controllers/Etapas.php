@@ -164,7 +164,7 @@
 					
 					if($etapa_conflict = $this->etapaModel->verificaEtapaPeriodo($data['data_ini'],$data['data_fin'])){
 						// se o período que estou editando está dentro do período atual de uma etapa
-						// então tenho que permitir a atualização logo não atribuo valor a $data['erro']                    
+						// então tenho que permitir a atualização logo não atribuo valor a $data['erro'] 
 						if($id != $etapa_conflict->id){
 							$erro = 'Existem etapas cadastradas que conflitam com este período '; 
 						}                 

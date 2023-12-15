@@ -1,5 +1,8 @@
 <!-- HEADER DA PAGINA -->
 <?php include 'header.php'; ?>
+
+<?php flash('message');?>
+
 <!-- COLOCO UM BACKGROUND CINZA E CRIAMOS UM CONTAINDER COM MARGEN SUPERIOR DE 90PX -->
 <body style="background-color:#DCDCDC">
     <div class="container" style="margin-top: 90px;"> 
@@ -46,7 +49,7 @@
     
     <!-- ===================FORMULÁRIO DE CADASTRO========================== -->   
     <div class="container mt-3" style="background-color:#FFFAF0">
-    <form id="cadastrar_t" action="<?php echo $data['urlForm']; ?>" method="post" enctype="multipart/form-data">
+    <form id="cadastrar_t" action="<?php echo URLROOT; ?>/filas/cadastrar" method="post" enctype="multipart/form-data">
         
         
           
