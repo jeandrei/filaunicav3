@@ -86,7 +86,7 @@
     
           <div class="row justify-content-center align-items-center">         
               <div class="col-lg-4">                    
-                    <a href="<?php echo $data['urlForm'];?>" class="btn btn-success btn-lg btn-block" role="button">Cadastrar</a> 
+                    <a href="<?php echo URLROOT; ?>/filas/cadastrar" class="btn btn-success btn-lg btn-block" role="button">Cadastrar</a> 
                     <a href="<?php echo URLROOT; ?>/listas/listachamada" class="btn btn-default btn-lg btn-block" role="button">Lista de Chamada</a>                                      
               </div>
           </div>

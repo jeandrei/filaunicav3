@@ -45,7 +45,7 @@ ALTER TABLE `config`
 
 
 -- TRIGGERS TRIGGER PARA GERAR O PROTOCOLO DIRETO NO BANCO DE DADOS PARE EVITAR PROTOCOLO DUPLICADO
-DELIMITER $
+/* DELIMITER $
 
 CREATE TRIGGER geraproto BEFORE INSERT
 ON fila
@@ -56,6 +56,24 @@ BEGIN
 			SET @lastID = 0;
 	END IF;
 	SET @lastID = @lastID + 1;
+	SET new.protocolo = concat(@lastID, YEAR(NOW()));
+END$
+
+
+DELIMITER ; */
+
+
+
+DELIMITER $
+
+CREATE TRIGGER geraproto BEFORE INSERT
+ON fila
+FOR EACH ROW
+BEGIN
+	SET @lastID = (SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'filaunica' AND TABLE_NAME = 'fila');
+	IF @lastID IS NULL OR @lastID = '' THEN
+			SET @lastID = 0;
+	END IF;	
 	SET new.protocolo = concat(@lastID, YEAR(NOW()));
 END$
 
