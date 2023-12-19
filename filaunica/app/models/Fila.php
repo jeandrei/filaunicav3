@@ -68,7 +68,7 @@
 							
 		//retorna se já existe um nome e data de nascimento cadastrado
 		public function nomeCadastrado($nome,$nasc){
-			$sql = "SELECT * FROM fila where nomecrianca = :nomecrianca AND nascimento = :nascimento";
+			$sql = "SELECT * FROM fila WHERE nomecrianca = :nomecrianca AND nascimento = :nascimento";
 			if($situacoesFicamFila = $this->getSituacaoQueFicamNaFila()){
 				$sql .= " AND (";
 				foreach($situacoesFicamFila as $key=>$situacao){ 

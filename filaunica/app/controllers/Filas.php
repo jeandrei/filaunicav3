@@ -230,10 +230,11 @@
 									$protocolo = $this->filaModel->getProtocoloByid($lastId);
 									//$_SESSION['protocolo'] é para impedir o reenvio do formulário
 									$_SESSION['protocolo'] = $protocolo;
+									$data['protocolo'] = $protocolo;
 									$data['posicao'] = $this->filaModel->buscaPosicaoFila($protocolo);
 									$id_etapa = $this->etapaModel->getEtapa($data['nascimento']);
 									//a partir do id da etapa pego a descrição
-									$data['desc_etapa'] = $this->etapaModel->getDescricaoEtapa($id_etapa);
+									$data['desc_etapa'] = $this->etapaModel->getDescricaoEtapa($id_etapa);		
 									$this->view('relatorios/protocolo', $data); 
 								} else {                        
 									throw new Exception('Ops! Algo deu errado ao tentar realizar o cadastro!');
