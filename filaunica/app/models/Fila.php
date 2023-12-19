@@ -861,9 +861,9 @@
 			$sql = 'SELECT * FROM fila f WHERE id = :id';
 			$this->db->query($sql);            
 			$this->db->bind(':id',$id);
-			$result = $this->db->resultSet(); 
+			$row = $this->db->single();	
 			if($this->db->rowCount() > 0){
-				return $result;
+				return $row;
 			} else {
 				return false;
 			} 

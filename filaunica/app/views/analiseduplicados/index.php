@@ -221,7 +221,7 @@ function arquivar(rowToDelete,id) {
           url: `<?php echo URLROOT; ?>/filas/arquiva/${id}`,                
           method:'POST',
           success: function(retorno_php){   
-              console.log(retorno_php);               
+              //console.log(retorno_php);               
               var responseObj = JSON.parse(retorno_php);               
                if(responseObj.error == false){
                 deleteRow(rowToDelete);
