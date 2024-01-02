@@ -42,6 +42,22 @@
 			}
 		}
 
+		//Retorna todas as escolas
+		public function getAllEscolas(){            
+			$this->db->query('SELECT 
+															es.nome as nome, 
+															es.id as escolaid
+												FROM 
+															escola es                               
+											'); 			
+			$result = $this->db->resultSet();		
+			if($this->db->rowCount() > 0){
+					return $result;
+			} else {
+					return false;
+			}
+		}	
+
 		//Remove um usuário da tabela userescola
 		public function delete($id){   
 			$this->db->query('DELETE FROM userescola WHERE id = :id');
