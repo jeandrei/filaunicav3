@@ -896,7 +896,7 @@
 							'escola' => isset($escola->nome)
 											? $escola->nome
 											: '',
-							'etapa' => isset(($etapa['id'])->descricao)
+							'etapa' => isset($etapa['id'])
 											? $this->etapaModel->getEtapaById($etapa['id'])->descricao
 											: '', 
 							'matutino' => isset($quadroVagas->matutino)
