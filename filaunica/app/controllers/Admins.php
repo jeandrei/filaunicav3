@@ -861,7 +861,10 @@
 										: '',
 						'opcao_turno' => ($this->filaModel->getTurno($row->opcao_turno))
 										? $this->filaModel->getTurno($row->opcao_turno)
-										: ''
+										: '',
+            'ultimo_historico' => ($this->filaModel->getLastHistorico($row->id))
+                  ? $this->filaModel->getLastHistorico($row->id)->historico
+                  : ''
 					);       
 				} 
 			} else {

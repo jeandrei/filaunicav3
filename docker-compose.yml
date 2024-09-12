@@ -27,7 +27,7 @@
 # docker stop www_db_1 www_phpmyadmin_1 www_webserver_1 && docker-compose rm -v -f && docker-compose up -d
 #**************************************************************************
 
-version: '2'
+version: '2.4'
 
 services:
   #container webserver onde teremos php e apache

@@ -454,7 +454,7 @@ if($data['results'] == false){ die('<div class="container alert alert-warning">S
                             <?php else : ?>                      
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    Nenhuma histórico registrado
+                                    Nenhum histórico registrado
                                 </td>
                             </tr>
                             <?php endif; ?>

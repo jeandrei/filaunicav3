@@ -560,6 +560,7 @@
 		public function getAguardandoAlfabetica(){
 			$this->db->query('
 											SELECT
+                          f.id,
 													f.registro, 
 													f.protocolo,
 													f.responsavel, 

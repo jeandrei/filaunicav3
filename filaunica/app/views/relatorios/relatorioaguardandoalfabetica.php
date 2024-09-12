@@ -86,7 +86,7 @@ class PDF extends FPDF
                          $pdf->Cell($larguracoll[$i],$tam_fonte,utf8_decode($coluna),1);
                      }
                     
-                     $contador = 0;
+                     $contador = 0;                     
                      foreach($data['results'] as $row) { 
                          $contador++;      
                          $pdf->SetFont('Arial','',7);  
@@ -104,6 +104,12 @@ class PDF extends FPDF
                          $pdf->Cell($larguracoll[7],$tam_fonte,utf8_decode($row["opcao1_id"]),1,0,'C'); 
                          $pdf->Cell($larguracoll[8],$tam_fonte,utf8_decode($row["opcao2_id"]),1,0,'C'); 
                          $pdf->Cell($larguracoll[9],$tam_fonte,utf8_decode($row["registro"]),1,0,'C'); 
+
+                         if($row['ultimo_historico']){
+                          $pdf->Ln(); 
+                          $pdf->SetFillColor(255, 255, 179); 
+                          $pdf->Cell(283,$tam_fonte,utf8_decode("Último histórico: " . $row['ultimo_historico']),1,0,'C',true);   
+                          }
                          
                         
                      }                     
