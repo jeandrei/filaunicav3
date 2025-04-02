@@ -66,6 +66,7 @@ services:
         MYSQL_USER: spuser
         MYSQL_PASSWORD: mypassword
         MYSQL_ROOT_PASSWORD: rootadm 
+        UPLOAD_LIMIT: 100000000
     volumes:
         #aqui criamos um volume para o docker acessar nosso script de criação do banco de dados
         #./dumps/ijdb.sql nosso backup do banco

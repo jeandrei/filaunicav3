@@ -4,6 +4,10 @@
 				// 1 Chama o model
 			$this->configModel = $this->model('Config');
 		}
+
+		public function info(){		
+			$this->view('pages/info');
+		}
 	
 		public function index(){			
 			$data = [
